@@ -23,4 +23,6 @@ $(TARGET_DLL): $(OBJS)
 	g++ --shared -g -o $@ $^ -Wl,--output-def,$(TARGET_DEF),--out-implib,$(TARGET_LIB)
 
 obj/%.o: %.cpp %.h
-	g++ -D_WIN32 -D_SLERPYCORE_EXPORT -g -o $@ -c $<
+	g++ -D_WIN32 -D_SLERPYCORE_EXPORT -g -MMD -MP -o $@ -c $<
+
+-include $(OBJS:.o=.d)
