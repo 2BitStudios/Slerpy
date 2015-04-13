@@ -5,26 +5,26 @@
 
 #ifdef _MANAGED
 
-#define SYMBOL_PREFIX static
-#define TRANSLATE_SYMBOL_NAME(name) __clrcall name
+#define DECLARATION_PREFIX static
+#define TRANSLATE_FUNCTION_NAME(name) __clrcall name
 
 #else //_MANAGED
 
 #ifdef _WIN32
 
 #ifdef _SLERPYCORE_EXPORT
-#define SYMBOL_PREFIX __declspec(dllexport)
+#define DECLARATION_PREFIX __declspec(dllexport)
 #else //SLERPYCORE_EXPORT
-#define SYMBOL_PREFIX __declspec(dllimport)
+#define DECLARATION_PREFIX __declspec(dllimport)
 #endif //SLERPYCORE_EXPORT
 
 #else //_WIN32
 
-#define SYMBOL_PREFIX 
+#define DECLARATION_PREFIX 
 
 #endif //_WIN32
 
-#define TRANSLATE_SYMBOL_NAME(name) __stdcall name
+#define TRANSLATE_FUNCTION_NAME(name) __stdcall name
 
 #endif //_MANAGED
 
@@ -39,7 +39,9 @@ extern "C"
 {
 #endif //_MANAGED
 
-    //symbol declarations here
+#define TRANSFORMATION_PARAMS_STANDARD Transform from, Transform to, float weight
+
+    DECLARATION_PREFIX Transform TRANSLATE_FUNCTION_NAME(LerpShake)(TRANSFORMATION_PARAMS_STANDARD, float xRate, float yRate, float zRate, float strength);
 
 #ifdef _MANAGED
     };
@@ -48,8 +50,7 @@ extern "C"
 }
 #endif //_MANAGED
 
-#undef TRANSLATE_SYMBOL_NAME
-
-#undef SYMBOL_PREFIX
+#undef TRANSLATE_FUNCTION_NAME
+#undef DECLARATION_PREFIX
 
 #endif //__SLERPYCORE_TRANSFORMATION__
