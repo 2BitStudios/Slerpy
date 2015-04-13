@@ -85,6 +85,7 @@
     <ClCompile Include="Types.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="SystemDefines.h" />
     <ClInclude Include="Transformation.h" />
     <ClInclude Include="Types.h" />
   </ItemGroup>
