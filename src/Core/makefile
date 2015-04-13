@@ -1,6 +1,6 @@
-TARGET_DLL = bin/SlerpyCore.dll
-TARGET_DEF = bin/SlerpyCore.def
-TARGET_LIB = bin/SlerpyCore.a
+TARGET_DLL = bin/Slerpy.dll
+TARGET_DEF = bin/Slerpy.def
+TARGET_LIB = bin/Slerpy.a
 
 OBJS = obj/Types.o obj/Transformation.o
 
