@@ -39,9 +39,9 @@ extern "C"
 {
 #endif //_MANAGED
 
-#define TRANSFORMATION_PARAMS_STANDARD Transform from, Transform to, float weight
+#define TRANSFORMATION_OFFSET_PARAMS_STANDARD float time
 
-    DECLARATION_PREFIX Transform TRANSLATE_FUNCTION_NAME(LerpShake)(TRANSFORMATION_PARAMS_STANDARD, float xRate, float yRate, float zRate, float strength);
+    DECLARATION_PREFIX Transform TRANSLATE_FUNCTION_NAME(OffsetShake)(TRANSFORMATION_OFFSET_PARAMS_STANDARD, float xRate, float yRate, float zRate);
 
 #ifdef _MANAGED
     };

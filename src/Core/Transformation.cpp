@@ -19,16 +19,16 @@ namespace Slerpy
 
 #endif //_MANAGED
 
-    Transform TRANSLATE_FUNCTION_NAME(LerpShake)(TRANSFORMATION_PARAMS_STANDARD, float xRate, float yRate, float zRate, float strength)
+    Transform TRANSLATE_FUNCTION_NAME(OffsetShake)(TRANSFORMATION_OFFSET_PARAMS_STANDARD, float xRate, float yRate, float zRate)
     {
-        Transform returnValue = Transform::Lerp(from, to, weight);
+        Transform returnValue = TRANSFORM_DEFAULT;
 
-        float const shakeCoef = MATH_PI * weight;
+        float const shakeCoef = MATH_PI * time;
 
         returnValue.Position = returnValue.Position + Vector3D(
-            strength * MATH_SIN(xRate * shakeCoef),
-            strength * MATH_SIN(yRate * shakeCoef),
-            strength * MATH_SIN(zRate * shakeCoef));
+            MATH_SIN(xRate * shakeCoef),
+            MATH_SIN(yRate * shakeCoef),
+            MATH_SIN(zRate * shakeCoef));
 
         return returnValue;
     }

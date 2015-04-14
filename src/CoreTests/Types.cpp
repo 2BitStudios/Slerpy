@@ -1,5 +1,3 @@
-using namespace System;
-
 namespace Slerpy
 {
     namespace Tests
@@ -20,7 +18,7 @@ namespace Slerpy
                 Vector3D v2 = Vector3D(-2.0f, -4.0f, -6.0f);
 
                 Vector3D v3 = Vector3D::Lerp(v1, v2, 0.75f);
-
+                
                 Assert::AreEqual(-1.0f, v3.X, EPSILON);
                 Assert::AreEqual(-2.0f, v3.Y, EPSILON);
                 Assert::AreEqual(-3.0f, v3.Z, EPSILON);
