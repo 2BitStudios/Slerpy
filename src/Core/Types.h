@@ -21,6 +21,8 @@ extern "C"
 {
 #endif //_MANAGED
 
+#define VECTOR3D_DEFAULT Vector3D(0.0f, 0.0f, 0.0f)
+
     TRANSLATE_TYPE_NAME(Vector3D)
     {
     public:
@@ -46,6 +48,8 @@ extern "C"
     Vector3D operator+(Vector3D const& lhs, Vector3D const& rhs);
     Vector3D operator-(Vector3D const& lhs, Vector3D const& rhs);
 #endif //_MANAGED
+
+#define QUATERNION_DEFAULT Quaternion(0.0f, 0.0f, 0.0f, 1.0f)
 
     TRANSLATE_TYPE_NAME(Quaternion)
     {
@@ -74,6 +78,8 @@ extern "C"
 #ifndef _MANAGED
     Quaternion operator*(Quaternion const& lhs, Quaternion const& rhs);
 #endif //_MANAGED
+
+#define TRANSFORM_DEFAULT Transform(VECTOR3D_DEFAULT, QUATERNION_DEFAULT, VECTOR3D_DEFAULT)
 
     TRANSLATE_TYPE_NAME(Transform)
     {
