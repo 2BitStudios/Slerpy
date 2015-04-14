@@ -97,6 +97,37 @@ extern "C"
         static Transform Lerp(Transform from, Transform to, float weight);
     };
 
+#define WEIGHTING_DEFAULT Weighting(0.0f, 0.0f)
+
+    TRANSLATE_TYPE_NAME(Weighting)
+    {
+    public:
+        TRANSLATE_PROPERTY_NAME(float, Rate);
+        TRANSLATE_PROPERTY_NAME(float, Strength);
+
+#ifndef _MANAGED
+        Weighting() {};
+#endif //_MANAGED
+
+        Weighting(float rate, float strength);
+    };
+
+#define AXISWEIGHTINGS_DEFAULT AxisWeightings(WEIGHTING_DEFAULT, WEIGHTING_DEFAULT, WEIGHTING_DEFAULT)
+
+    TRANSLATE_TYPE_NAME(AxisWeightings)
+    {
+    public:
+        TRANSLATE_PROPERTY_NAME(Weighting, X);
+        TRANSLATE_PROPERTY_NAME(Weighting, Y);
+        TRANSLATE_PROPERTY_NAME(Weighting, Z);
+
+#ifndef _MANAGED
+        AxisWeightings() {};
+#endif //_MANAGED
+
+        AxisWeightings(Weighting x, Weighting y, Weighting z);
+    };
+
 #ifdef _MANAGED
 }
 #else //_MANAGED

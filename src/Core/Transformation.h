@@ -41,9 +41,9 @@ extern "C"
 
 #define TRANSFORMATION_OFFSET_PARAMS_STANDARD float time
 
-    DECLARATION_PREFIX Transform TRANSLATE_FUNCTION_NAME(OffsetShake)(TRANSFORMATION_OFFSET_PARAMS_STANDARD, float xRate, float yRate, float zRate, float xStrength, float yStrength, float zStrength);
-    DECLARATION_PREFIX Transform TRANSLATE_FUNCTION_NAME(OffsetTwist)(TRANSFORMATION_OFFSET_PARAMS_STANDARD, float xRate, float yRate, float zRate, float xStrength, float yStrength, float zStrength);
-    DECLARATION_PREFIX Transform TRANSLATE_FUNCTION_NAME(OffsetThrob)(TRANSFORMATION_OFFSET_PARAMS_STANDARD, float xRate, float yRate, float zRate, float xStrength, float yStrength, float zStrength);
+    DECLARATION_PREFIX Transform TRANSLATE_FUNCTION_NAME(OffsetShake)(TRANSFORMATION_OFFSET_PARAMS_STANDARD, AxisWeightings axisWeightings);
+    DECLARATION_PREFIX Transform TRANSLATE_FUNCTION_NAME(OffsetTwist)(TRANSFORMATION_OFFSET_PARAMS_STANDARD, AxisWeightings axisWeightings);
+    DECLARATION_PREFIX Transform TRANSLATE_FUNCTION_NAME(OffsetThrob)(TRANSFORMATION_OFFSET_PARAMS_STANDARD, AxisWeightings axisWeightings);
 
 #ifdef _MANAGED
     };

@@ -132,6 +132,19 @@ namespace Slerpy
             Vector3D::Lerp(from.Scale, to.Scale, weight));
     }
 
+    Weighting::Weighting(float rate, float strength)
+    {
+        this->Rate = rate;
+        this->Strength = strength;
+    }
+
+    AxisWeightings::AxisWeightings(Weighting x, Weighting y, Weighting z)
+    {
+        this->X = x;
+        this->Y = y;
+        this->Z = z;
+    }
+
 #ifdef _MANAGED
 }
 #else //_MANAGED
