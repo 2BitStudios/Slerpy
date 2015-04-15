@@ -14,7 +14,18 @@ namespace Slerpy.Unity3D
         private float timeRunning = 0.0f;
 
         [SerializeField]
+        private bool allowInversion = false;
+
+        [SerializeField]
         private SerializableAxisWeightings axisWeightings = null;
+
+        public bool AllowInversion
+        {
+            get
+            {
+                return this.allowInversion;
+            }
+        }
 
         public SerializableAxisWeightings AxisWeightings
         {

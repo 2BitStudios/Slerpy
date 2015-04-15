@@ -7,15 +7,18 @@
 #define MATH_SIN(value) ((float)System::Math::Sin(value))
 #define MATH_COS(value) ((float)System::Math::Cos(value))
 #define MATH_SQRT(value) ((float)System::Math::Sqrt(value))
+#define MATH_ABS(value) ((float)System::Math::Abs(value))
 
 #else //_MANAGED
 
+#include <stdlib.h>
 #include <math.h>
 
 #define MATH_PI ((float)M_PI)
 #define MATH_SIN(value) ((float)sin(value))
 #define MATH_COS(value) ((float)cos(value))
 #define MATH_SQRT(value) ((float)sqrt(value))
+#define MATH_ABS(value) ((float)abs(value))
 
 #endif //_MANAGED
 

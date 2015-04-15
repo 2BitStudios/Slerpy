@@ -6,7 +6,7 @@ namespace Slerpy.Unity3D
     {
         protected override Slerpy.Transform CalculateOffset(float time)
         {
-            return Slerpy.Transformation.OffsetThrob(time, this.AxisWeightings.AsStruct(time));
+            return Slerpy.Transformation.OffsetThrob(time, this.AxisWeightings.AsStruct(time), this.AllowInversion);
         }
     }
 }
