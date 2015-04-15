@@ -57,19 +57,31 @@ namespace Slerpy.Unity3D
             private float xRate = 1.0f;
 
             [SerializeField]
-            private AnimationCurve xStrength = null;
+            private AnimationCurve xStrength = AnimationCurve.Linear(0.0f, 1.0f, 1.0f, 1.0f);
 
             [SerializeField]
             private float yRate = 1.0f;
 
             [SerializeField]
-            private AnimationCurve yStrength = null;
+            private AnimationCurve yStrength = AnimationCurve.Linear(0.0f, 1.0f, 1.0f, 1.0f);
 
             [SerializeField]
             private float zRate = 1.0f;
 
             [SerializeField]
-            private AnimationCurve zStrength = null;
+            private AnimationCurve zStrength = AnimationCurve.Linear(0.0f, 1.0f, 1.0f, 1.0f);
+
+            public SerializableAxisWeightings()
+            {
+                xStrength.preWrapMode = WrapMode.PingPong;
+                xStrength.postWrapMode = WrapMode.PingPong;
+
+                yStrength.preWrapMode = WrapMode.PingPong;
+                yStrength.postWrapMode = WrapMode.PingPong;
+
+                zStrength.preWrapMode = WrapMode.PingPong;
+                zStrength.postWrapMode = WrapMode.PingPong;
+            }
 
             public float XRate
             {
@@ -138,7 +150,7 @@ namespace Slerpy.Unity3D
             {
                 if (this.xStrength.length > 0)
                 {
-                    return this.xStrength.Evaluate(time % this.xStrength.keys[this.xStrength.length - 1].time);
+                    return this.xStrength.Evaluate(time);
                 }
 
                 return 0.0f;
@@ -153,7 +165,7 @@ namespace Slerpy.Unity3D
             {
                 if (this.yStrength.length > 0)
                 {
-                    return this.yStrength.Evaluate(time % this.yStrength.keys[this.yStrength.length - 1].time);
+                    return this.yStrength.Evaluate(time);
                 }
 
                 return 0.0f;
@@ -168,7 +180,7 @@ namespace Slerpy.Unity3D
             {
                 if (this.zStrength.length > 0)
                 {
-                    return this.zStrength.Evaluate(time % this.zStrength.keys[this.zStrength.length - 1].time);
+                    return this.zStrength.Evaluate(time);
                 }
 
                 return 0.0f;
