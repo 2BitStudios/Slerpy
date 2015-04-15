@@ -57,16 +57,17 @@ namespace Slerpy.Unity3D
             }
         }
 
-        public void RestoreTransformToOriginal()
+        public void SetOffsetTo(Slerpy.Transform newOffset)
         {
             this.transform.position -= this.offset.Position.ToUnity3D();
             this.transform.rotation *= UnityEngine.Quaternion.Inverse(this.offset.Rotation.ToUnity3D());
             this.transform.localScale -= this.offset.Scale.ToUnity3D();
+            
+            this.offset = newOffset;
 
-            this.offset = new Slerpy.Transform(
-                new Slerpy.Vector3D(0.0f, 0.0f, 0.0f),
-                new Slerpy.Quaternion(0.0f, 0.0f, 0.0f, 1.0f),
-                new Slerpy.Vector3D(0.0f, 0.0f, 0.0f));
+            this.transform.position += this.offset.Position.ToUnity3D();
+            this.transform.rotation *= this.offset.Rotation.ToUnity3D();
+            this.transform.localScale += this.offset.Scale.ToUnity3D();
         }
 
         protected abstract Slerpy.Transform CalculateOffset(float time);
@@ -81,13 +82,7 @@ namespace Slerpy.Unity3D
             {
                 this.timeRunning += Time.deltaTime;
 
-                Slerpy.Transform newOffset = this.CalculateOffset(this.timeRunning);
-
-                this.transform.position += (newOffset.Position - this.offset.Position).ToUnity3D();
-                this.transform.rotation *= newOffset.Rotation.ToUnity3D() * UnityEngine.Quaternion.Inverse(this.offset.Rotation.ToUnity3D());
-                this.transform.localScale += (newOffset.Scale - this.offset.Scale).ToUnity3D();
-
-                this.offset = newOffset;
+                this.SetOffsetTo(this.CalculateOffset(this.timeRunning));
             }
         }
 
@@ -95,7 +90,10 @@ namespace Slerpy.Unity3D
         {
             if (this.restoreTransformOnDestruction)
             {
-                this.RestoreTransformToOriginal();
+                this.SetOffsetTo(new Slerpy.Transform(
+                    new Slerpy.Vector3D(0.0f, 0.0f, 0.0f),
+                    new Slerpy.Quaternion(0.0f, 0.0f, 0.0f, 1.0f),
+                    new Slerpy.Vector3D(0.0f, 0.0f, 0.0f)));
             }
         }
 
