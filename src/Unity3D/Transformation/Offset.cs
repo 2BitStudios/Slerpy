@@ -80,31 +80,19 @@ namespace Slerpy.Unity3D
             private float xRate = 1.0f;
 
             [SerializeField]
-            private AnimationCurve xStrength = AnimationCurve.Linear(0.0f, 1.0f, 1.0f, 1.0f);
+            private float xStrength = 1.0f;
 
             [SerializeField]
             private float yRate = 1.0f;
 
             [SerializeField]
-            private AnimationCurve yStrength = AnimationCurve.Linear(0.0f, 1.0f, 1.0f, 1.0f);
+            private float yStrength = 1.0f;
 
             [SerializeField]
             private float zRate = 1.0f;
 
             [SerializeField]
-            private AnimationCurve zStrength = AnimationCurve.Linear(0.0f, 1.0f, 1.0f, 1.0f);
-
-            public SerializableAxisWeightings()
-            {
-                xStrength.preWrapMode = WrapMode.PingPong;
-                xStrength.postWrapMode = WrapMode.PingPong;
-
-                yStrength.preWrapMode = WrapMode.PingPong;
-                yStrength.postWrapMode = WrapMode.PingPong;
-
-                zStrength.preWrapMode = WrapMode.PingPong;
-                zStrength.postWrapMode = WrapMode.PingPong;
-            }
+            private float zStrength = 1.0f;
 
             public float RateModifier
             {
@@ -145,11 +133,16 @@ namespace Slerpy.Unity3D
                 }
             }
 
-            public AnimationCurve XStrength
+            public float XStrength
             {
                 get
                 {
                     return this.xStrength;
+                }
+
+                set
+                {
+                    this.xStrength = value;
                 }
             }
 
@@ -166,11 +159,16 @@ namespace Slerpy.Unity3D
                 }
             }
 
-            public AnimationCurve YStrength
+            public float YStrength
             {
                 get
                 {
                     return this.yStrength;
+                }
+
+                set
+                {
+                    this.yStrength = value;
                 }
             }
 
@@ -187,65 +185,25 @@ namespace Slerpy.Unity3D
                 }
             }
 
-            public AnimationCurve ZStrength
+            public float ZStrength
             {
                 get
                 {
                     return this.zStrength;
                 }
-            }
 
-            public float GetXStrength(float time)
-            {
-                if (this.xStrength.length > 0)
+                set
                 {
-                    return this.xStrength.Evaluate(time);
+                    this.zStrength = value;
                 }
-
-                return 0.0f;
-            }
-
-            public void SetXStrength(float time, float value)
-            {
-                this.xStrength.AddKey(time, value);
-            }
-
-            public float GetYStrength(float time)
-            {
-                if (this.yStrength.length > 0)
-                {
-                    return this.yStrength.Evaluate(time);
-                }
-
-                return 0.0f;
-            }
-
-            public void SetYStrength(float time, float value)
-            {
-                this.yStrength.AddKey(time, value);
-            }
-
-            public float GetZStrength(float time)
-            {
-                if (this.zStrength.length > 0)
-                {
-                    return this.zStrength.Evaluate(time);
-                }
-
-                return 0.0f;
-            }
-
-            public void SetZStrength(float time, float value)
-            {
-                this.zStrength.AddKey(time, value);
             }
 
             public Slerpy.AxisWeightings AsStruct(float time)
             {
                 return new Slerpy.AxisWeightings(
-                    new Weighting(this.rateModifier * this.xRate, this.strengthModifier * this.GetXStrength(time)),
-                    new Weighting(this.rateModifier * this.yRate, this.strengthModifier * this.GetYStrength(time)),
-                    new Weighting(this.rateModifier * this.zRate, this.strengthModifier * this.GetZStrength(time)));
+                    new Weighting(this.rateModifier * this.xRate, this.strengthModifier * this.xStrength),
+                    new Weighting(this.rateModifier * this.yRate, this.strengthModifier * this.yStrength),
+                    new Weighting(this.rateModifier * this.zRate, this.strengthModifier * this.zStrength));
             }
         }
     }
