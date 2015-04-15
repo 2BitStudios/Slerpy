@@ -1,0 +1,55 @@
+﻿using UnityEngine;
+
+namespace Slerpy.Unity3D
+{
+    public abstract class Effect : MonoBehaviour
+    {
+        [SerializeField]
+        private bool randomiseStartTime = true;
+
+        private float timeRunning = 0.0f;
+
+        [SerializeField]
+        private float timeRemaining = 0.0f;
+
+        public float TimeRunning
+        {
+            get
+            {
+                return this.timeRunning;
+            }
+        }
+
+        public float TimeRemaining
+        {
+            get
+            {
+                return this.timeRemaining;
+            }
+        }
+
+        protected abstract void ProcessEffect(float deltaTime);
+
+        protected void Start()
+        {
+            if (this.randomiseStartTime)
+            {
+                this.timeRunning += Random.value;
+            }
+        }
+
+        protected void Update()
+        {
+            if (this.timeRemaining > 0.0f && (this.timeRemaining -= Time.deltaTime) < 0.0f)
+            {
+                MonoBehaviour.Destroy(this);
+            }
+            else
+            {
+                this.timeRunning += Time.deltaTime;
+
+                this.ProcessEffect(Time.deltaTime);
+            }
+        }
+    }
+}

@@ -4,17 +4,12 @@ using UnityEngine;
 
 namespace Slerpy.Unity3D
 {
-    public abstract class Offset : MonoBehaviour
+    public abstract class Offset : Effect
     {
         private Slerpy.Transform offset = new Slerpy.Transform(
             new Slerpy.Vector3D(0.0f, 0.0f, 0.0f),
             new Slerpy.Quaternion(0.0f, 0.0f, 0.0f, 1.0f),
             new Slerpy.Vector3D(0.0f, 0.0f, 0.0f));
-
-        private float timeRunning = 0.0f;
-
-        [SerializeField]
-        private float timeRemaining = 0.0f;
 
         [SerializeField]
         private bool restoreTransformOnDestruction = true;
@@ -24,22 +19,6 @@ namespace Slerpy.Unity3D
 
         [SerializeField]
         private SerializableAxisWeightings axisWeightings = null;
-
-        public float TimeRunning
-        {
-            get
-            {
-                return this.timeRunning;
-            }
-        }
-
-        public float TimeRemaining
-        {
-            get
-            {
-                return this.timeRemaining;
-            }
-        }
 
         public bool AllowInversion
         {
@@ -72,18 +51,9 @@ namespace Slerpy.Unity3D
 
         protected abstract Slerpy.Transform CalculateOffset(float time);
 
-        protected void Update()
+        protected override void ProcessEffect(float deltaTime)
         {
-            if (this.timeRemaining > 0.0f && (this.timeRemaining -= Time.deltaTime) < 0.0f)
-            {
-                MonoBehaviour.Destroy(this);
-            }
-            else
-            {
-                this.timeRunning += Time.deltaTime;
-
-                this.SetOffsetTo(this.CalculateOffset(this.timeRunning));
-            }
+            this.SetOffsetTo(this.CalculateOffset(this.TimeRunning));
         }
 
         protected void OnDestroy()
