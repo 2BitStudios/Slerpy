@@ -19,26 +19,26 @@ namespace Slerpy
                     Weighting(0.0f, 0.0f),
                     Weighting(0.0f, 0.0f));
 
-                Assert::AreEqual(0.0f, Slerpy::Transformation::OffsetShake(0.0f, axisWeightings).Position.X, EPSILON);
-                Assert::AreEqual(1.0f, Slerpy::Transformation::OffsetShake(0.25f, axisWeightings).Position.X, EPSILON);
-                Assert::AreEqual(0.0f, Slerpy::Transformation::OffsetShake(0.5f, axisWeightings).Position.X, EPSILON);
-                Assert::AreEqual(-1.0f, Slerpy::Transformation::OffsetShake(0.75f, axisWeightings).Position.X, EPSILON);
-                Assert::AreEqual(0.0f, Slerpy::Transformation::OffsetShake(1.0f, axisWeightings).Position.X, EPSILON);
+                Assert::AreEqual(0.0f, Slerpy::Transformation::OffsetShake(0.0f, axisWeightings, true).Position.X, EPSILON);
+                Assert::AreEqual(1.0f, Slerpy::Transformation::OffsetShake(0.25f, axisWeightings, true).Position.X, EPSILON);
+                Assert::AreEqual(0.0f, Slerpy::Transformation::OffsetShake(0.5f, axisWeightings, true).Position.X, EPSILON);
+                Assert::AreEqual(-1.0f, Slerpy::Transformation::OffsetShake(0.75f, axisWeightings, true).Position.X, EPSILON);
+                Assert::AreEqual(0.0f, Slerpy::Transformation::OffsetShake(1.0f, axisWeightings, true).Position.X, EPSILON);
             }
             
             [Test]
             static void OffsetTwist()
             {
                 AxisWeightings axisWeightings(
-                    Weighting(2.0f, 180.0f),
+                    Weighting(2.0f, 0.5f),
                     Weighting(0.0f, 0.0f),
                     Weighting(0.0f, 0.0f));
 
-                Assert::AreEqual(0.0f, Slerpy::Transformation::OffsetTwist(0.0f, axisWeightings).Rotation.X, EPSILON);
-                Assert::AreEqual(1.0f, Slerpy::Transformation::OffsetTwist(0.25f, axisWeightings).Rotation.X, EPSILON);
-                Assert::AreEqual(0.0f, Slerpy::Transformation::OffsetTwist(0.5f, axisWeightings).Rotation.X, EPSILON);
-                Assert::AreEqual(-1.0f, Slerpy::Transformation::OffsetTwist(0.75f, axisWeightings).Rotation.X, EPSILON);
-                Assert::AreEqual(0.0f, Slerpy::Transformation::OffsetTwist(1.0f, axisWeightings).Rotation.X, EPSILON);
+                Assert::AreEqual(0.0f, Slerpy::Transformation::OffsetTwist(0.0f, axisWeightings, true).Rotation.X, EPSILON);
+                Assert::AreEqual(1.0f, Slerpy::Transformation::OffsetTwist(0.25f, axisWeightings, true).Rotation.X, EPSILON);
+                Assert::AreEqual(0.0f, Slerpy::Transformation::OffsetTwist(0.5f, axisWeightings, true).Rotation.X, EPSILON);
+                Assert::AreEqual(-1.0f, Slerpy::Transformation::OffsetTwist(0.75f, axisWeightings, true).Rotation.X, EPSILON);
+                Assert::AreEqual(0.0f, Slerpy::Transformation::OffsetTwist(1.0f, axisWeightings, true).Rotation.X, EPSILON);
             }
 
             [Test]
@@ -49,11 +49,11 @@ namespace Slerpy
                     Weighting(0.0f, 0.0f),
                     Weighting(0.0f, 0.0f));
 
-                Assert::AreEqual(0.0f, Slerpy::Transformation::OffsetThrob(0.0f, axisWeightings).Scale.X, EPSILON);
-                Assert::AreEqual(1.0f, Slerpy::Transformation::OffsetThrob(0.25f, axisWeightings).Scale.X, EPSILON);
-                Assert::AreEqual(0.0f, Slerpy::Transformation::OffsetThrob(0.5f, axisWeightings).Scale.X, EPSILON);
-                Assert::AreEqual(-1.0f, Slerpy::Transformation::OffsetThrob(0.75f, axisWeightings).Scale.X, EPSILON);
-                Assert::AreEqual(0.0f, Slerpy::Transformation::OffsetThrob(1.0f, axisWeightings).Scale.X, EPSILON);
+                Assert::AreEqual(0.0f, Slerpy::Transformation::OffsetThrob(0.0f, axisWeightings, true).Scale.X, EPSILON);
+                Assert::AreEqual(1.0f, Slerpy::Transformation::OffsetThrob(0.25f, axisWeightings, true).Scale.X, EPSILON);
+                Assert::AreEqual(0.0f, Slerpy::Transformation::OffsetThrob(0.5f, axisWeightings, true).Scale.X, EPSILON);
+                Assert::AreEqual(-1.0f, Slerpy::Transformation::OffsetThrob(0.75f, axisWeightings, true).Scale.X, EPSILON);
+                Assert::AreEqual(0.0f, Slerpy::Transformation::OffsetThrob(1.0f, axisWeightings, true).Scale.X, EPSILON);
             }
         };
     }
