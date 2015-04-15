@@ -6,7 +6,7 @@ namespace Slerpy.Unity3D
 {
     public abstract class Offset : MonoBehaviour
     {
-        private Slerpy.Transform previousOffset = new Slerpy.Transform(
+        private Slerpy.Transform offset = new Slerpy.Transform(
             new Slerpy.Vector3D(0.0f, 0.0f, 0.0f),
             new Slerpy.Quaternion(0.0f, 0.0f, 0.0f, 1.0f),
             new Slerpy.Vector3D(0.0f, 0.0f, 0.0f));
@@ -14,10 +14,32 @@ namespace Slerpy.Unity3D
         private float timeRunning = 0.0f;
 
         [SerializeField]
+        private float timeRemaining = 1.0f;
+
+        [SerializeField]
+        private bool restoreTransformOnDestruction = false;
+
+        [SerializeField]
         private bool allowInversion = false;
 
         [SerializeField]
         private SerializableAxisWeightings axisWeightings = null;
+
+        public float TimeRunning
+        {
+            get
+            {
+                return this.timeRunning;
+            }
+        }
+
+        public float TimeRemaining
+        {
+            get
+            {
+                return this.timeRemaining;
+            }
+        }
 
         public bool AllowInversion
         {
@@ -35,19 +57,46 @@ namespace Slerpy.Unity3D
             }
         }
 
+        public void RestoreTransformToOriginal()
+        {
+            this.transform.position -= this.offset.Position.ToUnity3D();
+            this.transform.rotation *= UnityEngine.Quaternion.Inverse(this.offset.Rotation.ToUnity3D());
+            this.transform.localScale -= this.offset.Scale.ToUnity3D();
+
+            this.offset = new Slerpy.Transform(
+                new Slerpy.Vector3D(0.0f, 0.0f, 0.0f),
+                new Slerpy.Quaternion(0.0f, 0.0f, 0.0f, 1.0f),
+                new Slerpy.Vector3D(0.0f, 0.0f, 0.0f));
+        }
+
         protected abstract Slerpy.Transform CalculateOffset(float time);
 
         protected void Update()
         {
-            this.timeRunning += Time.deltaTime;
+            if (this.timeRemaining > 0.0f && (this.timeRemaining -= Time.deltaTime) < 0.0f)
+            {
+                MonoBehaviour.Destroy(this);
+            }
+            else
+            {
+                this.timeRunning += Time.deltaTime;
 
-            Slerpy.Transform currentOffset = this.CalculateOffset(this.timeRunning);
+                Slerpy.Transform newOffset = this.CalculateOffset(this.timeRunning);
 
-            this.transform.position += (currentOffset.Position - this.previousOffset.Position).ToUnity3D();
-            this.transform.rotation *= currentOffset.Rotation.ToUnity3D() * UnityEngine.Quaternion.Inverse(this.previousOffset.Rotation.ToUnity3D());
-            this.transform.localScale += (currentOffset.Scale - this.previousOffset.Scale).ToUnity3D();
+                this.transform.position += (newOffset.Position - this.offset.Position).ToUnity3D();
+                this.transform.rotation *= newOffset.Rotation.ToUnity3D() * UnityEngine.Quaternion.Inverse(this.offset.Rotation.ToUnity3D());
+                this.transform.localScale += (newOffset.Scale - this.offset.Scale).ToUnity3D();
 
-            this.previousOffset = currentOffset;
+                this.offset = newOffset;
+            }
+        }
+
+        protected void OnDestroy()
+        {
+            if (this.restoreTransformOnDestruction)
+            {
+                this.RestoreTransformToOriginal();
+            }
         }
 
         [Serializable]
