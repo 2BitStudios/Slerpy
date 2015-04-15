@@ -17,7 +17,7 @@ namespace Slerpy.Unity3D
         private float timeRemaining = 1.0f;
 
         [SerializeField]
-        private bool restoreTransformOnDestruction = false;
+        private bool restoreTransformOnDestruction = true;
 
         [SerializeField]
         private bool allowInversion = false;
