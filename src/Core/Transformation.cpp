@@ -41,9 +41,9 @@ namespace Slerpy
         return Transform(
             VECTOR3D_DEFAULT,
             Quaternion::FromEuler(
-                axisWeightings.X.Strength * HANDLE_INVERSION(MATH_SIN(axisWeightings.X.Rate * twistCoef)),
-                axisWeightings.Y.Strength * HANDLE_INVERSION(MATH_SIN(axisWeightings.Y.Rate * twistCoef)),
-                axisWeightings.Z.Strength * HANDLE_INVERSION(MATH_SIN(axisWeightings.Z.Rate * twistCoef))),
+                360.0f * axisWeightings.X.Strength * HANDLE_INVERSION(MATH_SIN(axisWeightings.X.Rate * twistCoef)),
+                360.0f * axisWeightings.Y.Strength * HANDLE_INVERSION(MATH_SIN(axisWeightings.Y.Rate * twistCoef)),
+                360.0f * axisWeightings.Z.Strength * HANDLE_INVERSION(MATH_SIN(axisWeightings.Z.Rate * twistCoef))),
             VECTOR3D_DEFAULT);
     }
 
