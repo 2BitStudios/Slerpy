@@ -43,6 +43,10 @@
   <ItemGroup>
     <Compile Include="Extensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Transformation\Offset.cs" />
+    <Compile Include="Transformation\Offsets\Throb.cs" />
+    <Compile Include="Transformation\Offsets\Twist.cs" />
+    <Compile Include="Transformation\Offsets\Shake.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.vcxproj">
