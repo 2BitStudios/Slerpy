@@ -103,6 +103,12 @@ namespace Slerpy.Unity3D
         public sealed class SerializableAxisWeightings
         {
             [SerializeField]
+            private float rateModifier = 1.0f;
+
+            [SerializeField]
+            private float strengthModifier = 1.0f;
+
+            [SerializeField]
             private float xRate = 1.0f;
 
             [SerializeField]
@@ -130,6 +136,32 @@ namespace Slerpy.Unity3D
 
                 zStrength.preWrapMode = WrapMode.PingPong;
                 zStrength.postWrapMode = WrapMode.PingPong;
+            }
+
+            public float RateModifier
+            {
+                get
+                {
+                    return this.rateModifier;
+                }
+
+                set
+                {
+                    this.rateModifier = value;
+                }
+            }
+
+            public float StrengthModifier
+            {
+                get
+                {
+                    return this.strengthModifier;
+                }
+
+                set
+                {
+                    this.strengthModifier = value;
+                }
             }
 
             public float XRate
@@ -243,9 +275,9 @@ namespace Slerpy.Unity3D
             public Slerpy.AxisWeightings AsStruct(float time)
             {
                 return new Slerpy.AxisWeightings(
-                    new Weighting(this.XRate, this.GetXStrength(time)),
-                    new Weighting(this.YRate, this.GetYStrength(time)),
-                    new Weighting(this.ZRate, this.GetZStrength(time)));
+                    new Weighting(this.rateModifier * this.xRate, this.strengthModifier * this.GetXStrength(time)),
+                    new Weighting(this.rateModifier * this.yRate, this.strengthModifier * this.GetYStrength(time)),
+                    new Weighting(this.rateModifier * this.zRate, this.strengthModifier * this.GetZStrength(time)));
             }
         }
     }
