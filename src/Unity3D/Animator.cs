@@ -149,7 +149,10 @@ namespace Slerpy.Unity3D
                 PropertyInfo[] otherProperties = propertyOwner.GetType().GetProperties(BINDING_FLAGS);
                 for (int k = 0; k < otherProperties.Length; ++k)
                 {
-                    errorString.AppendLine("\t" + otherProperties[k].Name);
+                    if (otherProperties[k].CanWrite)
+                    {
+                        errorString.AppendLine("\t" + otherProperties[k].Name);
+                    }
                 }
 
                 Debug.LogError(errorString.ToString());
