@@ -19,6 +19,9 @@ namespace Slerpy.Unity3D
         [SerializeField]
         private RotationAnimation[] rotationAnimations = null;
 
+        [SerializeField]
+        private ColorAnimation[] colorAnimations = null;
+
         public IEnumerable<FloatAnimation> FloatAnimations
         {
             get
@@ -43,6 +46,14 @@ namespace Slerpy.Unity3D
             }
         }
 
+        public IEnumerable<ColorAnimation> ColorAnimations
+        {
+            get
+            {
+                return this.colorAnimations;
+            }
+        }
+
         protected override void ProcessEffect(float deltaTime)
         {
             for (int i = 0; i < this.floatAnimations.Length; ++i)
@@ -58,6 +69,11 @@ namespace Slerpy.Unity3D
             for (int i = 0; i < this.rotationAnimations.Length; ++i)
             {
                 this.rotationAnimations[i].Evaluate(this.TimeRunning);
+            }
+
+            for (int i = 0; i < this.colorAnimations.Length; ++i)
+            {
+                this.colorAnimations[i].Evaluate(this.TimeRunning);
             }
         }
 
@@ -260,6 +276,59 @@ namespace Slerpy.Unity3D
             public override void Evaluate(float time)
             {
                 this.SetValue(UnityEngine.Quaternion.Euler(this.xValues.Evaluate(time), this.yValues.Evaluate(time), this.zValues.Evaluate(time)));
+            }
+        }
+
+        [Serializable]
+        public sealed class ColorAnimation : Animation
+        {
+            [SerializeField]
+            private AnimationCurve rValues = null;
+
+            [SerializeField]
+            private AnimationCurve gValues = null;
+
+            [SerializeField]
+            private AnimationCurve bValues = null;
+
+            [SerializeField]
+            private AnimationCurve aValues = null;
+
+            public AnimationCurve RValues
+            {
+                get
+                {
+                    return this.rValues;
+                }
+            }
+
+            public AnimationCurve GValues
+            {
+                get
+                {
+                    return this.gValues;
+                }
+            }
+
+            public AnimationCurve BValues
+            {
+                get
+                {
+                    return this.bValues;
+                }
+            }
+
+            public AnimationCurve AValues
+            {
+                get
+                {
+                    return this.aValues;
+                }
+            }
+
+            public override void Evaluate(float time)
+            {
+                this.SetValue(new Color(this.rValues.Evaluate(time), this.gValues.Evaluate(time), this.bValues.Evaluate(time), this.aValues.Evaluate(time)));
             }
         }
     }
