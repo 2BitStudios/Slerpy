@@ -14,10 +14,7 @@
     <ClCompile Include="AssemblyInfo.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Types.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Transformation.cpp">
+    <ClCompile Include="Weight.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

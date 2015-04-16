@@ -2,7 +2,7 @@ TARGET_DLL = bin/Slerpy.dll
 TARGET_DEF = bin/Slerpy.def
 TARGET_LIB = bin/Slerpy.a
 
-OBJS = obj/Types.o obj/Transformation.o
+OBJS = obj/Interpolate.o obj/Weight.o
 
 all: directories $(TARGET_DLL)
 
@@ -23,6 +23,6 @@ $(TARGET_DLL): $(OBJS)
 	g++ --shared -g -o $@ $^ -Wl,--output-def,$(TARGET_DEF),--out-implib,$(TARGET_LIB)
 
 obj/%.o: %.cpp %.h
-	g++ -D_WIN32 -D_SLERPYCORE_EXPORT -g -MMD -MP -o $@ -c $<
+	g++ -D_WIN32 -D_SLERPYCORE_EXPORT -g -MMD -MP -std=gnu++11 -o $@ -c $<
 
 -include $(OBJS:.o=.d)
