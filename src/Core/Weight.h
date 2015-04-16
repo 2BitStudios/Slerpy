@@ -36,7 +36,8 @@ namespace Slerpy
     {
         Linear = 0,
         Heavy = 1,
-        Invert = 2
+        Inverted = 2,
+        Exaggerated = 3,
     };
 
 #ifdef _MANAGED
@@ -63,7 +64,8 @@ extern "C"
 
     DECLARATION_PREFIX float TRANSLATE_FUNCTION_NAME(Linear)(WEIGHT_PARAMS_STANDARD);
     DECLARATION_PREFIX float TRANSLATE_FUNCTION_NAME(Heavy)(WEIGHT_PARAMS_STANDARD);
-    DECLARATION_PREFIX float TRANSLATE_FUNCTION_NAME(Invert)(WEIGHT_PARAMS_STANDARD);
+    DECLARATION_PREFIX float TRANSLATE_FUNCTION_NAME(Inverted)(WEIGHT_PARAMS_STANDARD);
+    DECLARATION_PREFIX float TRANSLATE_FUNCTION_NAME(Exaggerated)(WEIGHT_PARAMS_STANDARD);
 
 #ifdef _MANAGED
     };

@@ -32,13 +32,25 @@ namespace Slerpy
             }
 
             [Test]
-            static void Invert()
+            static void Inverted()
             {
-                Assert::AreEqual(0.0f, Slerpy::Weight::Invert(1.0f), EPSILON);
-                Assert::AreEqual(0.25f, Slerpy::Weight::Invert(0.75f), EPSILON);
-                Assert::AreEqual(0.5f, Slerpy::Weight::Invert(0.5f), EPSILON);
-                Assert::AreEqual(0.75f, Slerpy::Weight::Invert(0.25f), EPSILON);
-                Assert::AreEqual(1.0f, Slerpy::Weight::Invert(0.0f), EPSILON);
+                Assert::AreEqual(1.0f, Slerpy::Weight::Inverted(0.0f), EPSILON);
+                Assert::AreEqual(0.75f, Slerpy::Weight::Inverted(0.25f), EPSILON);
+                Assert::AreEqual(0.5f, Slerpy::Weight::Inverted(0.5f), EPSILON);
+                Assert::AreEqual(0.25f, Slerpy::Weight::Inverted(0.75f), EPSILON);
+                Assert::AreEqual(0.0f, Slerpy::Weight::Inverted(1.0f), EPSILON);
+            }
+
+            [Test]
+            static void Exaggerated()
+            {
+                Assert::AreEqual(0.0f, Slerpy::Weight::Exaggerated(0.0f), EPSILON);
+                Assert::AreEqual(0.3125f, Slerpy::Weight::Exaggerated(0.25f), EPSILON);
+                Assert::AreEqual(0.625f, Slerpy::Weight::Exaggerated(0.5f), EPSILON);
+                Assert::AreEqual(0.9375f, Slerpy::Weight::Exaggerated(0.75f), EPSILON);
+                Assert::AreEqual(1.0625f, Slerpy::Weight::Exaggerated(0.85f), EPSILON);
+                Assert::AreEqual(0.95f + 0.05625f, Slerpy::Weight::Exaggerated(0.95f), EPSILON);
+                Assert::AreEqual(1.0f, Slerpy::Weight::Exaggerated(1.0f), EPSILON);
             }
         };
     }
