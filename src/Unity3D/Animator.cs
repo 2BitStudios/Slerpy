@@ -11,6 +11,12 @@ namespace Slerpy.Unity3D
     public sealed class Animator : Effect
     {
         [SerializeField]
+        private BoolAnimation[] boolAnimations = null;
+
+        [SerializeField]
+        private IntAnimation[] intAnimations = null;
+
+        [SerializeField]
         private FloatAnimation[] floatAnimations = null;
 
         [SerializeField]
@@ -21,6 +27,22 @@ namespace Slerpy.Unity3D
 
         [SerializeField]
         private ColorAnimation[] colorAnimations = null;
+
+        public IEnumerable<BoolAnimation> BoolAnimations
+        {
+            get
+            {
+                return this.boolAnimations;
+            }
+        }
+
+        public IEnumerable<IntAnimation> IntAnimations
+        {
+            get
+            {
+                return this.intAnimations;
+            }
+        }
 
         public IEnumerable<FloatAnimation> FloatAnimations
         {
@@ -56,24 +78,34 @@ namespace Slerpy.Unity3D
 
         protected override void ProcessEffect(float deltaTime)
         {
+            for (int i = 0; i < this.boolAnimations.Length; ++i)
+            {
+                this.boolAnimations[i].Evaluate(this.TimeRunning, deltaTime);
+            }
+
+            for (int i = 0; i < this.intAnimations.Length; ++i)
+            {
+                this.intAnimations[i].Evaluate(this.TimeRunning, deltaTime);
+            }
+
             for (int i = 0; i < this.floatAnimations.Length; ++i)
             {
-                this.floatAnimations[i].Evaluate(this.TimeRunning);
+                this.floatAnimations[i].Evaluate(this.TimeRunning, deltaTime);
             }
 
             for (int i = 0; i < this.vector3Animations.Length; ++i)
             {
-                this.vector3Animations[i].Evaluate(this.TimeRunning);
+                this.vector3Animations[i].Evaluate(this.TimeRunning, deltaTime);
             }
 
             for (int i = 0; i < this.rotationAnimations.Length; ++i)
             {
-                this.rotationAnimations[i].Evaluate(this.TimeRunning);
+                this.rotationAnimations[i].Evaluate(this.TimeRunning, deltaTime);
             }
 
             for (int i = 0; i < this.colorAnimations.Length; ++i)
             {
-                this.colorAnimations[i].Evaluate(this.TimeRunning);
+                this.colorAnimations[i].Evaluate(this.TimeRunning, deltaTime);
             }
         }
 
@@ -104,7 +136,7 @@ namespace Slerpy.Unity3D
                 }
             }
 
-            public abstract void Evaluate(float time);
+            public abstract void Evaluate(float time, float deltaTime);
 
             protected void SetValue(object value)
             {
@@ -176,6 +208,122 @@ namespace Slerpy.Unity3D
         }
 
         [Serializable]
+        public sealed class BoolAnimation : Animation
+        {
+            [SerializeField]
+            private float timeOffset = 0.0f;
+
+            [SerializeField]
+            private float time = 0.0f;
+
+            [SerializeField]
+            private bool value = true;
+
+            [SerializeField]
+            private bool loop = false;
+
+            public float TimeOffset
+            {
+                get
+                {
+                    return this.timeOffset;
+                }
+            }
+
+            public float Time
+            {
+                get
+                {
+                    return this.time;
+                }
+            }
+
+            public bool Value
+            {
+                get
+                {
+                    return this.value;
+                }
+            }
+
+            public bool Loop
+            {
+                get
+                {
+                    return this.loop;
+                }
+            }
+
+            public override void Evaluate(float time, float deltaTime)
+            {
+                time -= this.timeOffset;
+
+                if (this.time <= time && ((this.loop && (time % this.time) <= deltaTime) || !this.loop))
+                {
+                    this.SetValue(this.value);
+                }
+            }
+        }
+
+        [Serializable]
+        public sealed class IntAnimation : Animation
+        {
+            [SerializeField]
+            private float timeOffset = 0.0f;
+
+            [SerializeField]
+            private float time = 0.0f;
+
+            [SerializeField]
+            private int value = 0;
+
+            [SerializeField]
+            private bool loop = false;
+
+            public float TimeOffset
+            {
+                get
+                {
+                    return this.timeOffset;
+                }
+            }
+
+            public float Time
+            {
+                get
+                {
+                    return this.time;
+                }
+            }
+
+            public int Value
+            {
+                get
+                {
+                    return this.value;
+                }
+            }
+
+            public bool Loop
+            {
+                get
+                {
+                    return this.loop;
+                }
+            }
+
+            public override void Evaluate(float time, float deltaTime)
+            {
+                time -= this.timeOffset;
+
+                if (this.time <= time && ((this.loop && (time % this.time) <= deltaTime) || !this.loop))
+                {
+                    this.SetValue(this.value);
+                }
+            }
+        }
+
+        [Serializable]
         public sealed class FloatAnimation : Animation
         {
             [SerializeField]
@@ -189,7 +337,7 @@ namespace Slerpy.Unity3D
                 }
             }
 
-            public override void Evaluate(float time)
+            public override void Evaluate(float time, float deltaTime)
             {
                 this.SetValue(this.values.Evaluate(time));
             }
@@ -231,7 +379,7 @@ namespace Slerpy.Unity3D
                 }
             }
 
-            public override void Evaluate(float time)
+            public override void Evaluate(float time, float deltaTime)
             {
                 this.SetValue(new Vector3(this.xValues.Evaluate(time), this.yValues.Evaluate(time), this.zValues.Evaluate(time)));
             }
@@ -273,7 +421,7 @@ namespace Slerpy.Unity3D
                 }
             }
 
-            public override void Evaluate(float time)
+            public override void Evaluate(float time, float deltaTime)
             {
                 this.SetValue(UnityEngine.Quaternion.Euler(this.xValues.Evaluate(time), this.yValues.Evaluate(time), this.zValues.Evaluate(time)));
             }
@@ -326,7 +474,7 @@ namespace Slerpy.Unity3D
                 }
             }
 
-            public override void Evaluate(float time)
+            public override void Evaluate(float time, float deltaTime)
             {
                 this.SetValue(new Color(this.rValues.Evaluate(time), this.gValues.Evaluate(time), this.bValues.Evaluate(time), this.aValues.Evaluate(time)));
             }
