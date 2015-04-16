@@ -179,7 +179,7 @@ namespace Slerpy.Unity3D
         public sealed class FloatAnimation : Animation
         {
             [SerializeField]
-            private AnimationCurve values = null;
+            private AnimationCurve values = AnimationCurve.Linear(0.0f, 0.0f, 1.0f, 0.0f);
 
             public AnimationCurve Values
             {
@@ -199,13 +199,13 @@ namespace Slerpy.Unity3D
         public sealed class Vector3Animation : Animation
         {
             [SerializeField]
-            private AnimationCurve xValues = null;
+            private AnimationCurve xValues = AnimationCurve.Linear(0.0f, 0.0f, 1.0f, 0.0f);
 
             [SerializeField]
-            private AnimationCurve yValues = null;
+            private AnimationCurve yValues = AnimationCurve.Linear(0.0f, 0.0f, 1.0f, 0.0f);
 
             [SerializeField]
-            private AnimationCurve zValues = null;
+            private AnimationCurve zValues = AnimationCurve.Linear(0.0f, 0.0f, 1.0f, 0.0f);
 
             public AnimationCurve XValues
             {
@@ -241,13 +241,13 @@ namespace Slerpy.Unity3D
         public sealed class RotationAnimation : Animation
         {
             [SerializeField]
-            private AnimationCurve xValues = null;
+            private AnimationCurve xValues = AnimationCurve.Linear(0.0f, 0.0f, 1.0f, 0.0f);
 
             [SerializeField]
-            private AnimationCurve yValues = null;
+            private AnimationCurve yValues = AnimationCurve.Linear(0.0f, 0.0f, 1.0f, 0.0f);
 
             [SerializeField]
-            private AnimationCurve zValues = null;
+            private AnimationCurve zValues = AnimationCurve.Linear(0.0f, 0.0f, 1.0f, 0.0f);
 
             public AnimationCurve XValues
             {
@@ -283,16 +283,16 @@ namespace Slerpy.Unity3D
         public sealed class ColorAnimation : Animation
         {
             [SerializeField]
-            private AnimationCurve rValues = null;
+            private AnimationCurve rValues = AnimationCurve.Linear(0.0f, 0.0f, 1.0f, 0.0f);
 
             [SerializeField]
-            private AnimationCurve gValues = null;
+            private AnimationCurve gValues = AnimationCurve.Linear(0.0f, 0.0f, 1.0f, 0.0f);
 
             [SerializeField]
-            private AnimationCurve bValues = null;
+            private AnimationCurve bValues = AnimationCurve.Linear(0.0f, 0.0f, 1.0f, 0.0f);
 
             [SerializeField]
-            private AnimationCurve aValues = null;
+            private AnimationCurve aValues = AnimationCurve.Linear(0.0f, 1.0f, 1.0f, 1.0f);
 
             public AnimationCurve RValues
             {
