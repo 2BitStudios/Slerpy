@@ -22,7 +22,7 @@
 
 #endif //_WIN32
 
-#define TRANSLATE_FUNCTION_NAME(name) __stdcall name
+#define TRANSLATE_FUNCTION_NAME(name) __stdcall Lerp_##name
 
 #endif //_MANAGED
 

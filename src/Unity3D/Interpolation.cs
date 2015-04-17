@@ -148,9 +148,9 @@ namespace Slerpy.Unity3D
 
         protected override void ProcessEffect(float deltaTime)
         {
-            float weight = Weight.WithWeightType(
+            float weight = Weight.WithType(
                 this.weightType, 
-                Interpolate.WithInterpolateType(
+                Interpolate.WithType(
                     this.interpolateType,
                     this.TimeRunning * this.rateModifier,
                     1.0f));

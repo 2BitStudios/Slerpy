@@ -4,11 +4,11 @@
 
 #ifdef _MANAGED
 
-#define TRANSLATE_SYMBOL_NAME(name) Lerp::name
+#define TRANSLATE_FUNCTION_NAME(name) Lerp::name
 
 #else //_MANAGED
 
-#define TRANSLATE_SYMBOL_NAME(name) name
+#define TRANSLATE_FUNCTION_NAME(name) Lerp_##name
 
 #endif //_MANAGED
 
@@ -19,12 +19,12 @@ namespace Slerpy
 
 #endif //_MANAGED
 
-float TRANSLATE_SYMBOL_NAME(Standard)(LERP_PARAMS_STANDARD)
+float TRANSLATE_FUNCTION_NAME(Standard)(LERP_PARAMS_STANDARD)
 {
     return MATH_LERP(from, to, weight);
 }
 
-float TRANSLATE_SYMBOL_NAME(Clamped)(LERP_PARAMS_STANDARD)
+float TRANSLATE_FUNCTION_NAME(Clamped)(LERP_PARAMS_STANDARD)
 {
     return MATH_LERP(from, to, MATH_CLAMP01(weight));
 }
