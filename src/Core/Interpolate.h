@@ -29,6 +29,22 @@
 #ifdef _MANAGED
 namespace Slerpy
 {
+    public
+#endif //_MANAGED
+
+    enum class InterpolateType
+    {
+        Standard = 0,
+        Clamped = 1
+    };
+
+#ifdef _MANAGED
+}
+#endif //_MANAGED
+
+#ifdef _MANAGED
+namespace Slerpy
+{
     public ref class Interpolate
     {
     private:
@@ -41,6 +57,8 @@ extern "C"
 #endif //_MANAGED
 
 #define INTERPOLATE_PARAMS_STANDARD float from, float to, float weight
+
+    DECLARATION_PREFIX float TRANSLATE_FUNCTION_NAME(WithType)(InterpolateType type, INTERPOLATE_PARAMS_STANDARD);
 
     DECLARATION_PREFIX float TRANSLATE_FUNCTION_NAME(Standard)(INTERPOLATE_PARAMS_STANDARD);
     DECLARATION_PREFIX float TRANSLATE_FUNCTION_NAME(Clamped)(INTERPOLATE_PARAMS_STANDARD);

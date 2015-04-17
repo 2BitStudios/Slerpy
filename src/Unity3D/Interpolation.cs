@@ -23,6 +23,9 @@ namespace Slerpy.Unity3D
         private TimeWrapType timeWrapType = TimeWrapType.Clamp;
 
         [SerializeField]
+        private InterpolateType interpolateType = InterpolateType.Standard;
+
+        [SerializeField]
         private float rateModifier = 1.0f;
 
         [SerializeField]
@@ -58,6 +61,19 @@ namespace Slerpy.Unity3D
             set
             {
                 this.timeWrapType = value;
+            }
+        }
+
+        public InterpolateType InterpolateType
+        {
+            get
+            {
+                return this.interpolateType;
+            }
+
+            set
+            {
+                this.interpolateType = value;
             }
         }
 

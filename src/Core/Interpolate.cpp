@@ -19,15 +19,27 @@ namespace Slerpy
 
 #endif //_MANAGED
 
-float TRANSLATE_FUNCTION_NAME(Standard)(INTERPOLATE_PARAMS_STANDARD)
-{
-    return MATH_LERP(from, to, weight);
-}
+    float TRANSLATE_FUNCTION_NAME(WithType)(InterpolateType type, INTERPOLATE_PARAMS_STANDARD)
+    {
+        switch (type)
+        {
+        case InterpolateType::Clamped:
+            return TRANSLATE_FUNCTION_NAME(Clamped)(from, to, weight);
+        case InterpolateType::Standard:
+        default:
+            return TRANSLATE_FUNCTION_NAME(Standard)(from, to, weight);
+        }
+    }
 
-float TRANSLATE_FUNCTION_NAME(Clamped)(INTERPOLATE_PARAMS_STANDARD)
-{
-    return MATH_LERP(from, to, MATH_CLAMP01(weight));
-}
+    float TRANSLATE_FUNCTION_NAME(Standard)(INTERPOLATE_PARAMS_STANDARD)
+    {
+        return MATH_LERP(from, to, weight);
+    }
+
+    float TRANSLATE_FUNCTION_NAME(Clamped)(INTERPOLATE_PARAMS_STANDARD)
+    {
+        return MATH_LERP(from, to, MATH_CLAMP01(weight));
+    }
 
 #ifdef _MANAGED
 }
