@@ -68,6 +68,10 @@ namespace Slerpy
             return TRANSLATE_FUNCTION_NAME(Inverted)(weight);
         case WeightType::Exaggerated:
             return TRANSLATE_FUNCTION_NAME(Exaggerated)(weight);
+        case WeightType::StickyLow:
+            return TRANSLATE_FUNCTION_NAME(StickyLow)(weight);
+        case WeightType::StickyHigh:
+            return TRANSLATE_FUNCTION_NAME(StickyHigh)(weight);
         case WeightType::Linear:
         default:
             return TRANSLATE_FUNCTION_NAME(Linear)(weight);
@@ -103,6 +107,42 @@ namespace Slerpy
         else if (weightAbs <= 1.0f)
         {
             weight *= MATH_LERP(HIGHWEIGHT, 1.0f, (weightAbs - HIGHPOINT) / (1.0f - HIGHPOINT)) / weightAbs;
+        }
+
+        return weight;
+    }
+
+    float TRANSLATE_FUNCTION_NAME(StickyLow)(WEIGHT_PARAMS_STANDARD)
+    {
+        static float const THRESHOLD = 0.2f;
+
+        float const weightAbs = MATH_ABS(weight);
+
+        if (weightAbs < THRESHOLD)
+        {
+            weight = 0.0f;
+        }
+        else if (weightAbs <= 1.0f)
+        {
+            weight = ((weightAbs - THRESHOLD) * MATH_SIGN(weight)) / (1.0f - THRESHOLD);
+        }
+
+        return weight;
+    }
+
+    float TRANSLATE_FUNCTION_NAME(StickyHigh)(WEIGHT_PARAMS_STANDARD)
+    {
+        static float const THRESHOLD = 0.8f;
+
+        float const weightAbs = MATH_ABS(weight);
+
+        if (weightAbs < THRESHOLD)
+        {
+            weight = weight / THRESHOLD;
+        }
+        else
+        {
+            weight = 1.0f * MATH_SIGN(weight);
         }
 
         return weight;

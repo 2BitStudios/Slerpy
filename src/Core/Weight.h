@@ -32,12 +32,12 @@ namespace Slerpy
     public
 #endif //_MANAGED
 
-    enum class WeightType
+    enum class TimeWrapType
     {
-        Linear = 0,
-        Heavy = 1,
-        Inverted = 2,
-        Exaggerated = 3,
+        Clamp = 0,
+        PingPong = 1,
+        Repeat = 2,
+        Cycle = 3
     };
 
 #ifdef _MANAGED
@@ -50,12 +50,14 @@ namespace Slerpy
     public
 #endif //_MANAGED
 
-    enum class TimeWrapType
+    enum class WeightType
     {
-        Clamp = 0,
-        PingPong = 1,
-        Repeat = 2,
-        Cycle = 3
+        Linear = 0,
+        Heavy = 1,
+        Inverted = 2,
+        Exaggerated = 3,
+        StickyLow = 4,
+        StickyHigh = 5
     };
 
 #ifdef _MANAGED
@@ -86,6 +88,8 @@ extern "C"
     DECLARATION_PREFIX float TRANSLATE_FUNCTION_NAME(Heavy)(WEIGHT_PARAMS_STANDARD);
     DECLARATION_PREFIX float TRANSLATE_FUNCTION_NAME(Inverted)(WEIGHT_PARAMS_STANDARD);
     DECLARATION_PREFIX float TRANSLATE_FUNCTION_NAME(Exaggerated)(WEIGHT_PARAMS_STANDARD);
+    DECLARATION_PREFIX float TRANSLATE_FUNCTION_NAME(StickyLow)(WEIGHT_PARAMS_STANDARD);
+    DECLARATION_PREFIX float TRANSLATE_FUNCTION_NAME(StickyHigh)(WEIGHT_PARAMS_STANDARD);
 
 #ifdef _MANAGED
     };
