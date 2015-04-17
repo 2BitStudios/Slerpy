@@ -229,7 +229,7 @@ namespace Slerpy.Unity3D
                 Slerpy.Interpolate.Standard(0.0f, this.scaleExtent.z * this.extentModifier, weight));
         }
 
-        protected void OnDestroy()
+        private void OnDestroy()
         {
             if (this.restoreTransformOnDestruction)
             {
