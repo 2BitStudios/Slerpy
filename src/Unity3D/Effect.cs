@@ -8,7 +8,7 @@ namespace Slerpy.Unity3D
     public abstract class Effect : MonoBehaviour
     {
         [SerializeField]
-        private bool randomiseStartTime = true;
+        private bool randomiseStartTime = false;
 
         private float timeRunning = 0.0f;
 
