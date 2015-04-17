@@ -38,7 +38,7 @@ namespace Slerpy
 
     float TRANSLATE_FUNCTION_NAME(Clamped)(INTERPOLATE_PARAMS_STANDARD)
     {
-        return MATH_LERP(from, to, MATH_CLAMP01(weight));
+        return MATH_LERP(from, to, MATH_CLAMP(weight, -1.0f, 1.0f));
     }
 
 #ifdef _MANAGED
