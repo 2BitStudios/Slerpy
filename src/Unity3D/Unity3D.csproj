@@ -42,7 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Animator.cs" />
-    <Compile Include="Interpolation.cs" />
+    <Compile Include="Transformer.cs" />
     <Compile Include="Effect.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

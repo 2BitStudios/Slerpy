@@ -4,18 +4,8 @@ using UnityEngine;
 
 namespace Slerpy.Unity3D
 {
-    public enum InterpolationTarget
+    public sealed class Transformer : Effect
     {
-        Position = 0,
-        Rotation = 1,
-        Scale = 2
-    }
-
-    public sealed class Interpolation : Effect
-    {
-        [SerializeField]
-        private InterpolationTarget target = InterpolationTarget.Position;
-
         [SerializeField]
         private WeightType weightType = WeightType.Linear;
 
@@ -26,13 +16,22 @@ namespace Slerpy.Unity3D
         private InterpolateType interpolateType = InterpolateType.Standard;
 
         [SerializeField]
+        private bool restoreTransformOnDestruction = false;
+
+        [SerializeField]
         private float rateModifier = 1.0f;
 
         [SerializeField]
         private float extentModifier = 1.0f;
 
         [SerializeField]
-        private Vector3 extent = Vector3.zero;
+        private Vector3 positionExtent = Vector3.zero;
+
+        [SerializeField]
+        private Vector3 rotationExtent = Vector3.zero;
+
+        [SerializeField]
+        private Vector3 scaleExtent = Vector3.zero;
 
         private Vector3 positionOffset = Vector3.zero;
         private Quaternion rotationOffset = Quaternion.identity;
@@ -77,11 +76,29 @@ namespace Slerpy.Unity3D
             }
         }
 
+        public bool RestoreTransformOnDestruction
+        {
+            get
+            {
+                return this.restoreTransformOnDestruction;
+            }
+
+            set
+            {
+                this.restoreTransformOnDestruction = value;
+            }
+        }
+
         public float RateModifier
         {
             get
             {
                 return this.rateModifier;
+            }
+
+            set
+            {
+                this.rateModifier = value;
             }
         }
 
@@ -98,16 +115,42 @@ namespace Slerpy.Unity3D
             }
         }
 
-        public Vector3 Extent
+        public Vector3 PositionExtent
         {
             get
             {
-                return this.extent;
+                return this.positionExtent;
             }
 
             set
             {
-                this.extent = value;
+                this.positionExtent = value;
+            }
+        }
+
+        public Vector3 RotationExtent
+        {
+            get
+            {
+                return this.rotationExtent;
+            }
+
+            set
+            {
+                this.rotationExtent = value;
+            }
+        }
+
+        public Vector3 ScaleExtent
+        {
+            get
+            {
+                return this.scaleExtent;
+            }
+
+            set
+            {
+                this.scaleExtent = value;
             }
         }
 
@@ -171,22 +214,29 @@ namespace Slerpy.Unity3D
                     this.TimeRunning * this.rateModifier,
                     1.0f));
 
-            Vector3 offset = new Vector3(
-                Slerpy.Interpolate.Standard(0.0f, this.extent.x * this.extentModifier, weight),
-                Slerpy.Interpolate.Standard(0.0f, this.extent.y * this.extentModifier, weight),
-                Slerpy.Interpolate.Standard(0.0f, this.extent.z * this.extentModifier, weight));
+            this.PositionOffset = new Vector3(
+                Slerpy.Interpolate.Standard(0.0f, this.positionExtent.x * this.extentModifier, weight),
+                Slerpy.Interpolate.Standard(0.0f, this.positionExtent.y * this.extentModifier, weight),
+                Slerpy.Interpolate.Standard(0.0f, this.positionExtent.z * this.extentModifier, weight));
 
-            switch (target)
+            this.RotationOffset = Quaternion.Euler(new Vector3(
+                Slerpy.Interpolate.Standard(0.0f, this.rotationExtent.x * this.extentModifier, weight),
+                Slerpy.Interpolate.Standard(0.0f, this.rotationExtent.y * this.extentModifier, weight),
+                Slerpy.Interpolate.Standard(0.0f, this.rotationExtent.z * this.extentModifier, weight)));
+
+            this.ScaleOffset = new Vector3(
+                Slerpy.Interpolate.Standard(0.0f, this.scaleExtent.x * this.extentModifier, weight),
+                Slerpy.Interpolate.Standard(0.0f, this.scaleExtent.y * this.extentModifier, weight),
+                Slerpy.Interpolate.Standard(0.0f, this.scaleExtent.z * this.extentModifier, weight));
+        }
+
+        protected void OnDestroy()
+        {
+            if (this.restoreTransformOnDestruction)
             {
-                case InterpolationTarget.Position:
-                    this.PositionOffset = offset;
-                    break;
-                case InterpolationTarget.Rotation:
-                    this.RotationOffset = Quaternion.Euler(offset);
-                    break;
-                case InterpolationTarget.Scale:
-                    this.ScaleOffset = offset;
-                    break;
+                this.PositionOffset = Vector3.zero;
+                this.RotationOffset = Quaternion.identity;
+                this.ScaleOffset = Vector3.zero;
             }
         }
     }
