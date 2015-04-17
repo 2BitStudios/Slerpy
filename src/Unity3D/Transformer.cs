@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 using UnityEngine;
 
@@ -7,7 +8,7 @@ namespace Slerpy.Unity3D
     public sealed class Transformer : Effect
     {
         [SerializeField]
-        private WeightType weightType = WeightType.Linear;
+        private WeightType[] weightTypes = null;
 
         [SerializeField]
         private TimeWrapType timeWrapType = TimeWrapType.Clamp;
@@ -37,16 +38,11 @@ namespace Slerpy.Unity3D
         private Quaternion rotationOffset = Quaternion.identity;
         private Vector3 scaleOffset = Vector3.zero;
 
-        public WeightType WeightType
+        public IEnumerable<WeightType> WeightTypes
         {
             get
             {
-                return this.weightType;
-            }
-
-            set
-            {
-                this.weightType = value;
+                return this.weightTypes;
             }
         }
 
@@ -207,12 +203,15 @@ namespace Slerpy.Unity3D
 
         protected override void ProcessEffect(float deltaTime)
         {
-            float weight = Weight.WithType(
-                this.weightType, 
-                Weight.FromTime(
-                    this.timeWrapType,
-                    this.TimeRunning * this.rateModifier,
-                    1.0f));
+            float weight = Weight.FromTime(
+                this.timeWrapType,
+                this.TimeRunning * this.rateModifier,
+                1.0f);
+
+            for (int i = 0; i < this.weightTypes.Length; ++i)
+            {
+                weight = Weight.WithType(this.weightTypes[i], weight);
+            }
 
             this.PositionOffset = new Vector3(
                 Slerpy.Interpolate.Standard(0.0f, this.positionExtent.x * this.extentModifier, weight),
