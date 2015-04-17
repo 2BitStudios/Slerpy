@@ -19,6 +19,32 @@ namespace Slerpy
 
 #endif //_MANAGED
 
+    float TRANSLATE_FUNCTION_NAME(FromTime)(TimeWrapType type, float timeCurrent, float timeMax)
+    {
+        switch (type)
+        {
+        case TimeWrapType::PingPong:
+            {
+                float weight = MATH_FMOD(timeCurrent, timeMax * 2.0f) / timeMax;
+
+                return weight >= 1.0f ? 2.0f - weight : weight;
+            }
+        case TimeWrapType::Repeat:
+            {
+                float weight = timeCurrent / timeMax;
+
+                return MATH_FMOD(weight, 1.0f);
+            }
+        case TimeWrapType::Clamp:
+        default:
+            {
+                float weight = timeCurrent / timeMax;
+
+                return MATH_CLAMP01(weight);
+            }
+        }
+    }
+
     float TRANSLATE_FUNCTION_NAME(WithType)(WeightType type, WEIGHT_PARAMS_STANDARD)
     {
         switch (type)
@@ -29,6 +55,7 @@ namespace Slerpy
             return TRANSLATE_FUNCTION_NAME(Inverted)(weight);
         case WeightType::Exaggerated:
             return TRANSLATE_FUNCTION_NAME(Exaggerated)(weight);
+        case WeightType::Linear:
         default:
             return TRANSLATE_FUNCTION_NAME(Linear)(weight);
         }

@@ -12,33 +12,23 @@ namespace Slerpy
 
         public:
             [Test]
-            static void Clamp()
+            static void Standard()
             {
-                Assert::AreEqual(0.0f, Slerpy::Interpolate::Clamp(0.0f, 1.0f), EPSILON);
-                Assert::AreEqual(0.5f, Slerpy::Interpolate::Clamp(0.5f, 1.0f), EPSILON);
-                Assert::AreEqual(1.0f, Slerpy::Interpolate::Clamp(1.0f, 1.0f), EPSILON);
-                Assert::AreEqual(1.0f, Slerpy::Interpolate::Clamp(1.5f, 1.0f), EPSILON);
-                Assert::AreEqual(1.0f, Slerpy::Interpolate::Clamp(2.0f, 1.0f), EPSILON);
+                Assert::AreEqual(-1.0f, Slerpy::Interpolate::Standard(1.0f, 3.0f, -1.0f), EPSILON);
+                Assert::AreEqual(1.0f, Slerpy::Interpolate::Standard(1.0f, 3.0f, 0.0f), EPSILON);
+                Assert::AreEqual(2.0f, Slerpy::Interpolate::Standard(1.0f, 3.0f, 0.5f), EPSILON);
+                Assert::AreEqual(3.0f, Slerpy::Interpolate::Standard(1.0f, 3.0f, 1.0f), EPSILON);
+                Assert::AreEqual(5.0f, Slerpy::Interpolate::Standard(1.0f, 3.0f, 2.0f), EPSILON);
             }
 
             [Test]
-            static void PingPong()
+            static void Clamped()
             {
-                Assert::AreEqual(0.0f, Slerpy::Interpolate::PingPong(0.0f, 1.0f), EPSILON);
-                Assert::AreEqual(0.5f, Slerpy::Interpolate::PingPong(0.5f, 1.0f), EPSILON);
-                Assert::AreEqual(1.0f, Slerpy::Interpolate::PingPong(1.0f, 1.0f), EPSILON);
-                Assert::AreEqual(0.5f, Slerpy::Interpolate::PingPong(1.5f, 1.0f), EPSILON);
-                Assert::AreEqual(0.0f, Slerpy::Interpolate::PingPong(2.0f, 1.0f), EPSILON);
-            }
-
-            [Test]
-            static void Repeat()
-            {
-                Assert::AreEqual(0.0f, Slerpy::Interpolate::Repeat(0.0f, 1.0f), EPSILON);
-                Assert::AreEqual(0.5f, Slerpy::Interpolate::Repeat(0.5f, 1.0f), EPSILON);
-                Assert::AreEqual(0.0f, Slerpy::Interpolate::Repeat(1.0f, 1.0f), EPSILON);
-                Assert::AreEqual(0.5f, Slerpy::Interpolate::Repeat(1.5f, 1.0f), EPSILON);
-                Assert::AreEqual(0.75f, Slerpy::Interpolate::Repeat(1.75f, 1.0f), EPSILON);
+                Assert::AreEqual(1.0f, Slerpy::Interpolate::Clamped(1.0f, 3.0f, -1.0f), EPSILON);
+                Assert::AreEqual(1.0f, Slerpy::Interpolate::Clamped(1.0f, 3.0f, 0.0f), EPSILON);
+                Assert::AreEqual(2.0f, Slerpy::Interpolate::Clamped(1.0f, 3.0f, 0.5f), EPSILON);
+                Assert::AreEqual(3.0f, Slerpy::Interpolate::Clamped(1.0f, 3.0f, 1.0f), EPSILON);
+                Assert::AreEqual(3.0f, Slerpy::Interpolate::Clamped(1.0f, 3.0f, 2.0f), EPSILON);
             }
         };
     }

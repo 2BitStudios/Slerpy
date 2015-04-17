@@ -20,7 +20,7 @@ namespace Slerpy.Unity3D
         private WeightType weightType = WeightType.Linear;
 
         [SerializeField]
-        private InterpolateType interpolateType = InterpolateType.Clamp;
+        private TimeWrapType timeWrapType = TimeWrapType.Clamp;
 
         [SerializeField]
         private float rateModifier = 1.0f;
@@ -48,16 +48,16 @@ namespace Slerpy.Unity3D
             }
         }
 
-        public InterpolateType InterpolateType
+        public TimeWrapType TimeWrapType
         {
             get
             {
-                return this.interpolateType;
+                return this.timeWrapType;
             }
 
             set
             {
-                this.interpolateType = value;
+                this.timeWrapType = value;
             }
         }
 
@@ -150,15 +150,15 @@ namespace Slerpy.Unity3D
         {
             float weight = Weight.WithType(
                 this.weightType, 
-                Interpolate.WithType(
-                    this.interpolateType,
+                Weight.FromTime(
+                    this.timeWrapType,
                     this.TimeRunning * this.rateModifier,
                     1.0f));
 
             Vector3 offset = new Vector3(
-                Slerpy.Lerp.Standard(0.0f, this.extent.x * this.extentModifier, weight),
-                Slerpy.Lerp.Standard(0.0f, this.extent.y * this.extentModifier, weight),
-                Slerpy.Lerp.Standard(0.0f, this.extent.z * this.extentModifier, weight));
+                Slerpy.Interpolate.Standard(0.0f, this.extent.x * this.extentModifier, weight),
+                Slerpy.Interpolate.Standard(0.0f, this.extent.y * this.extentModifier, weight),
+                Slerpy.Interpolate.Standard(0.0f, this.extent.z * this.extentModifier, weight));
 
             switch (target)
             {

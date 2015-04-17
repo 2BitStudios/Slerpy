@@ -29,23 +29,6 @@
 #ifdef _MANAGED
 namespace Slerpy
 {
-    public
-#endif //_MANAGED
-
-    enum class InterpolateType
-    {
-        Clamp = 0,
-        PingPong = 1,
-        Repeat = 2
-    };
-
-#ifdef _MANAGED
-}
-#endif //_MANAGED
-
-#ifdef _MANAGED
-namespace Slerpy
-{
     public ref class Interpolate
     {
     private:
@@ -57,17 +40,14 @@ extern "C"
 {
 #endif //_MANAGED
 
-#define INTERPOLATE_PARAMS_STANDARD float timeCurrent, float timeMax
+#define INTERPOLATE_PARAMS_STANDARD float from, float to, float weight
 
-    DECLARATION_PREFIX float TRANSLATE_FUNCTION_NAME(WithType)(InterpolateType type, INTERPOLATE_PARAMS_STANDARD);
-
-    DECLARATION_PREFIX float TRANSLATE_FUNCTION_NAME(Clamp)(INTERPOLATE_PARAMS_STANDARD);
-    DECLARATION_PREFIX float TRANSLATE_FUNCTION_NAME(PingPong)(INTERPOLATE_PARAMS_STANDARD);
-    DECLARATION_PREFIX float TRANSLATE_FUNCTION_NAME(Repeat)(INTERPOLATE_PARAMS_STANDARD);
+    DECLARATION_PREFIX float TRANSLATE_FUNCTION_NAME(Standard)(INTERPOLATE_PARAMS_STANDARD);
+    DECLARATION_PREFIX float TRANSLATE_FUNCTION_NAME(Clamped)(INTERPOLATE_PARAMS_STANDARD);
 
 #ifdef _MANAGED
-    };
-}
+};
+    }
 #else //_MANAGED
 }
 #endif //_MANAGED

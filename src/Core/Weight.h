@@ -47,6 +47,23 @@ namespace Slerpy
 #ifdef _MANAGED
 namespace Slerpy
 {
+    public
+#endif //_MANAGED
+
+    enum class TimeWrapType
+    {
+        Clamp = 0,
+        PingPong = 1,
+        Repeat = 2
+    };
+
+#ifdef _MANAGED
+}
+#endif //_MANAGED
+
+#ifdef _MANAGED
+namespace Slerpy
+{
     public ref class Weight
     {
     private :
@@ -57,6 +74,8 @@ namespace Slerpy
 extern "C"
 {
 #endif //_MANAGED
+
+    DECLARATION_PREFIX float TRANSLATE_FUNCTION_NAME(FromTime)(TimeWrapType type, float timeCurrent, float timeMax);
 
 #define WEIGHT_PARAMS_STANDARD float weight
 
