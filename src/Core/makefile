@@ -2,7 +2,7 @@ TARGET_DLL = bin/Slerpy.dll
 TARGET_DEF = bin/Slerpy.def
 TARGET_LIB = bin/Slerpy.a
 
-OBJS = obj/Interpolate.o obj/Weight.o
+OBJS = obj/Interpolate.o obj/Lerp.o obj/Weight.o
 
 all: directories $(TARGET_DLL)
 

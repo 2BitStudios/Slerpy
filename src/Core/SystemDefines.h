@@ -24,7 +24,7 @@
 
 #endif //_MANAGED
 
-#define MATH_LERP(value1, value2, weight) (value1 * (1.0f - weight) + value2 * weight)
+#define MATH_LERP(from, to, weight) (from + (to - from) * weight)
 #define MATH_CLAMP(value, min, max) (value < min ? min : (value > max) ? max : value)
 #define MATH_CLAMP01(value) MATH_CLAMP(value, 0.0f, 1.0f)
 

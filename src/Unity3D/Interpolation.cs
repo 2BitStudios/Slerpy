@@ -155,7 +155,10 @@ namespace Slerpy.Unity3D
                     this.TimeRunning * this.rateModifier,
                     1.0f));
 
-            Vector3 offset = Vector3.Lerp(Vector3.zero, this.extent * this.extentModifier, weight);
+            Vector3 offset = new Vector3(
+                Slerpy.Lerp.Standard(0.0f, this.extent.x * this.extentModifier, weight),
+                Slerpy.Lerp.Standard(0.0f, this.extent.y * this.extentModifier, weight),
+                Slerpy.Lerp.Standard(0.0f, this.extent.z * this.extentModifier, weight));
 
             switch (target)
             {

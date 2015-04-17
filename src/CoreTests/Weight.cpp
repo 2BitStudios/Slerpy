@@ -49,7 +49,7 @@ namespace Slerpy
                 Assert::AreEqual(0.625f, Slerpy::Weight::Exaggerated(0.5f), EPSILON);
                 Assert::AreEqual(0.9375f, Slerpy::Weight::Exaggerated(0.75f), EPSILON);
                 Assert::AreEqual(1.0625f, Slerpy::Weight::Exaggerated(0.85f), EPSILON);
-                Assert::AreEqual(0.95f + 0.05625f, Slerpy::Weight::Exaggerated(0.95f), EPSILON);
+                Assert::AreEqual(1.0625f, Slerpy::Weight::Exaggerated(0.95f), EPSILON);
                 Assert::AreEqual(1.0f, Slerpy::Weight::Exaggerated(1.0f), EPSILON);
             }
         };

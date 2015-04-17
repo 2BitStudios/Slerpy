@@ -82,9 +82,11 @@
   <ItemGroup>
     <ClCompile Include="AssemblyInfo.cpp" />
     <ClCompile Include="Interpolate.cpp" />
+    <ClCompile Include="Lerp.cpp" />
     <ClCompile Include="Weight.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Lerp.h" />
     <ClInclude Include="SystemDefines.h" />
     <ClInclude Include="Interpolate.h" />
     <ClInclude Include="Weight.h" />

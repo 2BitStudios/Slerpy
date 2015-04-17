@@ -52,7 +52,7 @@ namespace Slerpy
     float TRANSLATE_SYMBOL_NAME(Exaggerated)(WEIGHT_PARAMS_STANDARD)
     {
         static float const HIGHPOINT = 0.9f;
-        static float const HIGHWEIGHT = 1.125f;
+        static float const HIGHWEIGHT = HIGHPOINT / (HIGHPOINT - (1.0f - HIGHPOINT));
 
         if (weight < HIGHPOINT)
         {
@@ -60,7 +60,7 @@ namespace Slerpy
         }
         else if (weight <= 1.0f)
         {
-            weight += (1.0f - weight) * HIGHWEIGHT;
+            weight = (((HIGHPOINT - (1.0f - HIGHPOINT)) + (1.0f - weight)) / HIGHPOINT) * HIGHWEIGHT;
         }
 
         return weight;

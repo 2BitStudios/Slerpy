@@ -20,6 +20,9 @@
     <ClCompile Include="Interpolate.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Lerp.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SystemDefines.h">
@@ -29,6 +32,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Interpolate.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Lerp.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
