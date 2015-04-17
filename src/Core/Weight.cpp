@@ -35,6 +35,19 @@ namespace Slerpy
 
                 return MATH_FMOD(weight, 1.0f);
             }
+        case TimeWrapType::Cycle :
+            {
+                float weight = MATH_FMOD(timeCurrent, timeMax * 4.0f) / timeMax;
+
+                if (weight >= 2.0f)
+                {
+                    return weight >= 3.0f ? weight - 4.0f: 2.0f - weight;
+                }
+                else
+                {
+                    return weight >= 1.0f ? 2.0f - weight : weight;
+                }
+            }
         case TimeWrapType::Clamp:
         default:
             {
@@ -73,7 +86,7 @@ namespace Slerpy
 
     float TRANSLATE_FUNCTION_NAME(Inverted)(WEIGHT_PARAMS_STANDARD)
     {
-        return 1.0f - weight;
+        return -weight;
     }
 
     float TRANSLATE_FUNCTION_NAME(Exaggerated)(WEIGHT_PARAMS_STANDARD)
@@ -81,13 +94,15 @@ namespace Slerpy
         static float const HIGHPOINT = 0.9f;
         static float const HIGHWEIGHT = HIGHPOINT / (HIGHPOINT - (1.0f - HIGHPOINT));
 
-        if (weight < HIGHPOINT)
+        float const weightAbs = MATH_ABS(weight);
+
+        if (weightAbs < HIGHPOINT)
         {
             weight = (weight / HIGHPOINT) * HIGHWEIGHT;
         }
-        else if (weight <= 1.0f)
+        else if (weightAbs <= 1.0f)
         {
-            weight = (((HIGHPOINT - (1.0f - HIGHPOINT)) + (1.0f - weight)) / HIGHPOINT) * HIGHWEIGHT;
+            weight *= MATH_LERP(HIGHWEIGHT, 1.0f, (weightAbs - HIGHPOINT) / (1.0f - HIGHPOINT)) / weightAbs;
         }
 
         return weight;

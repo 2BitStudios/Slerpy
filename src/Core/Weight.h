@@ -54,7 +54,8 @@ namespace Slerpy
     {
         Clamp = 0,
         PingPong = 1,
-        Repeat = 2
+        Repeat = 2,
+        Cycle = 3
     };
 
 #ifdef _MANAGED
