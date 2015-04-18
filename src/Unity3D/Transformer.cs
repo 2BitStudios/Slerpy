@@ -201,6 +201,13 @@ namespace Slerpy.Unity3D
             }
         }
 
+        public void RestoreTransform()
+        {
+            this.PositionOffset = Vector3.zero;
+            this.RotationOffset = Quaternion.identity;
+            this.ScaleOffset = Vector3.zero;
+        }
+
         protected override void ProcessEffect(float deltaTime)
         {
             float weight = Weight.FromTime(
@@ -233,9 +240,7 @@ namespace Slerpy.Unity3D
         {
             if (this.restoreTransformOnDestruction)
             {
-                this.PositionOffset = Vector3.zero;
-                this.RotationOffset = Quaternion.identity;
-                this.ScaleOffset = Vector3.zero;
+                this.RestoreTransform();
             }
         }
     }
