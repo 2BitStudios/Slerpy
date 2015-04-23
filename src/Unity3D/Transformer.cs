@@ -8,9 +8,13 @@ namespace Slerpy.Unity3D
     public enum TransformerPreset
     {
         Custom = 0,
-        Shake = 1,
-        Twist = 2,
-        Throb = 3
+        ShakeX = 1,
+        ShakeY = 2,
+        ShakeZ = 3,
+        TwistX = 4,
+        TwistY = 5,
+        TwistZ = 6,
+        Throb = 7
     }
 
     public sealed class Transformer : Effect
@@ -19,9 +23,13 @@ namespace Slerpy.Unity3D
 
         private static readonly Dictionary<TransformerPreset, PresetData> presetData = new Dictionary<TransformerPreset, PresetData>()
         {
-            { TransformerPreset.Shake, new PresetData(8.0f, 1.0f, new Vector3(0.1f, 0.1f, 0.1f), Vector3.zero, Vector3.zero) },
-            { TransformerPreset.Twist, new PresetData(1.0f, 1.0f, Vector3.zero, new Vector3(180.0f, 180.0f, 180.0f), Vector3.zero) },
-            { TransformerPreset.Throb, new PresetData(1.0f, 1.0f, Vector3.zero, Vector3.zero, new Vector3(0.4f, 0.4f, 0.4f)) }
+            { TransformerPreset.ShakeX, new PresetData(12.0f, 1.0f, new Vector3(0.1f, 0.0f, 0.0f), Vector3.zero, Vector3.zero) },
+            { TransformerPreset.ShakeY, new PresetData(12.0f, 1.0f, new Vector3(0.0f, 0.1f, 0.0f), Vector3.zero, Vector3.zero) },
+            { TransformerPreset.ShakeZ, new PresetData(12.0f, 1.0f, new Vector3(0.0f, 0.0f, 0.1f), Vector3.zero, Vector3.zero) },
+            { TransformerPreset.TwistX, new PresetData(2.0f, 1.0f, Vector3.zero, new Vector3(180.0f, 0.0f, 0.0f), Vector3.zero) },
+            { TransformerPreset.TwistY, new PresetData(2.0f, 1.0f, Vector3.zero, new Vector3(0.0f, 180.0f, 0.0f), Vector3.zero) },
+            { TransformerPreset.TwistZ, new PresetData(2.0f, 1.0f, Vector3.zero, new Vector3(0.0f, 0.0f, 180.0f), Vector3.zero) },
+            { TransformerPreset.Throb, new PresetData(2.0f, 1.0f, Vector3.zero, Vector3.zero, new Vector3(0.1f, 0.1f, 0.1f)) }
         };
 
         [SerializeField]
