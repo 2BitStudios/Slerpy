@@ -36,13 +36,13 @@ namespace Slerpy.Unity3D
         private TransformerPreset preset = PRESET_DEFAULT;
 
         [SerializeField]
-        private WeightType[] weightTypes = new WeightType[] { WeightType.Linear };
+        private WeightType[] weights = new WeightType[] { WeightType.Linear };
 
         [SerializeField]
-        private TimeWrapType timeWrapType = TimeWrapType.Clamp;
+        private TimeWrapType timeWrap = TimeWrapType.Clamp;
 
         [SerializeField]
-        private InterpolateType interpolateType = InterpolateType.Standard;
+        private InterpolateType interpolate = InterpolateType.Standard;
 
         [SerializeField]
         private bool restoreTransformOnDestruction = false;
@@ -94,44 +94,44 @@ namespace Slerpy.Unity3D
             }
         }
 
-        public IEnumerable<WeightType> WeightTypes
+        public IEnumerable<WeightType> Weights
         {
             get
             {
-                return this.weightTypes;
+                return this.weights;
             }
         }
 
-        public TimeWrapType TimeWrapType
+        public TimeWrapType TimeWrap
         {
             get
             {
-                return this.timeWrapType;
+                return this.timeWrap;
             }
 
             set
             {
-                if (this.timeWrapType != value)
+                if (this.timeWrap != value)
                 {
-                    this.timeWrapType = value;
+                    this.timeWrap = value;
 
                     this.Preset = TransformerPreset.Custom;
                 }
             }
         }
 
-        public InterpolateType InterpolateType
+        public InterpolateType Interpolate
         {
             get
             {
-                return this.interpolateType;
+                return this.interpolate;
             }
 
             set
             {
-                if (this.interpolateType != value)
+                if (this.interpolate != value)
                 {
-                    this.interpolateType = value;
+                    this.interpolate = value;
 
                     this.Preset = TransformerPreset.Custom;
                 }
@@ -266,13 +266,13 @@ namespace Slerpy.Unity3D
         protected override void ProcessEffect(float deltaTime, float totalTime, float strength)
         {
             float weight = Weight.FromTime(
-                this.timeWrapType,
+                this.timeWrap,
                 totalTime,
                 1.0f);
 
-            for (int i = 0; i < this.weightTypes.Length; ++i)
+            for (int i = 0; i < this.weights.Length; ++i)
             {
-                weight = Weight.WithType(this.weightTypes[i], weight);
+                weight = Weight.WithType(this.weights[i], weight);
             }
 
             this.PositionOffset = new Vector3(
