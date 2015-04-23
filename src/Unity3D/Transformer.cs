@@ -5,8 +5,28 @@ using UnityEngine;
 
 namespace Slerpy.Unity3D
 {
+    public enum TransformerPreset
+    {
+        Custom = 0,
+        Shake = 1,
+        Twist = 2,
+        Throb = 3
+    }
+
     public sealed class Transformer : Effect
     {
+        private const TransformerPreset PRESET_DEFAULT = TransformerPreset.Custom;
+
+        private static readonly Dictionary<TransformerPreset, PresetData> presetData = new Dictionary<TransformerPreset, PresetData>()
+        {
+            { TransformerPreset.Shake, new PresetData(8.0f, 1.0f, new Vector3(0.1f, 0.1f, 0.1f), Vector3.zero, Vector3.zero) },
+            { TransformerPreset.Twist, new PresetData(1.0f, 1.0f, Vector3.zero, new Vector3(180.0f, 180.0f, 180.0f), Vector3.zero) },
+            { TransformerPreset.Throb, new PresetData(1.0f, 1.0f, Vector3.zero, Vector3.zero, new Vector3(0.4f, 0.4f, 0.4f)) }
+        };
+
+        [SerializeField]
+        private TransformerPreset preset = PRESET_DEFAULT;
+
         [SerializeField]
         private WeightType[] weightTypes = null;
 
@@ -34,9 +54,43 @@ namespace Slerpy.Unity3D
         [SerializeField]
         private Vector3 scaleExtent = Vector3.zero;
 
+        [SerializeField]
+        [HideInInspector]
+        private TransformerPreset previousPreset = PRESET_DEFAULT;
+
         private Vector3 positionOffset = Vector3.zero;
         private Quaternion rotationOffset = Quaternion.identity;
         private Vector3 scaleOffset = Vector3.zero;
+
+        public TransformerPreset Preset
+        {
+            get
+            {
+                return this.preset;
+            }
+
+            set
+            {
+                this.preset = value;
+
+                if (this.preset == TransformerPreset.Custom)
+                {
+                    foreach (KeyValuePair<TransformerPreset, PresetData> presetData in Transformer.presetData)
+                    {
+                        if (presetData.Value.CompareTo(this))
+                        {
+                            this.preset = presetData.Key;
+                        }
+                    }
+                }
+                else
+                {
+                    this.TrySetToPreset();
+                }
+
+                this.previousPreset = this.preset;
+            }
+        }
 
         public IEnumerable<WeightType> WeightTypes
         {
@@ -55,7 +109,12 @@ namespace Slerpy.Unity3D
 
             set
             {
-                this.timeWrapType = value;
+                if (this.timeWrapType != value)
+                {
+                    this.timeWrapType = value;
+
+                    this.Preset = TransformerPreset.Custom;
+                }
             }
         }
 
@@ -68,7 +127,12 @@ namespace Slerpy.Unity3D
 
             set
             {
-                this.interpolateType = value;
+                if (this.interpolateType != value)
+                {
+                    this.interpolateType = value;
+
+                    this.Preset = TransformerPreset.Custom;
+                }
             }
         }
 
@@ -94,7 +158,12 @@ namespace Slerpy.Unity3D
 
             set
             {
-                this.rateModifier = value;
+                if (this.rateModifier != value)
+                {
+                    this.rateModifier = value;
+
+                    this.Preset = TransformerPreset.Custom;
+                }
             }
         }
 
@@ -107,7 +176,12 @@ namespace Slerpy.Unity3D
 
             set
             {
-                this.extentModifier = value;
+                if (this.extentModifier != value)
+                {
+                    this.extentModifier = value;
+
+                    this.Preset = TransformerPreset.Custom;
+                }
             }
         }
 
@@ -120,7 +194,12 @@ namespace Slerpy.Unity3D
 
             set
             {
-                this.positionExtent = value;
+                if (this.positionExtent != value)
+                {
+                    this.positionExtent = value;
+
+                    this.Preset = TransformerPreset.Custom;
+                }
             }
         }
 
@@ -133,7 +212,12 @@ namespace Slerpy.Unity3D
 
             set
             {
-                this.rotationExtent = value;
+                if (this.rotationExtent != value)
+                {
+                    this.rotationExtent = value;
+
+                    this.Preset = TransformerPreset.Custom;
+                }
             }
         }
 
@@ -146,7 +230,12 @@ namespace Slerpy.Unity3D
 
             set
             {
-                this.scaleExtent = value;
+                if (this.scaleExtent != value)
+                {
+                    this.scaleExtent = value;
+
+                    this.Preset = TransformerPreset.Custom;
+                }
             }
         }
 
@@ -236,11 +325,118 @@ namespace Slerpy.Unity3D
                 Slerpy.Interpolate.Standard(0.0f, this.scaleExtent.z * this.extentModifier, weight));
         }
 
+        private void TrySetToPreset()
+        {
+            PresetData data = default(PresetData);
+
+            if (Transformer.presetData.TryGetValue(this.preset, out data))
+            {
+                data.SetTo(this);
+            }
+        }
+
+        private void OnValidate()
+        {
+            if (this.previousPreset != TransformerPreset.Custom && this.previousPreset == this.preset)
+            {
+                this.preset = TransformerPreset.Custom;
+            }
+
+            this.Preset = this.preset;
+        }
+
         private void OnDestroy()
         {
             if (this.restoreTransformOnDestruction)
             {
                 this.RestoreTransform();
+            }
+        }
+
+        public struct PresetData
+        {
+            public static PresetData Default
+            {
+                get
+                {
+                    return new PresetData(0.0f, 0.0f, Vector3.zero, Vector3.zero, Vector3.zero);
+                }
+            }
+
+            private readonly float rateModifier;
+            private readonly float extentModifier;
+
+            private readonly Vector3 positionExtent;
+            private readonly Vector3 rotationExtent;
+            private readonly Vector3 scaleExtent;
+
+            public PresetData(float rateModifier, float extentModifier, Vector3 positionExtent, Vector3 rotationExtent, Vector3 scaleExtent)
+            {
+                this.rateModifier = rateModifier;
+                this.extentModifier = extentModifier;
+
+                this.positionExtent = positionExtent;
+                this.rotationExtent = rotationExtent;
+                this.scaleExtent = scaleExtent;
+            }
+
+            public float RateModifier
+            {
+                get
+                {
+                    return this.rateModifier;
+                }
+            }
+
+            public float ExtentModifier
+            {
+                get
+                {
+                    return this.extentModifier;
+                }
+            }
+
+            public Vector3 PositionExtent
+            {
+                get
+                {
+                    return this.positionExtent;
+                }
+            }
+
+            public Vector3 RotationExtent
+            {
+                get
+                {
+                    return this.rotationExtent;
+                }
+            }
+
+            public Vector3 ScaleExtent
+            {
+                get
+                {
+                    return this.scaleExtent;
+                }
+            }
+
+            public bool CompareTo(Transformer target)
+            {
+                return Mathf.Approximately(target.rateModifier, this.rateModifier)
+                    && Mathf.Approximately(target.extentModifier, this.extentModifier)
+                    && target.positionExtent == this.positionExtent
+                    && target.rotationExtent == this.rotationExtent
+                    && target.scaleExtent == this.scaleExtent;
+            }
+
+            public void SetTo(Transformer target)
+            {
+                target.rateModifier = this.rateModifier;
+                target.extentModifier = this.extentModifier;
+
+                target.positionExtent = this.positionExtent;
+                target.rotationExtent = this.rotationExtent;
+                target.scaleExtent = this.scaleExtent;
             }
         }
     }
