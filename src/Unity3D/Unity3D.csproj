@@ -41,6 +41,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Timers\RaiseEvent.cs" />
+    <Compile Include="Timers\EnableBehaviour.cs" />
+    <Compile Include="Timers\DisableBehaviour.cs" />
+    <Compile Include="Timers\DestroyGameObject.cs" />
+    <Compile Include="Timers\DestroyComponent.cs" />
+    <Compile Include="Timers\Timer.cs" />
     <Compile Include="Animator.cs" />
     <Compile Include="Transformer.cs" />
     <Compile Include="Effect.cs" />
