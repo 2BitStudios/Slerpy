@@ -39,7 +39,7 @@ namespace Slerpy.Unity3D
         private WeightType[] weights = new WeightType[] { WeightType.Linear };
 
         [SerializeField]
-        private TimeWrapType timeWrap = TimeWrapType.Clamp;
+        private TimeWrapType timeWrap = TimeWrapType.Cycle;
 
         [SerializeField]
         private InterpolateType interpolate = InterpolateType.Standard;
