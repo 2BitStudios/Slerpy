@@ -7,9 +7,6 @@ namespace Slerpy.Unity3D
 {
     public abstract class Effect : MonoBehaviour
     {
-        [SerializeField]
-        private bool randomiseStartTime = false;
-
         private float timeRunning = 0.0f;
 
         [SerializeField]
@@ -35,11 +32,6 @@ namespace Slerpy.Unity3D
 
         protected void Start()
         {
-            if (this.randomiseStartTime)
-            {
-                this.timeRunning += UnityEngine.Random.value;
-            }
-
             this.ProcessEffect(this.timeRunning);
         }
 
