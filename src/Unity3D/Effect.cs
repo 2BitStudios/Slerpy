@@ -11,11 +11,18 @@ namespace Slerpy.Unity3D
         private float rate = 1.0f;
 
         [SerializeField]
+        private Modifier[] rateModifiers = null;
+
+        [SerializeField]
         private float strength = 1.0f;
 
+        [SerializeField]
+        private Modifier[] strengthModifiers = null;
+
+        private float rawTime = 0.0f;
         private float totalTime = 0.0f;
 
-        public float Rate
+        public float UnmodifiedRate
         {
             get
             {
@@ -31,7 +38,30 @@ namespace Slerpy.Unity3D
             }
         }
 
-        public float Strength
+        public float ModifiedRate
+        {
+            get
+            {
+                float modifiedRate = this.UnmodifiedRate;
+
+                for (int i = 0; i < this.rateModifiers.Length; ++i)
+                {
+                    modifiedRate = this.rateModifiers[i].Evaluate(modifiedRate, this.rawTime);
+                }
+
+                return modifiedRate;
+            }
+        }
+
+        public IEnumerable<Modifier> RateModifiers
+        {
+            get
+            {
+                return this.rateModifiers;
+            }
+        }
+
+        public float UnmodifiedStrength
         {
             get
             {
@@ -45,6 +75,35 @@ namespace Slerpy.Unity3D
                     this.strength = value;
                 }
             }
+        }
+
+        public float ModifiedStrength
+        {
+            get
+            {
+                float modifiedStrength = this.UnmodifiedStrength;
+
+                for (int i = 0; i < this.strengthModifiers.Length; ++i)
+                {
+                    modifiedStrength = this.strengthModifiers[i].Evaluate(modifiedStrength, this.rawTime);
+                }
+
+                return modifiedStrength;
+            }
+        }
+
+        public IEnumerable<Modifier> StrengthModifiers
+        {
+            get
+            {
+                return this.strengthModifiers;
+            }
+        }
+
+        public void ResetTime()
+        {
+            this.rawTime = 0.0f;
+            this.totalTime = 0.0f;
         }
 
         protected abstract void ProcessEffect(float deltaTime, float totalTime, float strength);
@@ -64,11 +123,15 @@ namespace Slerpy.Unity3D
 
         protected void Update()
         {
-            float deltaTime = Time.deltaTime * this.rate;
+            float deltaTime = Time.deltaTime;
 
+            this.rawTime += deltaTime;
+
+            deltaTime *= this.ModifiedRate;
+            
             this.totalTime += deltaTime;
 
-            this.ProcessEffect(deltaTime, this.totalTime, this.strength);
+            this.ProcessEffect(deltaTime, this.totalTime, this.ModifiedStrength);
         }
     }
 }
