@@ -76,36 +76,36 @@ namespace Slerpy.Unity3D
             }
         }
 
-        protected override void ProcessEffect(float deltaTime)
+        protected override void ProcessEffect(float deltaTime, float totalTime, float strength)
         {
             for (int i = 0; i < this.boolAnimations.Length; ++i)
             {
-                this.boolAnimations[i].Evaluate(this.TimeRunning, deltaTime);
+                this.boolAnimations[i].Evaluate(deltaTime, totalTime, strength);
             }
 
             for (int i = 0; i < this.intAnimations.Length; ++i)
             {
-                this.intAnimations[i].Evaluate(this.TimeRunning, deltaTime);
+                this.intAnimations[i].Evaluate(deltaTime, totalTime, strength);
             }
 
             for (int i = 0; i < this.floatAnimations.Length; ++i)
             {
-                this.floatAnimations[i].Evaluate(this.TimeRunning, deltaTime);
+                this.floatAnimations[i].Evaluate(deltaTime, totalTime, strength);
             }
 
             for (int i = 0; i < this.vector3Animations.Length; ++i)
             {
-                this.vector3Animations[i].Evaluate(this.TimeRunning, deltaTime);
+                this.vector3Animations[i].Evaluate(deltaTime, totalTime, strength);
             }
 
             for (int i = 0; i < this.rotationAnimations.Length; ++i)
             {
-                this.rotationAnimations[i].Evaluate(this.TimeRunning, deltaTime);
+                this.rotationAnimations[i].Evaluate(deltaTime, totalTime, strength);
             }
 
             for (int i = 0; i < this.colorAnimations.Length; ++i)
             {
-                this.colorAnimations[i].Evaluate(this.TimeRunning, deltaTime);
+                this.colorAnimations[i].Evaluate(deltaTime, totalTime, strength);
             }
         }
 
@@ -136,7 +136,7 @@ namespace Slerpy.Unity3D
                 }
             }
 
-            public abstract void Evaluate(float time, float deltaTime);
+            public abstract void Evaluate(float deltaTime, float totalTime, float strength);
 
             protected void SetValue(object value)
             {
@@ -254,11 +254,11 @@ namespace Slerpy.Unity3D
                 }
             }
 
-            public override void Evaluate(float time, float deltaTime)
+            public override void Evaluate(float deltaTime, float totalTime, float strength)
             {
-                time -= this.timeOffset;
+                totalTime -= this.timeOffset;
 
-                if (this.time <= time && ((this.loop && (time % this.time) <= deltaTime) || !this.loop))
+                if (this.time <= totalTime && ((this.loop && (totalTime % this.time) <= deltaTime) || !this.loop))
                 {
                     this.SetValue(this.value);
                 }
@@ -312,13 +312,13 @@ namespace Slerpy.Unity3D
                 }
             }
 
-            public override void Evaluate(float time, float deltaTime)
+            public override void Evaluate(float deltaTime, float totalTime, float strength)
             {
-                time -= this.timeOffset;
+                totalTime -= this.timeOffset;
 
-                if (this.time <= time && ((this.loop && (time % this.time) <= deltaTime) || !this.loop))
+                if (this.time <= totalTime && ((this.loop && (totalTime % this.time) <= deltaTime) || !this.loop))
                 {
-                    this.SetValue(this.value);
+                    this.SetValue((int)(this.value * strength + 0.5f));
                 }
             }
         }
@@ -337,9 +337,9 @@ namespace Slerpy.Unity3D
                 }
             }
 
-            public override void Evaluate(float time, float deltaTime)
+            public override void Evaluate(float deltaTime, float totalTime, float strength)
             {
-                this.SetValue(this.values.Evaluate(time));
+                this.SetValue(this.values.Evaluate(totalTime) * strength);
             }
         }
 
@@ -379,9 +379,13 @@ namespace Slerpy.Unity3D
                 }
             }
 
-            public override void Evaluate(float time, float deltaTime)
+            public override void Evaluate(float deltaTime, float totalTime, float strength)
             {
-                this.SetValue(new Vector3(this.xValues.Evaluate(time), this.yValues.Evaluate(time), this.zValues.Evaluate(time)));
+                this.SetValue(
+                    new Vector3(
+                        this.xValues.Evaluate(totalTime), 
+                        this.yValues.Evaluate(totalTime), 
+                        this.zValues.Evaluate(totalTime)) * strength);
             }
         }
 
@@ -421,9 +425,14 @@ namespace Slerpy.Unity3D
                 }
             }
 
-            public override void Evaluate(float time, float deltaTime)
+            public override void Evaluate(float deltaTime, float totalTime, float strength)
             {
-                this.SetValue(UnityEngine.Quaternion.Euler(this.xValues.Evaluate(time), this.yValues.Evaluate(time), this.zValues.Evaluate(time)));
+                this.SetValue(
+                    Quaternion.Euler(
+                        new Vector3(
+                            this.xValues.Evaluate(totalTime), 
+                            this.yValues.Evaluate(totalTime), 
+                            this.zValues.Evaluate(totalTime)) * strength));
             }
         }
 
@@ -474,9 +483,14 @@ namespace Slerpy.Unity3D
                 }
             }
 
-            public override void Evaluate(float time, float deltaTime)
+            public override void Evaluate(float deltaTime, float totalTime, float strength)
             {
-                this.SetValue(new Color(this.rValues.Evaluate(time), this.gValues.Evaluate(time), this.bValues.Evaluate(time), this.aValues.Evaluate(time)));
+                this.SetValue(
+                    new Color(
+                        this.rValues.Evaluate(totalTime), 
+                        this.gValues.Evaluate(totalTime), 
+                        this.bValues.Evaluate(totalTime),
+                        this.aValues.Evaluate(totalTime)) * strength);
             }
         }
     }

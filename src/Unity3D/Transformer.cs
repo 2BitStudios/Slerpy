@@ -40,12 +40,6 @@ namespace Slerpy.Unity3D
         private bool restoreTransformOnDestruction = false;
 
         [SerializeField]
-        private float rateModifier = 1.0f;
-
-        [SerializeField]
-        private float extentModifier = 1.0f;
-
-        [SerializeField]
         private Vector3 positionExtent = Vector3.zero;
 
         [SerializeField]
@@ -146,42 +140,6 @@ namespace Slerpy.Unity3D
             set
             {
                 this.restoreTransformOnDestruction = value;
-            }
-        }
-
-        public float RateModifier
-        {
-            get
-            {
-                return this.rateModifier;
-            }
-
-            set
-            {
-                if (this.rateModifier != value)
-                {
-                    this.rateModifier = value;
-
-                    this.Preset = TransformerPreset.Custom;
-                }
-            }
-        }
-
-        public float ExtentModifier
-        {
-            get
-            {
-                return this.extentModifier;
-            }
-
-            set
-            {
-                if (this.extentModifier != value)
-                {
-                    this.extentModifier = value;
-
-                    this.Preset = TransformerPreset.Custom;
-                }
             }
         }
 
@@ -297,11 +255,11 @@ namespace Slerpy.Unity3D
             this.ScaleOffset = Vector3.zero;
         }
 
-        protected override void ProcessEffect(float deltaTime)
+        protected override void ProcessEffect(float deltaTime, float totalTime, float strength)
         {
             float weight = Weight.FromTime(
                 this.timeWrapType,
-                this.TimeRunning * this.rateModifier,
+                totalTime,
                 1.0f);
 
             for (int i = 0; i < this.weightTypes.Length; ++i)
@@ -310,19 +268,29 @@ namespace Slerpy.Unity3D
             }
 
             this.PositionOffset = new Vector3(
-                Slerpy.Interpolate.Standard(0.0f, this.positionExtent.x * this.extentModifier, weight),
-                Slerpy.Interpolate.Standard(0.0f, this.positionExtent.y * this.extentModifier, weight),
-                Slerpy.Interpolate.Standard(0.0f, this.positionExtent.z * this.extentModifier, weight));
+                Slerpy.Interpolate.Standard(0.0f, this.positionExtent.x * strength, weight),
+                Slerpy.Interpolate.Standard(0.0f, this.positionExtent.y * strength, weight),
+                Slerpy.Interpolate.Standard(0.0f, this.positionExtent.z * strength, weight));
 
             this.RotationOffset = Quaternion.Euler(new Vector3(
-                Slerpy.Interpolate.Standard(0.0f, this.rotationExtent.x * this.extentModifier, weight),
-                Slerpy.Interpolate.Standard(0.0f, this.rotationExtent.y * this.extentModifier, weight),
-                Slerpy.Interpolate.Standard(0.0f, this.rotationExtent.z * this.extentModifier, weight)));
+                Slerpy.Interpolate.Standard(0.0f, this.rotationExtent.x * strength, weight),
+                Slerpy.Interpolate.Standard(0.0f, this.rotationExtent.y * strength, weight),
+                Slerpy.Interpolate.Standard(0.0f, this.rotationExtent.z * strength, weight)));
 
             this.ScaleOffset = new Vector3(
-                Slerpy.Interpolate.Standard(0.0f, this.scaleExtent.x * this.extentModifier, weight),
-                Slerpy.Interpolate.Standard(0.0f, this.scaleExtent.y * this.extentModifier, weight),
-                Slerpy.Interpolate.Standard(0.0f, this.scaleExtent.z * this.extentModifier, weight));
+                Slerpy.Interpolate.Standard(0.0f, this.scaleExtent.x * strength, weight),
+                Slerpy.Interpolate.Standard(0.0f, this.scaleExtent.y * strength, weight),
+                Slerpy.Interpolate.Standard(0.0f, this.scaleExtent.z * strength, weight));
+        }
+
+        protected override void OnRateChanged(float oldRate, float newRate)
+        {
+            this.Preset = TransformerPreset.Custom;
+        }
+
+        protected override void OnStrengthChanged(float oldStrength, float newStrength)
+        {
+            this.Preset = TransformerPreset.Custom;
         }
 
         private void TrySetToPreset()
@@ -363,36 +331,36 @@ namespace Slerpy.Unity3D
                 }
             }
 
-            private readonly float rateModifier;
-            private readonly float extentModifier;
+            private readonly float rate;
+            private readonly float strength;
 
             private readonly Vector3 positionExtent;
             private readonly Vector3 rotationExtent;
             private readonly Vector3 scaleExtent;
 
-            public PresetData(float rateModifier, float extentModifier, Vector3 positionExtent, Vector3 rotationExtent, Vector3 scaleExtent)
+            public PresetData(float rateModifier, float strengthModifier, Vector3 positionExtent, Vector3 rotationExtent, Vector3 scaleExtent)
             {
-                this.rateModifier = rateModifier;
-                this.extentModifier = extentModifier;
+                this.rate = rateModifier;
+                this.strength = strengthModifier;
 
                 this.positionExtent = positionExtent;
                 this.rotationExtent = rotationExtent;
                 this.scaleExtent = scaleExtent;
             }
 
-            public float RateModifier
+            public float Rate
             {
                 get
                 {
-                    return this.rateModifier;
+                    return this.rate;
                 }
             }
 
-            public float ExtentModifier
+            public float Strength
             {
                 get
                 {
-                    return this.extentModifier;
+                    return this.strength;
                 }
             }
 
@@ -422,8 +390,8 @@ namespace Slerpy.Unity3D
 
             public bool CompareTo(Transformer target)
             {
-                return Mathf.Approximately(target.rateModifier, this.rateModifier)
-                    && Mathf.Approximately(target.extentModifier, this.extentModifier)
+                return Mathf.Approximately(target.Rate, this.rate)
+                    && Mathf.Approximately(target.Strength, this.strength)
                     && target.positionExtent == this.positionExtent
                     && target.rotationExtent == this.rotationExtent
                     && target.scaleExtent == this.scaleExtent;
@@ -431,8 +399,8 @@ namespace Slerpy.Unity3D
 
             public void SetTo(Transformer target)
             {
-                target.rateModifier = this.rateModifier;
-                target.extentModifier = this.extentModifier;
+                target.Rate = this.rate;
+                target.Strength = this.strength;
 
                 target.positionExtent = this.positionExtent;
                 target.rotationExtent = this.rotationExtent;
