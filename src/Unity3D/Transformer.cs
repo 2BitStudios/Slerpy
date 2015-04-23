@@ -36,7 +36,7 @@ namespace Slerpy.Unity3D
         private TransformerPreset preset = PRESET_DEFAULT;
 
         [SerializeField]
-        private WeightType[] weightTypes = null;
+        private WeightType[] weightTypes = new WeightType[] { WeightType.Linear };
 
         [SerializeField]
         private TimeWrapType timeWrapType = TimeWrapType.Clamp;
