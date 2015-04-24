@@ -277,11 +277,15 @@ namespace Slerpy.Unity3D
 
         protected override void OnRateChanged(float oldRate, float newRate)
         {
+            base.OnRateChanged(oldRate, newRate);
+
             this.Preset = TransformerPreset.Custom;
         }
 
         protected override void OnStrengthChanged(float oldStrength, float newStrength)
         {
+            base.OnStrengthChanged(oldStrength, newStrength);
+
             this.Preset = TransformerPreset.Custom;
         }
 
