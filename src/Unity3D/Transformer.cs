@@ -36,6 +36,9 @@ namespace Slerpy.Unity3D
         private TransformerPreset preset = PRESET_DEFAULT;
 
         [SerializeField]
+        private float cycleTime = 1.0f;
+
+        [SerializeField]
         private WeightType[] weights = new WeightType[] { WeightType.Linear };
 
         [SerializeField]
@@ -88,6 +91,14 @@ namespace Slerpy.Unity3D
                 }
 
                 this.previousPreset = this.preset;
+            }
+        }
+
+        public float CycleTime
+        {
+            get
+            {
+                return this.cycleTime;
             }
         }
 
@@ -252,7 +263,7 @@ namespace Slerpy.Unity3D
             float weight = Weight.FromTime(
                 this.timeWrap,
                 totalTime,
-                1.0f);
+                this.cycleTime);
 
             for (int i = 0; i < this.weights.Length; ++i)
             {
