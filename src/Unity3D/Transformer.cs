@@ -398,8 +398,8 @@ namespace Slerpy.Unity3D
 
             public bool CompareTo(Transformer target)
             {
-                return Mathf.Approximately(target.UnmodifiedRate, this.rate)
-                    && Mathf.Approximately(target.UnmodifiedStrength, this.strength)
+                return Mathf.Approximately(target.UnscaledRate, this.rate)
+                    && Mathf.Approximately(target.UnscaledStrength, this.strength)
                     && target.positionExtent == this.positionExtent
                     && target.rotationExtent == this.rotationExtent
                     && target.scaleExtent == this.scaleExtent;
@@ -407,8 +407,8 @@ namespace Slerpy.Unity3D
 
             public void SetTo(Transformer target)
             {
-                target.UnmodifiedRate = this.rate;
-                target.UnmodifiedStrength = this.strength;
+                target.UnscaledRate = this.rate;
+                target.UnscaledStrength = this.strength;
 
                 target.positionExtent = this.positionExtent;
                 target.rotationExtent = this.rotationExtent;

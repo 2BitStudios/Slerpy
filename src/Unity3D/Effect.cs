@@ -11,18 +11,18 @@ namespace Slerpy.Unity3D
         private float rate = 1.0f;
 
         [SerializeField]
-        private Modifier[] rateModifiers = null;
+        private AnimationCurve rateScale = AnimationCurve.Linear(0.0f, 1.0f, 1.0f, 1.0f);
 
         [SerializeField]
         private float strength = 1.0f;
 
         [SerializeField]
-        private Modifier[] strengthModifiers = null;
+        private AnimationCurve strengthScale = AnimationCurve.Linear(0.0f, 1.0f, 1.0f, 1.0f);
 
         private float rawTime = 0.0f;
-        private float totalTime = 0.0f;
+        private float simulatedTime = 0.0f;
 
-        public float UnmodifiedRate
+        public float UnscaledRate
         {
             get
             {
@@ -38,30 +38,23 @@ namespace Slerpy.Unity3D
             }
         }
 
-        public float ModifiedRate
+        public float ScaledRate
         {
             get
             {
-                float modifiedRate = this.UnmodifiedRate;
-
-                for (int i = 0; i < this.rateModifiers.Length; ++i)
-                {
-                    modifiedRate = this.rateModifiers[i].Evaluate(modifiedRate, this.rawTime);
-                }
-
-                return modifiedRate;
+                return this.UnscaledRate * this.rateScale.Evaluate(this.rawTime);
             }
         }
 
-        public IEnumerable<Modifier> RateModifiers
+        public AnimationCurve RateScale
         {
             get
             {
-                return this.rateModifiers;
+                return this.rateScale;
             }
         }
 
-        public float UnmodifiedStrength
+        public float UnscaledStrength
         {
             get
             {
@@ -77,33 +70,26 @@ namespace Slerpy.Unity3D
             }
         }
 
-        public float ModifiedStrength
+        public float ScaledStrength
         {
             get
             {
-                float modifiedStrength = this.UnmodifiedStrength;
-
-                for (int i = 0; i < this.strengthModifiers.Length; ++i)
-                {
-                    modifiedStrength = this.strengthModifiers[i].Evaluate(modifiedStrength, this.rawTime);
-                }
-
-                return modifiedStrength;
+                return this.UnscaledStrength * this.strengthScale.Evaluate(this.rawTime);
             }
         }
 
-        public IEnumerable<Modifier> StrengthModifiers
+        public AnimationCurve StrengthScale
         {
             get
             {
-                return this.strengthModifiers;
+                return this.strengthScale;
             }
         }
 
         public void ResetTime()
         {
             this.rawTime = 0.0f;
-            this.totalTime = 0.0f;
+            this.simulatedTime = 0.0f;
         }
 
         protected abstract void ProcessEffect(float deltaTime, float totalTime, float strength);
@@ -115,10 +101,10 @@ namespace Slerpy.Unity3D
         protected virtual void OnStrengthChanged(float oldStrength, float newStrength)
         {
         }
-
+        
         protected void Start()
         {
-            this.ProcessEffect(0.0f, this.totalTime, this.strength);
+            this.ProcessEffect(0.0f, this.simulatedTime, this.ScaledStrength);
         }
 
         protected void Update()
@@ -127,11 +113,11 @@ namespace Slerpy.Unity3D
 
             this.rawTime += deltaTime;
 
-            deltaTime *= this.ModifiedRate;
+            deltaTime *= this.ScaledRate;
             
-            this.totalTime += deltaTime;
+            this.simulatedTime += deltaTime;
 
-            this.ProcessEffect(deltaTime, this.totalTime, this.ModifiedStrength);
+            this.ProcessEffect(deltaTime, this.simulatedTime, this.ScaledStrength);
         }
     }
 }
