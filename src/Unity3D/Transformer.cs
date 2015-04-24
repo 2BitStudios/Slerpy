@@ -45,9 +45,6 @@ namespace Slerpy.Unity3D
         private InterpolateType interpolate = InterpolateType.Standard;
 
         [SerializeField]
-        private bool restoreTransformOnDestruction = false;
-
-        [SerializeField]
         private Vector3 positionExtent = Vector3.zero;
 
         [SerializeField]
@@ -135,19 +132,6 @@ namespace Slerpy.Unity3D
 
                     this.Preset = TransformerPreset.Custom;
                 }
-            }
-        }
-
-        public bool RestoreTransformOnDestruction
-        {
-            get
-            {
-                return this.restoreTransformOnDestruction;
-            }
-
-            set
-            {
-                this.restoreTransformOnDestruction = value;
             }
         }
 
@@ -256,7 +240,7 @@ namespace Slerpy.Unity3D
             }
         }
 
-        public void RestoreTransform()
+        public void ResetOffsets()
         {
             this.PositionOffset = Vector3.zero;
             this.RotationOffset = Quaternion.identity;
@@ -319,14 +303,6 @@ namespace Slerpy.Unity3D
             }
 
             this.Preset = this.preset;
-        }
-
-        private void OnDestroy()
-        {
-            if (this.restoreTransformOnDestruction)
-            {
-                this.RestoreTransform();
-            }
         }
 
         public struct PresetData
