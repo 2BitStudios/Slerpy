@@ -260,19 +260,19 @@ namespace Slerpy.Unity3D
             }
 
             this.PositionOffset = new Vector3(
-                Slerpy.Interpolate.Standard(0.0f, this.positionExtent.x * strength, weight),
-                Slerpy.Interpolate.Standard(0.0f, this.positionExtent.y * strength, weight),
-                Slerpy.Interpolate.Standard(0.0f, this.positionExtent.z * strength, weight));
+                Slerpy.Interpolate.WithType(this.interpolate, 0.0f, this.positionExtent.x * strength, weight),
+                Slerpy.Interpolate.WithType(this.interpolate, 0.0f, this.positionExtent.y * strength, weight),
+                Slerpy.Interpolate.WithType(this.interpolate, 0.0f, this.positionExtent.z * strength, weight));
 
             this.RotationOffset = Quaternion.Euler(new Vector3(
-                Slerpy.Interpolate.Standard(0.0f, this.rotationExtent.x * strength, weight),
-                Slerpy.Interpolate.Standard(0.0f, this.rotationExtent.y * strength, weight),
-                Slerpy.Interpolate.Standard(0.0f, this.rotationExtent.z * strength, weight)));
+                Slerpy.Interpolate.WithType(this.interpolate, 0.0f, this.rotationExtent.x * strength, weight),
+                Slerpy.Interpolate.WithType(this.interpolate, 0.0f, this.rotationExtent.y * strength, weight),
+                Slerpy.Interpolate.WithType(this.interpolate, 0.0f, this.rotationExtent.z * strength, weight)));
 
             this.ScaleOffset = new Vector3(
-                Slerpy.Interpolate.Standard(0.0f, this.scaleExtent.x * strength, weight),
-                Slerpy.Interpolate.Standard(0.0f, this.scaleExtent.y * strength, weight),
-                Slerpy.Interpolate.Standard(0.0f, this.scaleExtent.z * strength, weight));
+                Slerpy.Interpolate.WithType(this.interpolate, 0.0f, this.scaleExtent.x * strength, weight),
+                Slerpy.Interpolate.WithType(this.interpolate, 0.0f, this.scaleExtent.y * strength, weight),
+                Slerpy.Interpolate.WithType(this.interpolate, 0.0f, this.scaleExtent.z * strength, weight));
         }
 
         protected override void OnRateChanged(float oldRate, float newRate)
