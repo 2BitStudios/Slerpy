@@ -86,6 +86,22 @@ namespace Slerpy.Unity3D
             }
         }
 
+        public float RawTime
+        {
+            get
+            {
+                return this.rawTime;
+            }
+        }
+
+        public float SimulatedTime
+        {
+            get
+            {
+                return this.simulatedTime;
+            }
+        }
+
         public void ResetTime()
         {
             this.rawTime = 0.0f;
