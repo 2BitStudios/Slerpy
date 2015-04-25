@@ -14,7 +14,10 @@ namespace Slerpy.Unity3D
         TwistX = 4,
         TwistY = 5,
         TwistZ = 6,
-        Throb = 7
+        Throb = 7,
+        Raise = 8,
+        Flip = 9,
+        Expand = 10
     }
 
     public sealed class Transformer : Effect
@@ -23,13 +26,16 @@ namespace Slerpy.Unity3D
 
         private static readonly Dictionary<TransformerPreset, PresetData> presetData = new Dictionary<TransformerPreset, PresetData>()
         {
-            { TransformerPreset.ShakeX, new PresetData(12.0f, 1.0f, new Vector3(0.1f, 0.0f, 0.0f), Vector3.zero, Vector3.zero) },
-            { TransformerPreset.ShakeY, new PresetData(12.0f, 1.0f, new Vector3(0.0f, 0.1f, 0.0f), Vector3.zero, Vector3.zero) },
-            { TransformerPreset.ShakeZ, new PresetData(12.0f, 1.0f, new Vector3(0.0f, 0.0f, 0.1f), Vector3.zero, Vector3.zero) },
-            { TransformerPreset.TwistX, new PresetData(2.0f, 1.0f, Vector3.zero, new Vector3(180.0f, 0.0f, 0.0f), Vector3.zero) },
-            { TransformerPreset.TwistY, new PresetData(2.0f, 1.0f, Vector3.zero, new Vector3(0.0f, 180.0f, 0.0f), Vector3.zero) },
-            { TransformerPreset.TwistZ, new PresetData(2.0f, 1.0f, Vector3.zero, new Vector3(0.0f, 0.0f, 180.0f), Vector3.zero) },
-            { TransformerPreset.Throb, new PresetData(2.0f, 1.0f, Vector3.zero, Vector3.zero, new Vector3(0.1f, 0.1f, 0.1f)) }
+            { TransformerPreset.ShakeX, new PresetData(TimeWrapType.Cycle, 12.0f, 1.0f, new Vector3(0.1f, 0.0f, 0.0f), Vector3.zero, Vector3.zero) },
+            { TransformerPreset.ShakeY, new PresetData(TimeWrapType.Cycle, 12.0f, 1.0f, new Vector3(0.0f, 0.1f, 0.0f), Vector3.zero, Vector3.zero) },
+            { TransformerPreset.ShakeZ, new PresetData(TimeWrapType.Cycle, 12.0f, 1.0f, new Vector3(0.0f, 0.0f, 0.1f), Vector3.zero, Vector3.zero) },
+            { TransformerPreset.TwistX, new PresetData(TimeWrapType.Cycle, 2.0f, 1.0f, Vector3.zero, new Vector3(180.0f, 0.0f, 0.0f), Vector3.zero) },
+            { TransformerPreset.TwistY, new PresetData(TimeWrapType.Cycle, 2.0f, 1.0f, Vector3.zero, new Vector3(0.0f, 180.0f, 0.0f), Vector3.zero) },
+            { TransformerPreset.TwistZ, new PresetData(TimeWrapType.Cycle, 2.0f, 1.0f, Vector3.zero, new Vector3(0.0f, 0.0f, 180.0f), Vector3.zero) },
+            { TransformerPreset.Throb, new PresetData(TimeWrapType.Cycle, 2.0f, 1.0f, Vector3.zero, Vector3.zero, new Vector3(0.1f, 0.1f, 0.1f)) },
+            { TransformerPreset.Raise, new PresetData(TimeWrapType.Clamp, 1.0f, 1.0f, new Vector3(0.0f, 1.0f, 0.0f), Vector3.zero, Vector3.zero) },
+            { TransformerPreset.Flip, new PresetData(TimeWrapType.Clamp, 1.0f, 1.0f, Vector3.zero, new Vector3(180.0f, 0.0f, 0.0f), Vector3.zero) },
+            { TransformerPreset.Expand, new PresetData(TimeWrapType.Clamp, 1.0f, 1.0f, Vector3.zero, Vector3.zero, new Vector3(1.0f, 1.0f, 1.0f)) }
         };
 
         [SerializeField]
@@ -327,13 +333,7 @@ namespace Slerpy.Unity3D
 
         public struct PresetData
         {
-            public static PresetData Default
-            {
-                get
-                {
-                    return new PresetData(0.0f, 0.0f, Vector3.zero, Vector3.zero, Vector3.zero);
-                }
-            }
+            private TimeWrapType timeWrap;
 
             private readonly float rate;
             private readonly float strength;
@@ -342,10 +342,12 @@ namespace Slerpy.Unity3D
             private readonly Vector3 rotationExtent;
             private readonly Vector3 scaleExtent;
 
-            public PresetData(float rateModifier, float strengthModifier, Vector3 positionExtent, Vector3 rotationExtent, Vector3 scaleExtent)
+            public PresetData(TimeWrapType timeWrap, float rate, float strength, Vector3 positionExtent, Vector3 rotationExtent, Vector3 scaleExtent)
             {
-                this.rate = rateModifier;
-                this.strength = strengthModifier;
+                this.timeWrap = timeWrap;
+
+                this.rate = rate;
+                this.strength = strength;
 
                 this.positionExtent = positionExtent;
                 this.rotationExtent = rotationExtent;
@@ -394,7 +396,8 @@ namespace Slerpy.Unity3D
 
             public bool CompareTo(Transformer target)
             {
-                return Mathf.Approximately(target.UnscaledRate, this.rate)
+                return target.timeWrap == this.timeWrap
+                    && Mathf.Approximately(target.UnscaledRate, this.rate)
                     && Mathf.Approximately(target.UnscaledStrength, this.strength)
                     && target.positionExtent == this.positionExtent
                     && target.rotationExtent == this.rotationExtent
@@ -404,6 +407,8 @@ namespace Slerpy.Unity3D
             public void SetTo(Transformer target)
             {
                 target.autodetectPresetValues = false;
+
+                target.timeWrap = this.timeWrap;
 
                 target.UnscaledRate = this.rate;
                 target.UnscaledStrength = this.strength;
