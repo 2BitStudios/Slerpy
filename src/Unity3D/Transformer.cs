@@ -64,6 +64,8 @@ namespace Slerpy.Unity3D
         private Quaternion rotationOffset = Quaternion.identity;
         private Vector3 scaleOffset = Vector3.zero;
 
+        private bool autodetectPresetValues = true;
+
         public TransformerPreset Preset
         {
             get
@@ -75,19 +77,22 @@ namespace Slerpy.Unity3D
             {
                 this.preset = value;
 
-                if (this.preset == TransformerPreset.Custom)
+                if (this.autodetectPresetValues)
                 {
-                    foreach (KeyValuePair<TransformerPreset, PresetData> presetData in Transformer.presetData)
+                    if (this.preset == TransformerPreset.Custom)
                     {
-                        if (presetData.Value.CompareTo(this))
+                        foreach (KeyValuePair<TransformerPreset, PresetData> presetData in Transformer.presetData)
                         {
-                            this.preset = presetData.Key;
+                            if (presetData.Value.CompareTo(this))
+                            {
+                                this.preset = presetData.Key;
+                            }
                         }
                     }
-                }
-                else
-                {
-                    this.TrySetToPreset();
+                    else
+                    {
+                        this.TrySetToPreset();
+                    }
                 }
 
                 this.previousPreset = this.preset;
@@ -398,12 +403,18 @@ namespace Slerpy.Unity3D
 
             public void SetTo(Transformer target)
             {
+                target.autodetectPresetValues = false;
+
                 target.UnscaledRate = this.rate;
                 target.UnscaledStrength = this.strength;
 
                 target.positionExtent = this.positionExtent;
                 target.rotationExtent = this.rotationExtent;
                 target.scaleExtent = this.scaleExtent;
+
+                target.autodetectPresetValues = true;
+
+                target.Preset = TransformerPreset.Custom;
             }
         }
     }
