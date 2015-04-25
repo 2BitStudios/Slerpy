@@ -41,6 +41,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\GlobalAssemblyInfo.cs">
+      <Link>Properties\GlobalAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="Timers\RaiseEvent.cs" />
     <Compile Include="Timers\EnableBehaviour.cs" />
     <Compile Include="Timers\DisableBehaviour.cs" />
