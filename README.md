@@ -1,13 +1,11 @@
 Slerpy
 ======
-
-A collection of 'juice' effects for video games.
-
-Requirements
-------------
-C#   - Visual Studio 2013
-C++  - Visual Studio 2008 (vc90 compiler, to target .Net 3.5)
+A collection of juice effects and workflow helpers for video games.
 
 Platforms
 ---------
-.Net 3.5
+- Native
+  - 'make' and 'g++'
+- .Net 3.5
+  - (C++/CLI) Visual Studio 2008 (vc90 compiler)
+  - (C#) Visual Studio 2013
