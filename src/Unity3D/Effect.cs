@@ -28,10 +28,7 @@ namespace Slerpy.Unity3D
 
             set
             {
-                if (this.rate != value)
-                {
-                    this.OnRateChanged(this.rate, this.rate = value);
-                }
+                this.rate = value;
             }
         }
 
@@ -106,14 +103,6 @@ namespace Slerpy.Unity3D
         }
 
         protected abstract void ProcessEffect(float deltaTime, float totalTime, float strength);
-
-        protected virtual void OnRateChanged(float oldRate, float newRate)
-        {
-        }
-
-        protected virtual void OnStrengthChanged(float oldStrength, float newStrength)
-        {
-        }
         
         protected void Start()
         {
