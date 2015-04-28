@@ -53,11 +53,12 @@ namespace Slerpy
     enum class WeightType
     {
         Linear = 0,
-        Heavy = 1,
-        Inverted = 2,
-        Exaggerated = 3,
-        StickyLow = 4,
-        StickyHigh = 5
+        Eager = 1,
+        Heavy = 2,
+        Inverted = 3,
+        Exaggerated = 4,
+        StickyLow = 5,
+        StickyHigh = 6
     };
 
 #ifdef _MANAGED
@@ -85,6 +86,7 @@ extern "C"
     DECLARATION_PREFIX float TRANSLATE_FUNCTION_NAME(WithType)(WeightType type, WEIGHT_PARAMS_STANDARD);
 
     DECLARATION_PREFIX float TRANSLATE_FUNCTION_NAME(Linear)(WEIGHT_PARAMS_STANDARD);
+    DECLARATION_PREFIX float TRANSLATE_FUNCTION_NAME(Eager)(WEIGHT_PARAMS_STANDARD);
     DECLARATION_PREFIX float TRANSLATE_FUNCTION_NAME(Heavy)(WEIGHT_PARAMS_STANDARD);
     DECLARATION_PREFIX float TRANSLATE_FUNCTION_NAME(Inverted)(WEIGHT_PARAMS_STANDARD);
     DECLARATION_PREFIX float TRANSLATE_FUNCTION_NAME(Exaggerated)(WEIGHT_PARAMS_STANDARD);

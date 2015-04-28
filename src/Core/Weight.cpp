@@ -62,6 +62,8 @@ namespace Slerpy
     {
         switch (type)
         {
+        case WeightType::Eager:
+            return TRANSLATE_FUNCTION_NAME(Eager)(weight);
         case WeightType::Heavy:
             return TRANSLATE_FUNCTION_NAME(Heavy)(weight);
         case WeightType::Inverted:
@@ -81,6 +83,13 @@ namespace Slerpy
     float TRANSLATE_FUNCTION_NAME(Linear)(WEIGHT_PARAMS_STANDARD)
     {
         return weight;
+    }
+
+    float TRANSLATE_FUNCTION_NAME(Eager)(WEIGHT_PARAMS_STANDARD)
+    {
+        float const weightAbs = MATH_ABS(weight);
+        
+        return (MATH_LOG2(1.0f + weightAbs * 3.0f) * 0.5f) * MATH_SIGN(weight);
     }
 
     float TRANSLATE_FUNCTION_NAME(Heavy)(WEIGHT_PARAMS_STANDARD)

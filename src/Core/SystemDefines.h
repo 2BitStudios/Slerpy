@@ -9,6 +9,9 @@
 #define MATH_SQRT(value) ((float)System::Math::Sqrt(value))
 #define MATH_ABS(value) ((float)System::Math::Abs(value))
 #define MATH_FLOOR(value) ((float)System::Math::Floor(value))
+#define MATH_LOG(value) ((float)System::Math::Log(value))
+#define MATH_LOG2(value) ((float)System::Math::Log(value, 2.0f))
+#define MATH_LOG10(value) ((float)System::Math::Log10(value))
 
 #else //_MANAGED
 
@@ -21,6 +24,9 @@
 #define MATH_SQRT(value) ((float)sqrt(value))
 #define MATH_ABS(value) ((float)abs(value))
 #define MATH_FLOOR(value) ((float)floor(value))
+#define MATH_LOG(value) ((float)log(value))
+#define MATH_LOG2(value) ((float)log2(value))
+#define MATH_LOG10(value) ((float)log10(value))
 
 #endif //_MANAGED
 

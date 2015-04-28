@@ -60,6 +60,22 @@ namespace Slerpy
             }
 
             [Test]
+            static void Eager()
+            {
+                Assert::AreEqual(0.0f, Slerpy::Weight::WithType(WeightType::Eager, 0.0f), EPSILON);
+                Assert::AreEqual(0.4036f, Slerpy::Weight::WithType(WeightType::Eager, 0.25f), EPSILON);
+                Assert::AreEqual(0.6610f, Slerpy::Weight::WithType(WeightType::Eager, 0.5f), EPSILON);
+                Assert::AreEqual(0.8502f, Slerpy::Weight::WithType(WeightType::Eager, 0.75f), EPSILON);
+                Assert::AreEqual(1.0f, Slerpy::Weight::WithType(WeightType::Eager, 1.0f), EPSILON);
+
+                Assert::AreEqual(0.0f, Slerpy::Weight::WithType(WeightType::Eager, 0.0f), EPSILON);
+                Assert::AreEqual(-0.4036f, Slerpy::Weight::WithType(WeightType::Eager, -0.25f), EPSILON);
+                Assert::AreEqual(-0.6610f, Slerpy::Weight::WithType(WeightType::Eager, -0.5f), EPSILON);
+                Assert::AreEqual(-0.8502f, Slerpy::Weight::WithType(WeightType::Eager, -0.75f), EPSILON);
+                Assert::AreEqual(-1.0f, Slerpy::Weight::WithType(WeightType::Eager, -1.0f), EPSILON);
+            }
+
+            [Test]
             static void Heavy()
             {
                 Assert::AreEqual(0.0f, Slerpy::Weight::WithType(WeightType::Heavy, 0.0f), EPSILON);
