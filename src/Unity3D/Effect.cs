@@ -5,15 +5,19 @@ namespace Slerpy.Unity3D
     public abstract class Effect : MonoBehaviour
     {
         [SerializeField]
+        [Tooltip("Rate that time passes. Speeds up or slows down effects.")]
         private float rate = 1.0f;
 
         [SerializeField]
+        [Tooltip("Multiplies against rate. Evaluation time is raw running time, not rate-modified time.")]
         private AnimationCurve rateScale = AnimationCurve.Linear(0.0f, 1.0f, 1.0f, 1.0f);
 
         [SerializeField]
+        [Tooltip("Strength of effect. For example, an effect that moves the object would move twice as far with a strength of 2.0.")]
         private float strength = 1.0f;
 
         [SerializeField]
+        [Tooltip("Multiplies against strength. Evaluation time is raw running time, not rate-modified time.")]
         private AnimationCurve strengthScale = AnimationCurve.Linear(0.0f, 1.0f, 1.0f, 1.0f);
 
         private float rawTime = 0.0f;

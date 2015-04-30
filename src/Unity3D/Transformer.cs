@@ -39,27 +39,35 @@ namespace Slerpy.Unity3D
         };
 
         [SerializeField]
-        private WeightType[] weights = new WeightType[] { WeightType.Linear };
-
-        [SerializeField]
-        private TransformerPreset preset = PRESET_DEFAULT;
-
-        [SerializeField]
-        private float time = 1.0f;
-
-        [SerializeField]
-        private TimeWrapType timeWrap = TimeWrapType.Cycle;
-
-        [SerializeField]
+        [Tooltip("Weight interpolation method.")]
         private InterpolateType interpolate = InterpolateType.Standard;
 
         [SerializeField]
+        [Tooltip("List of weight modifiers to be applied to the base weight of the effect. Will be applied in order listed here.")]
+        private WeightType[] weights = new WeightType[] { WeightType.Linear };
+
+        [SerializeField]
+        [Tooltip("Pre-defined common settings for the values that follow.")]
+        private TransformerPreset preset = PRESET_DEFAULT;
+
+        [SerializeField]
+        [Tooltip("Run time of a single cycle, to modified by 'rate'.")]
+        private float time = 1.0f;
+        
+        [SerializeField]
+        [Tooltip("How 'time' continues to affect the effect once the cycle ends.")]
+        private TimeWrapType timeWrap = TimeWrapType.Cycle;
+
+        [SerializeField]
+        [Tooltip("Maximum position change at a weight of 1.0. Can be exceeded or negated by weight modifiers or time wrap type.")]
         private Vector3 positionExtent = Vector3.zero;
 
         [SerializeField]
+        [Tooltip("Maximum rotation change at a weight of 1.0. Can be exceeded or negated by weight modifiers or time wrap type.")]
         private Vector3 rotationExtent = Vector3.zero;
 
         [SerializeField]
+        [Tooltip("Maximum scale change at a weight of 1.0. Can be exceeded or negated by weight modifiers or time wrap type.")]
         private Vector3 scaleExtent = Vector3.zero;
 
         [SerializeField]
@@ -69,6 +77,32 @@ namespace Slerpy.Unity3D
         private Vector3 positionOffset = Vector3.zero;
         private Quaternion rotationOffset = Quaternion.identity;
         private Vector3 scaleOffset = Vector3.zero;
+
+        public InterpolateType Interpolate
+        {
+            get
+            {
+                return this.interpolate;
+            }
+
+            set
+            {
+                if (this.interpolate != value)
+                {
+                    this.interpolate = value;
+
+                    this.Preset = TransformerPreset.Custom;
+                }
+            }
+        }
+
+        public IEnumerable<WeightType> Weights
+        {
+            get
+            {
+                return this.weights;
+            }
+        }
 
         public TransformerPreset Preset
         {
@@ -108,14 +142,6 @@ namespace Slerpy.Unity3D
             }
         }
 
-        public IEnumerable<WeightType> Weights
-        {
-            get
-            {
-                return this.weights;
-            }
-        }
-
         public TimeWrapType TimeWrap
         {
             get
@@ -128,24 +154,6 @@ namespace Slerpy.Unity3D
                 if (this.timeWrap != value)
                 {
                     this.timeWrap = value;
-
-                    this.Preset = TransformerPreset.Custom;
-                }
-            }
-        }
-
-        public InterpolateType Interpolate
-        {
-            get
-            {
-                return this.interpolate;
-            }
-
-            set
-            {
-                if (this.interpolate != value)
-                {
-                    this.interpolate = value;
 
                     this.Preset = TransformerPreset.Custom;
                 }
