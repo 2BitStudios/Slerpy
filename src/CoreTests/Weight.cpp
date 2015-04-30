@@ -158,6 +158,22 @@ namespace Slerpy
                 Assert::AreEqual(-0.9375f, Slerpy::Weight::WithType(WeightType::StickyHigh, -0.75f), EPSILON);
                 Assert::AreEqual(-1.0f, Slerpy::Weight::WithType(WeightType::StickyHigh, -1.0f), EPSILON);
             }
+
+            [Test]
+            static void Snap()
+            {
+                Assert::AreEqual(0.0f, Slerpy::Weight::WithType(WeightType::Snap, 0.0f), EPSILON);
+                Assert::AreEqual(0.0f, Slerpy::Weight::WithType(WeightType::Snap, 0.25f), EPSILON);
+                Assert::AreEqual(1.0f, Slerpy::Weight::WithType(WeightType::Snap, 0.5f), EPSILON);
+                Assert::AreEqual(1.0f, Slerpy::Weight::WithType(WeightType::Snap, 0.75f), EPSILON);
+                Assert::AreEqual(1.0f, Slerpy::Weight::WithType(WeightType::Snap, 1.0f), EPSILON);
+
+                Assert::AreEqual(0.0f, Slerpy::Weight::WithType(WeightType::Snap, 0.0f), EPSILON);
+                Assert::AreEqual(-0.0f, Slerpy::Weight::WithType(WeightType::Snap, -0.25f), EPSILON);
+                Assert::AreEqual(-1.0f, Slerpy::Weight::WithType(WeightType::Snap, -0.5f), EPSILON);
+                Assert::AreEqual(-1.0f, Slerpy::Weight::WithType(WeightType::Snap, -0.75f), EPSILON);
+                Assert::AreEqual(-1.0f, Slerpy::Weight::WithType(WeightType::Snap, -1.0f), EPSILON);
+            }
         };
     }
 }

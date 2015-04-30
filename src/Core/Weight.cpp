@@ -74,6 +74,8 @@ namespace Slerpy
             return TRANSLATE_FUNCTION_NAME(StickyLow)(weight);
         case WeightType::StickyHigh:
             return TRANSLATE_FUNCTION_NAME(StickyHigh)(weight);
+        case WeightType::Snap:
+            return TRANSLATE_FUNCTION_NAME(Snap)(weight);
         case WeightType::Linear:
         default:
             return TRANSLATE_FUNCTION_NAME(Linear)(weight);
@@ -155,6 +157,13 @@ namespace Slerpy
         }
 
         return weight;
+    }
+
+    float TRANSLATE_FUNCTION_NAME(Snap)(WEIGHT_PARAMS_STANDARD)
+    {
+        float const weightAbs = MATH_ABS(weight);
+
+        return ((int)(weightAbs + 0.5f)) * MATH_SIGN(weight);
     }
 
 #ifdef _MANAGED
