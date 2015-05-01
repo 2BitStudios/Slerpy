@@ -169,7 +169,7 @@ namespace Slerpy
                 Assert::AreEqual(1.0f, Slerpy::Weight::WithType(WeightType::Snap, 1.0f), EPSILON);
 
                 Assert::AreEqual(0.0f, Slerpy::Weight::WithType(WeightType::Snap, 0.0f), EPSILON);
-                Assert::AreEqual(-0.0f, Slerpy::Weight::WithType(WeightType::Snap, -0.25f), EPSILON);
+                Assert::AreEqual(0.0f, Slerpy::Weight::WithType(WeightType::Snap, -0.25f), EPSILON);
                 Assert::AreEqual(-1.0f, Slerpy::Weight::WithType(WeightType::Snap, -0.5f), EPSILON);
                 Assert::AreEqual(-1.0f, Slerpy::Weight::WithType(WeightType::Snap, -0.75f), EPSILON);
                 Assert::AreEqual(-1.0f, Slerpy::Weight::WithType(WeightType::Snap, -1.0f), EPSILON);
