@@ -22,6 +22,11 @@ namespace Slerpy.Unity3D.UI
             {
                 return this.argument;
             }
+
+            set
+            {
+                this.argument = value;
+            }
         }
 
         public void Trigger()
@@ -109,6 +114,11 @@ namespace Slerpy.Unity3D.UI
             {
                 return this.firstArgument;
             }
+
+            set
+            {
+                this.firstArgument = value;
+            }
         }
 
         public TArg2 SecondArgument
@@ -116,6 +126,11 @@ namespace Slerpy.Unity3D.UI
             get
             {
                 return this.secondArgument;
+            }
+
+            set
+            {
+                this.secondArgument = value;
             }
         }
 
