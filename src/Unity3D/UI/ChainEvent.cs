@@ -35,6 +35,12 @@ namespace Slerpy.Unity3D.UI
         }
     }
 
+    public sealed class ChainEventBOOL : ChainEvent<bool, ChainEventBOOL.SerializableEvent>
+    {
+        [Serializable]
+        public sealed class SerializableEvent : UnityEvent<bool> { }
+    }
+
     public sealed class ChainEventINT : ChainEvent<int, ChainEventINT.SerializableEvent>
     {
         [Serializable]
@@ -45,6 +51,12 @@ namespace Slerpy.Unity3D.UI
     {
         [Serializable]
         public sealed class SerializableEvent : UnityEvent<float> { }
+    }
+
+    public sealed class ChainEventSTR : ChainEvent<string, ChainEventSTR.SerializableEvent>
+    {
+        [Serializable]
+        public sealed class SerializableEvent : UnityEvent<string> { }
     }
 
     public sealed class ChainEventVEC2 : ChainEvent<Vector2, ChainEventVEC2.SerializableEvent>
@@ -123,6 +135,12 @@ namespace Slerpy.Unity3D.UI
         }
     }
 
+    public sealed class ChainEventGOBJ_BOOL : ChainEvent<GameObject, bool, ChainEventGOBJ_BOOL.SerializableEvent>
+    {
+        [Serializable]
+        public sealed class SerializableEvent : UnityEvent<GameObject, bool> { }
+    }
+
     public sealed class ChainEventGOBJ_INT : ChainEvent<GameObject, int, ChainEventGOBJ_INT.SerializableEvent>
     {
         [Serializable]
@@ -133,6 +151,12 @@ namespace Slerpy.Unity3D.UI
     {
         [Serializable]
         public sealed class SerializableEvent : UnityEvent<GameObject, float> { }
+    }
+
+    public sealed class ChainEventGOBJ_STR : ChainEvent<GameObject, string, ChainEventGOBJ_STR.SerializableEvent>
+    {
+        [Serializable]
+        public sealed class SerializableEvent : UnityEvent<GameObject, string> { }
     }
 
     public sealed class ChainEventGOBJ_VEC2 : ChainEvent<GameObject, Vector2, ChainEventGOBJ_VEC2.SerializableEvent>
