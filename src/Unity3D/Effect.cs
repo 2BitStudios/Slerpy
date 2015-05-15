@@ -1,9 +1,14 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+
+using UnityEngine;
 
 namespace Slerpy.Unity3D
 {
     public abstract class Effect : MonoBehaviour
     {
+        protected const string TOOLTIP_TIME = "Run time of a single cycle, to be modified by 'rate'.";
+        protected const string TOOLTIP_TIMEWRAPTYPE = "How 'time' continues to affect the effect once the cycle ends.";
+
         [SerializeField]
         [Tooltip("Rate that time passes. Speeds up or slows down effects.")]
         private float rate = 1.0f;
@@ -19,6 +24,14 @@ namespace Slerpy.Unity3D
         [SerializeField]
         [Tooltip("Multiplies against strength. Evaluation time is raw running time, not rate-modified time.")]
         private AnimationCurve strengthScale = AnimationCurve.Linear(0.0f, 1.0f, 1.0f, 1.0f);
+
+        [SerializeField]
+        [Tooltip("Weight interpolation method.")]
+        private InterpolateType interpolate = InterpolateType.Standard;
+
+        [SerializeField]
+        [Tooltip("List of weight modifiers to be applied to the base weight of the effect. Will be applied in order listed here.")]
+        private WeightType[] weights = new WeightType[] { WeightType.Linear };
 
         private float rawTime = 0.0f;
         private float simulatedTime = 0.0f;
@@ -84,6 +97,31 @@ namespace Slerpy.Unity3D
             }
         }
 
+        public InterpolateType Interpolate
+        {
+            get
+            {
+                return this.interpolate;
+            }
+
+            set
+            {
+                this.interpolate = value;
+            }
+        }
+
+        public IEnumerable<WeightType> Weights
+        {
+            get
+            {
+                return this.weights;
+            }
+        }
+
+        public abstract float CycleTime { get; }
+
+        public abstract TimeWrapType TimeWrap { get; set; }
+
         public float RawTime
         {
             get
@@ -106,11 +144,26 @@ namespace Slerpy.Unity3D
             this.simulatedTime = 0.0f;
         }
 
-        protected abstract void ProcessEffect(float deltaTime, float totalTime, float strength);
+        public float CalculateWeight()
+        {
+            float weight = Weight.FromTime(
+                this.TimeWrap,
+                this.simulatedTime,
+                this.CycleTime);
+
+            for (int i = 0; i < this.weights.Length; ++i)
+            {
+                weight = Weight.WithType(this.weights[i], weight);
+            }
+
+            return weight;
+        }
+
+        protected abstract void ProcessEffect(InterpolateType interpolateType, float weight, float strength);
         
         protected void Start()
         {
-            this.ProcessEffect(0.0f, this.simulatedTime, this.ScaledStrength);
+            this.ProcessEffect(this.interpolate, 0.0f, this.ScaledStrength);
         }
 
         protected void Update()
@@ -123,7 +176,7 @@ namespace Slerpy.Unity3D
             
             this.simulatedTime += deltaTime;
 
-            this.ProcessEffect(deltaTime, this.simulatedTime, this.ScaledStrength);
+            this.ProcessEffect(this.interpolate, this.CalculateWeight(), this.ScaledStrength);
         }
     }
 }
