@@ -138,6 +138,33 @@ namespace Slerpy.Unity3D
             }
         }
 
+        public void SetWeights(params WeightType[] newWeights)
+        {
+            this.weights = newWeights;
+        }
+
+        public void AddWeights(params WeightType[] additionalWeights)
+        {
+            WeightType[] newWeights = new WeightType[this.weights.Length + additionalWeights.Length];
+
+            for (int i = 0; i < this.weights.Length; ++i)
+            {
+                newWeights[i] = this.weights[i];
+            }
+
+            for (int i = 0; i < additionalWeights.Length; ++i)
+            {
+                newWeights[i + this.weights.Length] = additionalWeights[i];
+            }
+
+            this.SetWeights(newWeights);
+        }
+
+        public void ClearWeights()
+        {
+            this.weights = new WeightType[0];
+        }
+
         public void ResetTime()
         {
             this.rawTime = 0.0f;
