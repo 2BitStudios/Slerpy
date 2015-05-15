@@ -8,8 +8,11 @@ using UnityEngine.Events;
 
 namespace Slerpy.Unity3D
 {
-    public sealed class Animator : Effect
+    public sealed class Animator : MonoBehaviour
     {
+        [SerializeField]
+        private float strength = 1.0f;
+
         [SerializeField]
         private BoolAnimation[] boolAnimations = null;
 
@@ -27,6 +30,8 @@ namespace Slerpy.Unity3D
 
         [SerializeField]
         private ColorAnimation[] colorAnimations = null;
+
+        private float timeRunning = 0.0f;
 
         public IEnumerable<BoolAnimation> BoolAnimations
         {
@@ -76,36 +81,40 @@ namespace Slerpy.Unity3D
             }
         }
 
-        protected override void ProcessEffect(float deltaTime, float totalTime, float strength)
+        private void Update()
         {
+            float deltaTime = Time.deltaTime;
+
+            this.timeRunning += deltaTime;
+
             for (int i = 0; i < this.boolAnimations.Length; ++i)
             {
-                this.boolAnimations[i].Evaluate(deltaTime, totalTime, strength);
+                this.boolAnimations[i].Evaluate(deltaTime, this.timeRunning, this.strength);
             }
 
             for (int i = 0; i < this.intAnimations.Length; ++i)
             {
-                this.intAnimations[i].Evaluate(deltaTime, totalTime, strength);
+                this.intAnimations[i].Evaluate(deltaTime, this.timeRunning, this.strength);
             }
 
             for (int i = 0; i < this.floatAnimations.Length; ++i)
             {
-                this.floatAnimations[i].Evaluate(deltaTime, totalTime, strength);
+                this.floatAnimations[i].Evaluate(deltaTime, this.timeRunning, this.strength);
             }
 
             for (int i = 0; i < this.vector3Animations.Length; ++i)
             {
-                this.vector3Animations[i].Evaluate(deltaTime, totalTime, strength);
+                this.vector3Animations[i].Evaluate(deltaTime, this.timeRunning, this.strength);
             }
 
             for (int i = 0; i < this.rotationAnimations.Length; ++i)
             {
-                this.rotationAnimations[i].Evaluate(deltaTime, totalTime, strength);
+                this.rotationAnimations[i].Evaluate(deltaTime, this.timeRunning, this.strength);
             }
 
             for (int i = 0; i < this.colorAnimations.Length; ++i)
             {
-                this.colorAnimations[i].Evaluate(deltaTime, totalTime, strength);
+                this.colorAnimations[i].Evaluate(deltaTime, this.timeRunning, this.strength);
             }
         }
 
