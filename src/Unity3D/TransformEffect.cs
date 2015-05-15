@@ -20,7 +20,7 @@ namespace Slerpy.Unity3D
         Expand = 10
     }
 
-    public sealed class Transformer : Effect
+    public sealed class TransformEffect : Effect
     {
         private const TransformerPreset PRESET_DEFAULT = TransformerPreset.Custom;
 
@@ -43,11 +43,11 @@ namespace Slerpy.Unity3D
         private TransformerPreset preset = PRESET_DEFAULT;
 
         [SerializeField]
-        [Tooltip(TOOLTIP_CYCLETIME)]
+        [Tooltip(Effect.TOOLTIP_CYCLETIME)]
         private float cycleTime = 1.0f;
         
         [SerializeField]
-        [Tooltip(TOOLTIP_TIMEWRAPTYPE)]
+        [Tooltip(Effect.TOOLTIP_TIMEWRAPTYPE)]
         private TimeWrapType timeWrap = TimeWrapType.Cycle;
 
         [SerializeField]
@@ -83,7 +83,7 @@ namespace Slerpy.Unity3D
 
                 if (this.preset == TransformerPreset.Custom)
                 {
-                    foreach (KeyValuePair<TransformerPreset, PresetData> presetData in Transformer.presetData)
+                    foreach (KeyValuePair<TransformerPreset, PresetData> presetData in TransformEffect.presetData)
                     {
                         if (presetData.Value.CompareTo(this))
                         {
@@ -260,7 +260,7 @@ namespace Slerpy.Unity3D
         {
             PresetData data = default(PresetData);
 
-            if (Transformer.presetData.TryGetValue(this.preset, out data))
+            if (TransformEffect.presetData.TryGetValue(this.preset, out data))
             {
                 data.SetTo(this);
             }
@@ -337,7 +337,7 @@ namespace Slerpy.Unity3D
                 }
             }
 
-            public bool CompareTo(Transformer target)
+            public bool CompareTo(TransformEffect target)
             {
                 return Mathf.Approximately(target.cycleTime, this.cycleTime)
                     && target.timeWrap == this.timeWrap
@@ -346,7 +346,7 @@ namespace Slerpy.Unity3D
                     && target.scaleExtent == this.scaleExtent;
             }
 
-            public void SetTo(Transformer target)
+            public void SetTo(TransformEffect target)
             {
                 target.cycleTime = this.cycleTime;
 

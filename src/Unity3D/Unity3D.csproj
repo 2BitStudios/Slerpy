@@ -53,7 +53,7 @@
     <Compile Include="Timers\DestroyComponent.cs" />
     <Compile Include="Timers\Timer.cs" />
     <Compile Include="Animator.cs" />
-    <Compile Include="Transformer.cs" />
+    <Compile Include="TransformEffect.cs" />
     <Compile Include="Effect.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
