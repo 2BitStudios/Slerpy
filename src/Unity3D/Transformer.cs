@@ -43,8 +43,8 @@ namespace Slerpy.Unity3D
         private TransformerPreset preset = PRESET_DEFAULT;
 
         [SerializeField]
-        [Tooltip(TOOLTIP_TIME)]
-        private float time = 1.0f;
+        [Tooltip(TOOLTIP_CYCLETIME)]
+        private float cycleTime = 1.0f;
         
         [SerializeField]
         [Tooltip(TOOLTIP_TIMEWRAPTYPE)]
@@ -104,7 +104,7 @@ namespace Slerpy.Unity3D
         {
             get
             {
-                return this.time;
+                return this.cycleTime;
             }
         }
 
@@ -278,7 +278,7 @@ namespace Slerpy.Unity3D
 
         public struct PresetData
         {
-            private readonly float time;
+            private readonly float cycleTime;
 
             private readonly TimeWrapType timeWrap;
 
@@ -286,9 +286,9 @@ namespace Slerpy.Unity3D
             private readonly Vector3 rotationExtent;
             private readonly Vector3 scaleExtent;
 
-            public PresetData(float time, TimeWrapType timeWrap, Vector3 positionExtent, Vector3 rotationExtent, Vector3 scaleExtent)
+            public PresetData(float cycleTime, TimeWrapType timeWrap, Vector3 positionExtent, Vector3 rotationExtent, Vector3 scaleExtent)
             {
-                this.time = time;
+                this.cycleTime = cycleTime;
 
                 this.timeWrap = timeWrap;
 
@@ -297,11 +297,11 @@ namespace Slerpy.Unity3D
                 this.scaleExtent = scaleExtent;
             }
 
-            public float Time
+            public float CycleTime
             {
                 get
                 {
-                    return this.time;
+                    return this.cycleTime;
                 }
             }
 
@@ -339,7 +339,7 @@ namespace Slerpy.Unity3D
 
             public bool CompareTo(Transformer target)
             {
-                return Mathf.Approximately(target.time, this.time)
+                return Mathf.Approximately(target.cycleTime, this.cycleTime)
                     && target.timeWrap == this.timeWrap
                     && target.positionExtent == this.positionExtent
                     && target.rotationExtent == this.rotationExtent
@@ -348,7 +348,7 @@ namespace Slerpy.Unity3D
 
             public void SetTo(Transformer target)
             {
-                target.time = this.time;
+                target.cycleTime = this.cycleTime;
 
                 target.timeWrap = this.timeWrap;
 

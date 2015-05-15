@@ -6,7 +6,7 @@ namespace Slerpy.Unity3D
 {
     public abstract class Effect : MonoBehaviour
     {
-        protected const string TOOLTIP_TIME = "Run time of a single cycle, to be modified by 'rate'.";
+        protected const string TOOLTIP_CYCLETIME = "Run time of a single cycle, to be modified by 'rate'.";
         protected const string TOOLTIP_TIMEWRAPTYPE = "How 'time' continues to affect the effect once the cycle ends.";
 
         [SerializeField]
