@@ -47,8 +47,8 @@ namespace Slerpy.Unity3D
         private TransformerPreset preset = PRESET_DEFAULT;
 
         [SerializeField]
-        [Tooltip(Effect.TOOLTIP_CYCLETIME)]
-        private float cycleTime = 1.0f;
+        [Tooltip(Effect.TOOLTIP_DURATION)]
+        private float duration = 1.0f;
         
         [SerializeField]
         [Tooltip(Effect.TOOLTIP_TIMEWRAP)]
@@ -117,18 +117,18 @@ namespace Slerpy.Unity3D
             }
         }
 
-        public override float CycleTime
+        public override float Duration
         {
             get
             {
-                return this.cycleTime;
+                return this.duration;
             }
 
             set
             {
-                if (this.cycleTime != value)
+                if (this.duration != value)
                 {
-                    this.cycleTime = value;
+                    this.duration = value;
 
                     this.Preset = TransformerPreset.Custom;
                 }
@@ -305,7 +305,7 @@ namespace Slerpy.Unity3D
 
         public struct PresetData
         {
-            private readonly float cycleTime;
+            private readonly float duration;
 
             private readonly TimeWrapType timeWrap;
 
@@ -313,9 +313,9 @@ namespace Slerpy.Unity3D
             private readonly Vector3 rotationExtent;
             private readonly Vector3 scaleExtent;
 
-            public PresetData(float cycleTime, TimeWrapType timeWrap, Vector3 positionExtent, Vector3 rotationExtent, Vector3 scaleExtent)
+            public PresetData(float duration, TimeWrapType timeWrap, Vector3 positionExtent, Vector3 rotationExtent, Vector3 scaleExtent)
             {
-                this.cycleTime = cycleTime;
+                this.duration = duration;
 
                 this.timeWrap = timeWrap;
 
@@ -324,11 +324,11 @@ namespace Slerpy.Unity3D
                 this.scaleExtent = scaleExtent;
             }
 
-            public float CycleTime
+            public float Duration
             {
                 get
                 {
-                    return this.cycleTime;
+                    return this.duration;
                 }
             }
 
@@ -366,7 +366,7 @@ namespace Slerpy.Unity3D
 
             public bool CompareTo(TransformEffect target)
             {
-                return Mathf.Approximately(target.cycleTime, this.cycleTime)
+                return Mathf.Approximately(target.duration, this.duration)
                     && target.timeWrap == this.timeWrap
                     && target.positionExtent == this.positionExtent
                     && target.rotationExtent == this.rotationExtent
@@ -375,7 +375,7 @@ namespace Slerpy.Unity3D
 
             public void SetTo(TransformEffect target)
             {
-                target.cycleTime = this.cycleTime;
+                target.duration = this.duration;
 
                 target.timeWrap = this.timeWrap;
 

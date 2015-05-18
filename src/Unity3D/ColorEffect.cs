@@ -12,8 +12,8 @@ namespace Slerpy.Unity3D
         private InterpolateType interpolate = InterpolateType.Standard;
 
         [SerializeField]
-        [Tooltip(Effect.TOOLTIP_CYCLETIME)]
-        private float cycleTime = 1.0f;
+        [Tooltip(Effect.TOOLTIP_DURATION)]
+        private float duration = 1.0f;
         
         [SerializeField]
         [Tooltip(Effect.TOOLTIP_TIMEWRAP)]
@@ -44,16 +44,16 @@ namespace Slerpy.Unity3D
             }
         }
 
-        public override float CycleTime
+        public override float Duration
         {
             get
             {
-                return this.cycleTime;
+                return this.duration;
             }
 
             set
             {
-                this.cycleTime = value;
+                this.duration = value;
             }
         }
 

@@ -7,7 +7,7 @@ namespace Slerpy.Unity3D
     public abstract class Effect : MonoBehaviour
     {
         protected const string TOOLTIP_INTERPOLATE = "Weight interpolation method.";
-        protected const string TOOLTIP_CYCLETIME = "Run time of a single cycle, to be modified by 'rate'.";
+        protected const string TOOLTIP_DURATION = "Run time of a single cycle, to be modified by 'rate'.";
         protected const string TOOLTIP_TIMEWRAP = "How 'time' continues to affect the effect once the cycle ends.";
 
         [SerializeField]
@@ -104,7 +104,7 @@ namespace Slerpy.Unity3D
 
         public abstract InterpolateType Interpolate { get; set; }
 
-        public abstract float CycleTime { get; set; }
+        public abstract float Duration { get; set; }
 
         public abstract TimeWrapType TimeWrap { get; set; }
 
@@ -162,7 +162,7 @@ namespace Slerpy.Unity3D
             float weight = Weight.FromTime(
                 this.TimeWrap,
                 this.simulatedTime,
-                this.CycleTime);
+                this.Duration);
 
             for (int i = 0; i < this.weights.Length; ++i)
             {
