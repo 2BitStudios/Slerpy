@@ -7,8 +7,8 @@ namespace Slerpy.Unity3D
     public abstract class Effect : MonoBehaviour
     {
         protected const string TOOLTIP_INTERPOLATE = "Weight interpolation method.";
-        protected const string TOOLTIP_DURATION = "Run time of a single cycle, to be modified by 'rate'.";
-        protected const string TOOLTIP_TIMEWRAP = "How 'time' continues to affect the effect once the cycle ends.";
+        protected const string TOOLTIP_DURATION = "Run time of the effect, to be modified by 'rate'.";
+        protected const string TOOLTIP_TIMEWRAP = "How time continues to affect the effect once the duration ends.";
 
         [SerializeField]
         [Tooltip("Rate that time passes. Speeds up or slows down effects.")]
