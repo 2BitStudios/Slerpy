@@ -76,6 +76,8 @@ namespace Slerpy
             return TRANSLATE_FUNCTION_NAME(StickyHigh)(weight);
         case WeightType::Snap:
             return TRANSLATE_FUNCTION_NAME(Snap)(weight);
+        case WeightType::Elastic:
+            return TRANSLATE_FUNCTION_NAME(Elastic)(weight);
         case WeightType::Linear:
         default:
             return TRANSLATE_FUNCTION_NAME(Linear)(weight);
@@ -164,6 +166,35 @@ namespace Slerpy
         float const weightAbs = MATH_ABS(weight);
 
         return ((int)(weightAbs + 0.5f)) * MATH_SIGN(weight);
+    }
+
+    float TRANSLATE_FUNCTION_NAME(Elastic)(WEIGHT_PARAMS_STANDARD)
+    {
+        static float const THRESHOLD = 0.6f;
+        static float const THRESHOLD_HEAD = 1.0f - THRESHOLD;
+
+        static int const BOUNCES = 4;
+
+        float const weightAbs = MATH_ABS(weight);
+
+        if (weightAbs < THRESHOLD)
+        {
+            weight = weight / THRESHOLD;
+        }
+        else if (weightAbs < 1.0f)
+        {
+            float overflow = weightAbs - THRESHOLD;
+
+            float const overflowStrength = (1.0f - overflow / THRESHOLD_HEAD);
+
+            weight = 
+                (1.0f +
+                    THRESHOLD_HEAD / BOUNCES * (overflowStrength * overflowStrength)
+                    * MATH_SIN((overflow / THRESHOLD_HEAD) * (0.5f * BOUNCES * MATH_PI)))
+                * MATH_SIGN(weight);
+        }
+
+        return weight;
     }
 
 #ifdef _MANAGED
