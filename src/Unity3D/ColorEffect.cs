@@ -8,11 +8,15 @@ namespace Slerpy.Unity3D
     public sealed class ColorEffect : Effect
     {
         [SerializeField]
+        [Tooltip(Effect.TOOLTIP_INTERPOLATE)]
+        private InterpolateType interpolate = InterpolateType.Standard;
+
+        [SerializeField]
         [Tooltip(Effect.TOOLTIP_CYCLETIME)]
         private float cycleTime = 1.0f;
         
         [SerializeField]
-        [Tooltip(Effect.TOOLTIP_TIMEWRAPTYPE)]
+        [Tooltip(Effect.TOOLTIP_TIMEWRAP)]
         private TimeWrapType timeWrap = TimeWrapType.PingPong;
 
         [SerializeField]
@@ -26,6 +30,19 @@ namespace Slerpy.Unity3D
         [SerializeField]
         [Tooltip("Color to blend towards.")]
         private Color toColor = Color.red;
+
+        public override InterpolateType Interpolate
+        {
+            get
+            {
+                return this.interpolate;
+            }
+
+            set
+            {
+                this.interpolate = value;
+            }
+        }
 
         public override float CycleTime
         {
@@ -87,13 +104,13 @@ namespace Slerpy.Unity3D
             }
         }
 
-        protected override void ProcessEffect(InterpolateType interpolateType, float weight, float strength)
+        protected override void ProcessEffect(float weight, float strength)
         {
             Color interpolatedColor = new Color(
-                Slerpy.Interpolate.WithType(interpolateType, this.fromColor.r, this.toColor.r * strength, weight),
-                Slerpy.Interpolate.WithType(interpolateType, this.fromColor.g, this.toColor.g * strength, weight),
-                Slerpy.Interpolate.WithType(interpolateType, this.fromColor.b, this.toColor.b * strength, weight),
-                Slerpy.Interpolate.WithType(interpolateType, this.fromColor.a, this.toColor.a * strength, weight));
+                Slerpy.Interpolate.WithType(this.interpolate, this.fromColor.r, this.toColor.r * strength, weight),
+                Slerpy.Interpolate.WithType(this.interpolate, this.fromColor.g, this.toColor.g * strength, weight),
+                Slerpy.Interpolate.WithType(this.interpolate, this.fromColor.b, this.toColor.b * strength, weight),
+                Slerpy.Interpolate.WithType(this.interpolate, this.fromColor.a, this.toColor.a * strength, weight));
 
             Renderer[] renderers = this.gameObject.GetComponents<Renderer>();
             for (int i = 0; i < renderers.Length; ++i)

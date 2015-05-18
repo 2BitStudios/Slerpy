@@ -39,6 +39,10 @@ namespace Slerpy.Unity3D
         };
 
         [SerializeField]
+        [Tooltip(Effect.TOOLTIP_INTERPOLATE)]
+        private InterpolateType interpolate = InterpolateType.Standard;
+
+        [SerializeField]
         [Tooltip("Pre-defined common settings for the values that follow.")]
         private TransformerPreset preset = PRESET_DEFAULT;
 
@@ -47,7 +51,7 @@ namespace Slerpy.Unity3D
         private float cycleTime = 1.0f;
         
         [SerializeField]
-        [Tooltip(Effect.TOOLTIP_TIMEWRAPTYPE)]
+        [Tooltip(Effect.TOOLTIP_TIMEWRAP)]
         private TimeWrapType timeWrap = TimeWrapType.Cycle;
 
         [SerializeField]
@@ -69,6 +73,19 @@ namespace Slerpy.Unity3D
         private Vector3 positionOffset = Vector3.zero;
         private Quaternion rotationOffset = Quaternion.identity;
         private Vector3 scaleOffset = Vector3.zero;
+
+        public override InterpolateType Interpolate
+        {
+            get
+            {
+                return this.interpolate;
+            }
+
+            set
+            {
+                this.interpolate = value;
+            }
+        }
 
         public TransformerPreset Preset
         {
@@ -238,22 +255,22 @@ namespace Slerpy.Unity3D
             this.ScaleOffset = Vector3.zero;
         }
 
-        protected override void ProcessEffect(InterpolateType interpolateType, float weight, float strength)
+        protected override void ProcessEffect(float weight, float strength)
         {
             this.PositionOffset = new Vector3(
-                Slerpy.Interpolate.WithType(interpolateType, 0.0f, this.positionExtent.x * strength, weight),
-                Slerpy.Interpolate.WithType(interpolateType, 0.0f, this.positionExtent.y * strength, weight),
-                Slerpy.Interpolate.WithType(interpolateType, 0.0f, this.positionExtent.z * strength, weight));
+                Slerpy.Interpolate.WithType(this.interpolate, 0.0f, this.positionExtent.x * strength, weight),
+                Slerpy.Interpolate.WithType(this.interpolate, 0.0f, this.positionExtent.y * strength, weight),
+                Slerpy.Interpolate.WithType(this.interpolate, 0.0f, this.positionExtent.z * strength, weight));
 
             this.RotationOffset = Quaternion.Euler(new Vector3(
-                Slerpy.Interpolate.WithType(interpolateType, 0.0f, this.rotationExtent.x * strength, weight),
-                Slerpy.Interpolate.WithType(interpolateType, 0.0f, this.rotationExtent.y * strength, weight),
-                Slerpy.Interpolate.WithType(interpolateType, 0.0f, this.rotationExtent.z * strength, weight)));
+                Slerpy.Interpolate.WithType(this.interpolate, 0.0f, this.rotationExtent.x * strength, weight),
+                Slerpy.Interpolate.WithType(this.interpolate, 0.0f, this.rotationExtent.y * strength, weight),
+                Slerpy.Interpolate.WithType(this.interpolate, 0.0f, this.rotationExtent.z * strength, weight)));
 
             this.ScaleOffset = new Vector3(
-                Slerpy.Interpolate.WithType(interpolateType, 0.0f, this.scaleExtent.x * strength, weight),
-                Slerpy.Interpolate.WithType(interpolateType, 0.0f, this.scaleExtent.y * strength, weight),
-                Slerpy.Interpolate.WithType(interpolateType, 0.0f, this.scaleExtent.z * strength, weight));
+                Slerpy.Interpolate.WithType(this.interpolate, 0.0f, this.scaleExtent.x * strength, weight),
+                Slerpy.Interpolate.WithType(this.interpolate, 0.0f, this.scaleExtent.y * strength, weight),
+                Slerpy.Interpolate.WithType(this.interpolate, 0.0f, this.scaleExtent.z * strength, weight));
         }
 
         private void TrySetToPreset()
