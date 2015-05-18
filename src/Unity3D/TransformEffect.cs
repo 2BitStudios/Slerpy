@@ -123,6 +123,16 @@ namespace Slerpy.Unity3D
             {
                 return this.cycleTime;
             }
+
+            set
+            {
+                if (this.cycleTime != value)
+                {
+                    this.cycleTime = value;
+
+                    this.Preset = TransformerPreset.Custom;
+                }
+            }
         }
 
         public override TimeWrapType TimeWrap

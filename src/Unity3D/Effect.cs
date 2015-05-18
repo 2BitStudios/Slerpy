@@ -104,7 +104,7 @@ namespace Slerpy.Unity3D
 
         public abstract InterpolateType Interpolate { get; set; }
 
-        public abstract float CycleTime { get; }
+        public abstract float CycleTime { get; set; }
 
         public abstract TimeWrapType TimeWrap { get; set; }
 

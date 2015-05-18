@@ -50,6 +50,11 @@ namespace Slerpy.Unity3D
             {
                 return this.cycleTime;
             }
+
+            set
+            {
+                this.cycleTime = value;
+            }
         }
 
         public override TimeWrapType TimeWrap
