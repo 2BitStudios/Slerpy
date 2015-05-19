@@ -267,20 +267,23 @@ namespace Slerpy.Unity3D
 
         protected override void ProcessEffect(float deltaTime, float weight, float strength)
         {
-            this.PositionOffset = new Vector3(
-                Slerpy.Interpolate.WithType(this.interpolate, 0.0f, this.positionExtent.x * strength, weight),
-                Slerpy.Interpolate.WithType(this.interpolate, 0.0f, this.positionExtent.y * strength, weight),
-                Slerpy.Interpolate.WithType(this.interpolate, 0.0f, this.positionExtent.z * strength, weight));
+            this.PositionOffset = Extensions.Interpolate(
+                Vector3.zero, 
+                this.positionExtent * strength, 
+                weight, 
+                this.interpolate);
 
-            this.RotationOffset = Quaternion.Euler(new Vector3(
-                Slerpy.Interpolate.WithType(this.interpolate, 0.0f, this.rotationExtent.x * strength, weight),
-                Slerpy.Interpolate.WithType(this.interpolate, 0.0f, this.rotationExtent.y * strength, weight),
-                Slerpy.Interpolate.WithType(this.interpolate, 0.0f, this.rotationExtent.z * strength, weight)));
+            this.RotationOffset = Extensions.Interpolate(
+                Quaternion.identity, 
+                Quaternion.Euler(this.rotationExtent * strength), 
+                weight, 
+                this.interpolate);
 
-            this.ScaleOffset = new Vector3(
-                Slerpy.Interpolate.WithType(this.interpolate, 0.0f, this.scaleExtent.x * strength, weight),
-                Slerpy.Interpolate.WithType(this.interpolate, 0.0f, this.scaleExtent.y * strength, weight),
-                Slerpy.Interpolate.WithType(this.interpolate, 0.0f, this.scaleExtent.z * strength, weight));
+            this.ScaleOffset = Extensions.Interpolate(
+                Vector3.zero, 
+                this.scaleExtent * strength, 
+                weight, 
+                this.interpolate);
         }
 
         private void TrySetToPreset()

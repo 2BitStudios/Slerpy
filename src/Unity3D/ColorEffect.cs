@@ -111,11 +111,11 @@ namespace Slerpy.Unity3D
 
         protected override void ProcessEffect(float deltaTime, float weight, float strength)
         {
-            Color interpolatedColor = new Color(
-                Slerpy.Interpolate.WithType(this.interpolate, this.fromColor.r, this.toColor.r * strength, weight),
-                Slerpy.Interpolate.WithType(this.interpolate, this.fromColor.g, this.toColor.g * strength, weight),
-                Slerpy.Interpolate.WithType(this.interpolate, this.fromColor.b, this.toColor.b * strength, weight),
-                Slerpy.Interpolate.WithType(this.interpolate, this.fromColor.a, this.toColor.a * strength, weight));
+            Color interpolatedColor = Extensions.Interpolate(
+                this.fromColor, 
+                this.toColor * strength, 
+                weight, 
+                this.interpolate);
 
             Renderer[] renderers = this.gameObject.GetComponents<Renderer>();
             for (int i = 0; i < renderers.Length; ++i)
