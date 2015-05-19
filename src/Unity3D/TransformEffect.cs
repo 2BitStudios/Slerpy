@@ -265,7 +265,7 @@ namespace Slerpy.Unity3D
             this.ScaleOffset = Vector3.zero;
         }
 
-        protected override void ProcessEffect(float weight, float strength)
+        protected override void ProcessEffect(float deltaTime, float weight, float strength)
         {
             this.PositionOffset = new Vector3(
                 Slerpy.Interpolate.WithType(this.interpolate, 0.0f, this.positionExtent.x * strength, weight),

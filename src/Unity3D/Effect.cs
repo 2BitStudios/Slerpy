@@ -261,20 +261,22 @@ namespace Slerpy.Unity3D
             return weight;
         }
 
-        protected abstract void ProcessEffect(float weight, float strength);
+        protected abstract void ProcessEffect(float deltaTime, float weight, float strength);
         
-        protected void Start()
+        protected virtual void Start()
         {
             this.Rewind();
 
-            this.ProcessEffect(this.CalculateWeight(), this.ScaledStrength);
+            this.ProcessEffect(this.SimulatedTime, this.CalculateWeight(), this.ScaledStrength);
         }
 
         protected void Update()
         {
+            float previousSimulatedTime = this.SimulatedTime;
+
             this.AddRawTime(this.options.UseUnscaledTime ? Time.unscaledDeltaTime : Time.deltaTime);
 
-            this.ProcessEffect(this.CalculateWeight(), this.ScaledStrength);
+            this.ProcessEffect(this.SimulatedTime - previousSimulatedTime, this.CalculateWeight(), this.ScaledStrength);
         }
 
         private void AddRawTime(float deltaTime)
