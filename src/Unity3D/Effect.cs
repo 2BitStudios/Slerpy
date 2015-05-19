@@ -124,6 +124,19 @@ namespace Slerpy.Unity3D
             }
         }
 
+        public bool IsPlaying
+        {
+            get
+            {
+                return this.enabled;
+            }
+
+            set
+            {
+                this.enabled = value;
+            }
+        }
+
         public void SetWeights(params WeightType[] newWeights)
         {
             this.weights = newWeights;
@@ -151,7 +164,22 @@ namespace Slerpy.Unity3D
             this.weights = new WeightType[0];
         }
 
-        public void ResetTime()
+        public void Play()
+        {
+            this.enabled = true;
+        }
+
+        public void Stop()
+        {
+            this.enabled = false;
+        }
+
+        public void Reverse()
+        {
+            this.rate = -this.rate;
+        }
+
+        public void Rewind()
         {
             this.rawTime = 0.0f;
             this.simulatedTime = 0.0f;
