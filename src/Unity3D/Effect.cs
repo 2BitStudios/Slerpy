@@ -1,14 +1,58 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 using UnityEngine;
 
 namespace Slerpy.Unity3D
 {
+    [Serializable]
+    public sealed class EffectOptions
+    {
+        [SerializeField]
+        [Tooltip("Raw time to begin the effect at.")]
+        private float timeOffset = 0.0f;
+
+        [SerializeField]
+        [Tooltip("Random time range to add to the effect at start.")]
+        private float timeRandomness = 0.0f;
+
+        [SerializeField]
+        [Tooltip("Whether to ignore engine time scaling (such as pauses). Does not ignore local scaling via 'speedScale'.")]
+        private bool useUnscaledTime = false;
+
+        public float TimeOffset
+        {
+            get
+            {
+                return this.timeOffset;
+            }
+        }
+
+        public float TimeRandomness
+        {
+            get
+            {
+                return this.timeRandomness;
+            }
+        }
+
+        public bool UseUnscaledTime
+        {
+            get
+            {
+                return this.useUnscaledTime;
+            }
+        }
+    }
+
     public abstract class Effect : MonoBehaviour
     {
         protected const string TOOLTIP_INTERPOLATE = "Weight interpolation method.";
         protected const string TOOLTIP_DURATION = "Run time of the effect, affected by 'speed'.";
         protected const string TOOLTIP_TIMEWRAP = "How time continues to affect the effect once the duration ends.";
+
+        [SerializeField]
+        private EffectOptions options = null;
 
         [SerializeField]
         [Tooltip("Rate that time passes. Speeds up or slows down effects.")]
@@ -32,6 +76,14 @@ namespace Slerpy.Unity3D
 
         private float rawTime = 0.0f;
         private float simulatedTime = 0.0f;
+
+        public EffectOptions Options
+        {
+            get
+            {
+                return this.options;
+            }
+        }
 
         public float UnscaledSpeed
         {
@@ -190,6 +242,8 @@ namespace Slerpy.Unity3D
         {
             this.rawTime = 0.0f;
             this.simulatedTime = 0.0f;
+
+            this.AddRawTime(this.options.TimeOffset + UnityEngine.Random.Range(0.0f, this.options.TimeRandomness));
         }
 
         public float CalculateWeight()
@@ -211,20 +265,25 @@ namespace Slerpy.Unity3D
         
         protected void Start()
         {
-            this.ProcessEffect(0.0f, this.ScaledStrength);
+            this.Rewind();
+
+            this.ProcessEffect(this.CalculateWeight(), this.ScaledStrength);
         }
 
         protected void Update()
         {
-            float deltaTime = Time.deltaTime;
+            this.AddRawTime(this.options.UseUnscaledTime ? Time.unscaledDeltaTime : Time.deltaTime);
 
+            this.ProcessEffect(this.CalculateWeight(), this.ScaledStrength);
+        }
+
+        private void AddRawTime(float deltaTime)
+        {
             this.rawTime += deltaTime;
 
             deltaTime *= this.ScaledSpeed;
-            
-            this.simulatedTime += deltaTime;
 
-            this.ProcessEffect(this.CalculateWeight(), this.ScaledStrength);
+            this.simulatedTime += deltaTime;
         }
     }
 }
