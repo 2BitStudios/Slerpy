@@ -29,6 +29,7 @@ namespace Slerpy.Unity3D.UI
             }
         }
 
+        [ContextMenu("Trigger")]
         public void Trigger()
         {
             this.chainEvent.Invoke(this.argument);
@@ -134,6 +135,7 @@ namespace Slerpy.Unity3D.UI
             }
         }
 
+        [ContextMenu("Trigger")]
         public void Trigger()
         {
             this.chainEvent.Invoke(this.firstArgument, this.secondArgument);

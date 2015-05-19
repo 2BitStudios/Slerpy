@@ -96,6 +96,7 @@ namespace Slerpy.Unity3D.Timers
             }
         }
 
+        [ContextMenu("Reset Countdown")]
         public void ResetCountdown()
         {
             this.runningTime = 0.0f;

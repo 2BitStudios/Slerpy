@@ -174,11 +174,13 @@ namespace Slerpy.Unity3D
             this.enabled = false;
         }
 
+        [ContextMenu("Reverse")]
         public void Reverse()
         {
             this.rate = -this.rate;
         }
 
+        [ContextMenu("Rewind")]
         public void Rewind()
         {
             this.rawTime = 0.0f;
