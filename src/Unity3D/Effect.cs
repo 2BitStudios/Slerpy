@@ -52,6 +52,7 @@ namespace Slerpy.Unity3D
         protected const string TOOLTIP_TIMEWRAP = "How time continues to affect the effect once the duration ends.";
 
         [SerializeField]
+        [Tooltip("Minor options related to timing and engine integration.")]
         private EffectOptions options = null;
 
         [SerializeField]
@@ -67,11 +68,11 @@ namespace Slerpy.Unity3D
         private float strength = 1.0f;
 
         [SerializeField]
-        [Tooltip("Multiplies against strength. Evaluation time is raw running time, not speed-modified time.")]
+        [Tooltip("Multiplies against 'strength'. Evaluation time is raw running time, not speed-modified time.")]
         private AnimationCurve strengthScale = AnimationCurve.Linear(0.0f, 1.0f, 1.0f, 1.0f);
 
         [SerializeField]
-        [Tooltip("List of weight modifiers to be applied to the base weight of the effect. Will be applied in order listed here.")]
+        [Tooltip("List of weight modifiers to be applied to the base weight of the effect. Will be applied in order they appear here.")]
         private WeightType[] weights = new WeightType[] { WeightType.Linear };
 
         private float rawTime = 0.0f;
