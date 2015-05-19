@@ -122,6 +122,11 @@ namespace Slerpy.Unity3D
             {
                 return this.simulatedTime;
             }
+
+            set
+            {
+                this.simulatedTime = value;
+            }
         }
 
         public bool IsPlaying
@@ -191,7 +196,7 @@ namespace Slerpy.Unity3D
         {
             float weight = Weight.FromTime(
                 this.TimeWrap,
-                this.simulatedTime,
+                this.SimulatedTime,
                 this.Duration);
 
             for (int i = 0; i < this.weights.Length; ++i)
