@@ -7,23 +7,23 @@ namespace Slerpy.Unity3D
     public abstract class Effect : MonoBehaviour
     {
         protected const string TOOLTIP_INTERPOLATE = "Weight interpolation method.";
-        protected const string TOOLTIP_DURATION = "Run time of the effect, to be modified by 'rate'.";
+        protected const string TOOLTIP_DURATION = "Run time of the effect, affected by 'speed'.";
         protected const string TOOLTIP_TIMEWRAP = "How time continues to affect the effect once the duration ends.";
 
         [SerializeField]
         [Tooltip("Rate that time passes. Speeds up or slows down effects.")]
-        private float rate = 1.0f;
+        private float speed = 1.0f;
 
         [SerializeField]
-        [Tooltip("Multiplies against rate. Evaluation time is raw running time, not rate-modified time.")]
-        private AnimationCurve rateScale = AnimationCurve.Linear(0.0f, 1.0f, 1.0f, 1.0f);
+        [Tooltip("Multiplies against 'speed'. Evaluation time is raw running time, not speed-modified time.")]
+        private AnimationCurve speedScale = AnimationCurve.Linear(0.0f, 1.0f, 1.0f, 1.0f);
 
         [SerializeField]
         [Tooltip("Strength of effect. For example, an effect that moves the object would move twice as far with a strength of 2.0.")]
         private float strength = 1.0f;
 
         [SerializeField]
-        [Tooltip("Multiplies against strength. Evaluation time is raw running time, not rate-modified time.")]
+        [Tooltip("Multiplies against strength. Evaluation time is raw running time, not speed-modified time.")]
         private AnimationCurve strengthScale = AnimationCurve.Linear(0.0f, 1.0f, 1.0f, 1.0f);
 
         [SerializeField]
@@ -33,32 +33,32 @@ namespace Slerpy.Unity3D
         private float rawTime = 0.0f;
         private float simulatedTime = 0.0f;
 
-        public float UnscaledRate
+        public float UnscaledSpeed
         {
             get
             {
-                return this.rate;
+                return this.speed;
             }
 
             set
             {
-                this.rate = value;
+                this.speed = value;
             }
         }
 
-        public float ScaledRate
+        public float ScaledSpeed
         {
             get
             {
-                return this.UnscaledRate * this.rateScale.Evaluate(this.rawTime);
+                return this.UnscaledSpeed * this.speedScale.Evaluate(this.rawTime);
             }
         }
 
-        public AnimationCurve RateScale
+        public AnimationCurve SpeedScale
         {
             get
             {
-                return this.rateScale;
+                return this.speedScale;
             }
         }
 
@@ -177,7 +177,7 @@ namespace Slerpy.Unity3D
         [ContextMenu("Reverse")]
         public void Reverse()
         {
-            this.rate = -this.rate;
+            this.speed = -this.speed;
         }
 
         [ContextMenu("Rewind")]
@@ -215,7 +215,7 @@ namespace Slerpy.Unity3D
 
             this.rawTime += deltaTime;
 
-            deltaTime *= this.ScaledRate;
+            deltaTime *= this.ScaledSpeed;
             
             this.simulatedTime += deltaTime;
 
