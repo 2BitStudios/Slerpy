@@ -258,6 +258,7 @@ namespace Slerpy.Unity3D
             }
         }
 
+        [ContextMenu("Reset Offsets")]
         public void ResetOffsets()
         {
             this.PositionOffset = Vector3.zero;
