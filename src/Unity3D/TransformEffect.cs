@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Slerpy.Unity3D
 {
-    public enum TransformerPreset
+    public enum TransformEffectPreset
     {
         Custom = 0,
         ShakeX = 1,
@@ -22,20 +22,20 @@ namespace Slerpy.Unity3D
 
     public sealed class TransformEffect : Effect
     {
-        private const TransformerPreset PRESET_DEFAULT = TransformerPreset.Custom;
+        private const TransformEffectPreset PRESET_DEFAULT = TransformEffectPreset.Custom;
 
-        private static readonly Dictionary<TransformerPreset, PresetData> presetData = new Dictionary<TransformerPreset, PresetData>()
+        private static readonly Dictionary<TransformEffectPreset, PresetData> presetData = new Dictionary<TransformEffectPreset, PresetData>()
         {
-            { TransformerPreset.ShakeX, new PresetData(0.1f, TimeWrapType.Cycle, new Vector3(0.1f, 0.0f, 0.0f), Vector3.zero, Vector3.zero) },
-            { TransformerPreset.ShakeY, new PresetData(0.1f, TimeWrapType.Cycle, new Vector3(0.0f, 0.1f, 0.0f), Vector3.zero, Vector3.zero) },
-            { TransformerPreset.ShakeZ, new PresetData(0.1f, TimeWrapType.Cycle, new Vector3(0.0f, 0.0f, 0.1f), Vector3.zero, Vector3.zero) },
-            { TransformerPreset.TwistX, new PresetData(0.5f, TimeWrapType.Cycle, Vector3.zero, new Vector3(180.0f, 0.0f, 0.0f), Vector3.zero) },
-            { TransformerPreset.TwistY, new PresetData(0.5f, TimeWrapType.Cycle, Vector3.zero, new Vector3(0.0f, 180.0f, 0.0f), Vector3.zero) },
-            { TransformerPreset.TwistZ, new PresetData(0.5f, TimeWrapType.Cycle, Vector3.zero, new Vector3(0.0f, 0.0f, 180.0f), Vector3.zero) },
-            { TransformerPreset.Throb, new PresetData(0.5f, TimeWrapType.Cycle, Vector3.zero, Vector3.zero, new Vector3(0.1f, 0.1f, 0.1f)) },
-            { TransformerPreset.Raise, new PresetData(1.0f, TimeWrapType.Clamp, new Vector3(0.0f, 1.0f, 0.0f), Vector3.zero, Vector3.zero) },
-            { TransformerPreset.Flip, new PresetData(1.0f, TimeWrapType.Clamp, Vector3.zero, new Vector3(180.0f, 0.0f, 0.0f), Vector3.zero) },
-            { TransformerPreset.Expand, new PresetData(1.0f, TimeWrapType.Clamp, Vector3.zero, Vector3.zero, new Vector3(1.0f, 1.0f, 1.0f)) }
+            { TransformEffectPreset.ShakeX, new PresetData(0.1f, TimeWrapType.Cycle, new Vector3(0.1f, 0.0f, 0.0f), Vector3.zero, Vector3.zero) },
+            { TransformEffectPreset.ShakeY, new PresetData(0.1f, TimeWrapType.Cycle, new Vector3(0.0f, 0.1f, 0.0f), Vector3.zero, Vector3.zero) },
+            { TransformEffectPreset.ShakeZ, new PresetData(0.1f, TimeWrapType.Cycle, new Vector3(0.0f, 0.0f, 0.1f), Vector3.zero, Vector3.zero) },
+            { TransformEffectPreset.TwistX, new PresetData(0.5f, TimeWrapType.Cycle, Vector3.zero, new Vector3(180.0f, 0.0f, 0.0f), Vector3.zero) },
+            { TransformEffectPreset.TwistY, new PresetData(0.5f, TimeWrapType.Cycle, Vector3.zero, new Vector3(0.0f, 180.0f, 0.0f), Vector3.zero) },
+            { TransformEffectPreset.TwistZ, new PresetData(0.5f, TimeWrapType.Cycle, Vector3.zero, new Vector3(0.0f, 0.0f, 180.0f), Vector3.zero) },
+            { TransformEffectPreset.Throb, new PresetData(0.5f, TimeWrapType.Cycle, Vector3.zero, Vector3.zero, new Vector3(0.1f, 0.1f, 0.1f)) },
+            { TransformEffectPreset.Raise, new PresetData(1.0f, TimeWrapType.Clamp, new Vector3(0.0f, 1.0f, 0.0f), Vector3.zero, Vector3.zero) },
+            { TransformEffectPreset.Flip, new PresetData(1.0f, TimeWrapType.Clamp, Vector3.zero, new Vector3(180.0f, 0.0f, 0.0f), Vector3.zero) },
+            { TransformEffectPreset.Expand, new PresetData(1.0f, TimeWrapType.Clamp, Vector3.zero, Vector3.zero, new Vector3(1.0f, 1.0f, 1.0f)) }
         };
 
         [SerializeField]
@@ -44,7 +44,7 @@ namespace Slerpy.Unity3D
 
         [SerializeField]
         [Tooltip("Pre-defined common settings for the values that follow.")]
-        private TransformerPreset preset = PRESET_DEFAULT;
+        private TransformEffectPreset preset = PRESET_DEFAULT;
 
         [SerializeField]
         [Tooltip(Effect.TOOLTIP_DURATION)]
@@ -68,7 +68,7 @@ namespace Slerpy.Unity3D
 
         [SerializeField]
         [HideInInspector]
-        private TransformerPreset previousPreset = PRESET_DEFAULT;
+        private TransformEffectPreset previousPreset = PRESET_DEFAULT;
 
         private Vector3 positionOffset = Vector3.zero;
         private Quaternion rotationOffset = Quaternion.identity;
@@ -87,7 +87,7 @@ namespace Slerpy.Unity3D
             }
         }
 
-        public TransformerPreset Preset
+        public TransformEffectPreset Preset
         {
             get
             {
@@ -98,9 +98,9 @@ namespace Slerpy.Unity3D
             {
                 this.preset = value;
 
-                if (this.preset == TransformerPreset.Custom)
+                if (this.preset == TransformEffectPreset.Custom)
                 {
-                    foreach (KeyValuePair<TransformerPreset, PresetData> presetData in TransformEffect.presetData)
+                    foreach (KeyValuePair<TransformEffectPreset, PresetData> presetData in TransformEffect.presetData)
                     {
                         if (presetData.Value.CompareTo(this))
                         {
@@ -130,7 +130,7 @@ namespace Slerpy.Unity3D
                 {
                     this.duration = value;
 
-                    this.Preset = TransformerPreset.Custom;
+                    this.Preset = TransformEffectPreset.Custom;
                 }
             }
         }
@@ -148,7 +148,7 @@ namespace Slerpy.Unity3D
                 {
                     this.timeWrap = value;
 
-                    this.Preset = TransformerPreset.Custom;
+                    this.Preset = TransformEffectPreset.Custom;
                 }
             }
         }
@@ -166,7 +166,7 @@ namespace Slerpy.Unity3D
                 {
                     this.positionExtent = value;
 
-                    this.Preset = TransformerPreset.Custom;
+                    this.Preset = TransformEffectPreset.Custom;
                 }
             }
         }
@@ -184,7 +184,7 @@ namespace Slerpy.Unity3D
                 {
                     this.rotationExtent = value;
 
-                    this.Preset = TransformerPreset.Custom;
+                    this.Preset = TransformEffectPreset.Custom;
                 }
             }
         }
@@ -202,7 +202,7 @@ namespace Slerpy.Unity3D
                 {
                     this.scaleExtent = value;
 
-                    this.Preset = TransformerPreset.Custom;
+                    this.Preset = TransformEffectPreset.Custom;
                 }
             }
         }
@@ -298,9 +298,9 @@ namespace Slerpy.Unity3D
 
         private void OnValidate()
         {
-            if (this.previousPreset != TransformerPreset.Custom && this.previousPreset == this.preset)
+            if (this.previousPreset != TransformEffectPreset.Custom && this.previousPreset == this.preset)
             {
-                this.preset = TransformerPreset.Custom;
+                this.preset = TransformEffectPreset.Custom;
             }
 
             this.Preset = this.preset;
@@ -386,7 +386,7 @@ namespace Slerpy.Unity3D
                 target.rotationExtent = this.rotationExtent;
                 target.scaleExtent = this.scaleExtent;
 
-                target.Preset = TransformerPreset.Custom;
+                target.Preset = TransformEffectPreset.Custom;
             }
         }
     }
