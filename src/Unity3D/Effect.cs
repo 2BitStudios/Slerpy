@@ -136,10 +136,7 @@ namespace Slerpy.Unity3D
 
             set
             {
-                if (this.strength != value)
-                {
-                    this.strength = value;
-                }
+                this.strength = value;
             }
         }
 
@@ -244,6 +241,26 @@ namespace Slerpy.Unity3D
         public void Play()
         {
             this.enabled = true;
+        }
+
+        public void PlayForward()
+        {
+            this.Play();
+
+            if (this.speed < 0.0f)
+            {
+                this.speed = -this.speed;
+            }
+        }
+
+        public void PlayBackward()
+        {
+            this.Play();
+
+            if (this.speed > 0.0f)
+            {
+                this.speed = -this.speed;
+            }
         }
 
         public void Stop()
