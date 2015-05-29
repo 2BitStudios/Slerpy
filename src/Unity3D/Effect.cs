@@ -6,45 +6,45 @@ using UnityEngine;
 namespace Slerpy.Unity3D
 {
     [Serializable]
-    public sealed class EffectOptions
+    public sealed class TimeOptions
     {
         [SerializeField]
         [Tooltip("Raw time to begin the effect at.")]
-        private float timeOffset = 0.0f;
+        private float offset = 0.0f;
 
         [SerializeField]
         [Tooltip("Random time range to add to the effect at start.")]
-        private float timeRandomness = 0.0f;
+        private float randomness = 0.0f;
 
         [SerializeField]
         [Tooltip("Whether to ignore engine time scaling (such as pauses). Does not ignore local scaling via 'speedScale'.")]
-        private bool useUnscaledTime = false;
+        private bool useUnscaledDelta = false;
 
         [SerializeField]
         [Tooltip("Whether to lock simulated time to 'duration' (clamping between 0 and 'duration').")]
         private bool clampToDuration = false;
 
-        public float TimeOffset
+        public float Offset
         {
             get
             {
-                return this.timeOffset;
+                return this.offset;
             }
         }
 
-        public float TimeRandomness
+        public float Randomness
         {
             get
             {
-                return this.timeRandomness;
+                return this.randomness;
             }
         }
 
-        public bool UseUnscaledTime
+        public bool UseUnscaledDelta
         {
             get
             {
-                return this.useUnscaledTime;
+                return this.useUnscaledDelta;
             }
         }
 
@@ -64,8 +64,8 @@ namespace Slerpy.Unity3D
         protected const string TOOLTIP_TIMEWRAP = "How time continues to affect the effect once the duration ends.";
 
         [SerializeField]
-        [Tooltip("Minor options related to timing and engine integration.")]
-        private EffectOptions options = null;
+        [Tooltip("Time settings, such as offsets and boundaries.")]
+        private TimeOptions timeOptions = null;
 
         [SerializeField]
         [Tooltip("Rate that time passes. Speeds up or slows down effects.")]
@@ -90,11 +90,11 @@ namespace Slerpy.Unity3D
         private float rawTime = 0.0f;
         private float simulatedTime = 0.0f;
 
-        public EffectOptions Options
+        public TimeOptions TimeOptions
         {
             get
             {
-                return this.options;
+                return this.timeOptions;
             }
         }
 
@@ -190,7 +190,7 @@ namespace Slerpy.Unity3D
 
             set
             {
-                if (this.options.ClampToDuration)
+                if (this.timeOptions.ClampToDuration)
                 {
                     this.simulatedTime = Mathf.Clamp(value, 0.0f, this.Duration);
                 }
@@ -263,7 +263,7 @@ namespace Slerpy.Unity3D
             this.rawTime = 0.0f;
             this.simulatedTime = 0.0f;
 
-            this.AddRawTime(this.options.TimeOffset + UnityEngine.Random.Range(0.0f, this.options.TimeRandomness));
+            this.AddRawTime(this.timeOptions.Offset + UnityEngine.Random.Range(0.0f, this.timeOptions.Randomness));
         }
 
         public float CalculateWeight()
@@ -292,7 +292,7 @@ namespace Slerpy.Unity3D
 
         protected void Update()
         {
-            this.AddRawTime(this.options.UseUnscaledTime ? Time.unscaledDeltaTime : Time.deltaTime);
+            this.AddRawTime(this.timeOptions.UseUnscaledDelta ? Time.unscaledDeltaTime : Time.deltaTime);
 
             this.ProcessEffect(this.CalculateWeight(), this.ScaledStrength);
         }
