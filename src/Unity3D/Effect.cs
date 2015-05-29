@@ -20,6 +20,10 @@ namespace Slerpy.Unity3D
         [Tooltip("Whether to ignore engine time scaling (such as pauses). Does not ignore local scaling via 'speedScale'.")]
         private bool useUnscaledTime = false;
 
+        [SerializeField]
+        [Tooltip("Whether to lock simulated time to 'duration' (clamping between 0 and 'duration').")]
+        private bool clampToDuration = false;
+
         public float TimeOffset
         {
             get
@@ -41,6 +45,14 @@ namespace Slerpy.Unity3D
             get
             {
                 return this.useUnscaledTime;
+            }
+        }
+
+        public bool ClampToDuration
+        {
+            get
+            {
+                return this.clampToDuration;
             }
         }
     }
@@ -178,7 +190,14 @@ namespace Slerpy.Unity3D
 
             set
             {
-                this.simulatedTime = value;
+                if (this.options.ClampToDuration)
+                {
+                    this.simulatedTime = Mathf.Clamp(value, 0.0f, this.Duration);
+                }
+                else
+                {
+                    this.simulatedTime = value;
+                }
             }
         }
 
@@ -284,7 +303,7 @@ namespace Slerpy.Unity3D
 
             deltaTime *= this.ScaledSpeed;
 
-            this.simulatedTime += deltaTime;
+            this.SimulatedTime += deltaTime;
         }
     }
 }
