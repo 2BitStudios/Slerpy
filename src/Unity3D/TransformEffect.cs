@@ -216,11 +216,11 @@ namespace Slerpy.Unity3D
 
             set
             {
-                this.transform.position -= this.positionOffset;
+                this.transform.localPosition -= this.positionOffset;
 
                 this.positionOffset = value;
 
-                this.transform.position += this.positionOffset;
+                this.transform.localPosition += this.positionOffset;
             }
         }
 
@@ -233,11 +233,11 @@ namespace Slerpy.Unity3D
 
             set
             {
-                this.transform.rotation *= Quaternion.Inverse(this.rotationOffset);
+                this.transform.localRotation *= Quaternion.Inverse(this.rotationOffset);
 
                 this.rotationOffset = value;
 
-                this.transform.rotation *= this.rotationOffset;
+                this.transform.localRotation *= this.rotationOffset;
             }
         }
 
