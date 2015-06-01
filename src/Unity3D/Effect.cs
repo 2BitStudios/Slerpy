@@ -65,7 +65,7 @@ namespace Slerpy.Unity3D
 
         [SerializeField]
         [Tooltip("Time settings, such as offsets and boundaries.")]
-        private TimeOptions timeOptions = null;
+        private TimeOptions timeOptions = new TimeOptions();
 
         [SerializeField]
         [Tooltip("Rate that time passes. Speeds up or slows down effects.")]
