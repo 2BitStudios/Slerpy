@@ -274,11 +274,11 @@ namespace Slerpy.Unity3D
                 weight, 
                 this.interpolate);
 
-            this.RotationOffset = Extensions.Interpolate(
-                Quaternion.identity, 
-                Quaternion.Euler(this.rotationExtent * strength), 
+            this.RotationOffset = Quaternion.Euler(Extensions.Interpolate(
+                Vector3.zero, 
+                this.rotationExtent * strength, 
                 weight, 
-                this.interpolate);
+                this.interpolate));
 
             this.ScaleOffset = Extensions.Interpolate(
                 Vector3.zero, 
