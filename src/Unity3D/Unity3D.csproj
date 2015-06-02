@@ -46,6 +46,8 @@
     </Compile>
     <Compile Include="Extensions.cs" />
     <Compile Include="ColorEffect.cs" />
+    <Compile Include="Timers\StopAnimation.cs" />
+    <Compile Include="Timers\PlayAnimation.cs" />
     <Compile Include="Timers\DeactivateGameObject.cs" />
     <Compile Include="Timers\ActivateGameObject.cs" />
     <Compile Include="UI\ChainEvent.cs" />
