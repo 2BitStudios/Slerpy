@@ -44,9 +44,6 @@
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>Properties\GlobalAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="ClampModifier.cs" />
-    <Compile Include="AdditiveModifier.cs" />
-    <Compile Include="CurveModifier.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="ColorEffect.cs" />
     <Compile Include="Timers\StopAnimation.cs" />

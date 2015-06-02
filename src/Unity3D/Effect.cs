@@ -83,8 +83,6 @@ namespace Slerpy.Unity3D
         protected const string TOOLTIP_DURATION = "Run time of the effect, affected by 'speed'.";
         protected const string TOOLTIP_TIMEWRAP = "How time continues to affect the effect once the duration ends.";
 
-        private readonly List<Modifier> modifiers = new List<Modifier>();
-
         [SerializeField]
         [Tooltip("Time settings, such as offsets and boundaries.")]
         private TimeOptions timeOptions = new TimeOptions();
@@ -94,8 +92,16 @@ namespace Slerpy.Unity3D
         private float speed = 1.0f;
 
         [SerializeField]
+        [Tooltip("Multiplies against 'speed'. Evaluation time is raw running time, not speed-modified time.")]
+        private List<AnimationCurve> speedModifiers = new List<AnimationCurve>();
+
+        [SerializeField]
         [Tooltip("Strength of effect. For example, an effect that moves the object would move twice as far with a strength of 2.0.")]
         private float strength = 1.0f;
+
+        [SerializeField]
+        [Tooltip("Multiplies against 'strength'. Evaluation time is raw running time, not speed-modified time.")]
+        private List<AnimationCurve> strengthModifiers = new List<AnimationCurve>();
 
         [SerializeField]
         [Tooltip("List of weight modifiers to be applied to the base weight of the effect. Will be applied in order they appear here.")]
@@ -103,14 +109,6 @@ namespace Slerpy.Unity3D
 
         private float rawTime = 0.0f;
         private float simulatedTime = 0.0f;
-
-        public IEnumerable<Modifier> Modifiers
-        {
-            get
-            {
-                return this.modifiers;
-            }
-        }
 
         public TimeOptions TimeOptions
         {
@@ -133,15 +131,23 @@ namespace Slerpy.Unity3D
             }
         }
 
+        public IEnumerable<AnimationCurve> SpeedModifiers
+        {
+            get
+            {
+                return this.speedModifiers;
+            }
+        }
+
         public float ModifiedSpeed
         {
             get
             {
                 float returnValue = this.Speed;
 
-                for (int i = 0; i < this.modifiers.Count; ++i)
+                for (int i = 0; i < this.speedModifiers.Count; ++i)
                 {
-                    returnValue = this.modifiers[i].ProcessSpeed(returnValue);
+                    returnValue = this.speedModifiers[i].Evaluate(this.rawTime) * returnValue;
                 }
 
                 return returnValue;
@@ -161,15 +167,23 @@ namespace Slerpy.Unity3D
             }
         }
 
+        public IEnumerable<AnimationCurve> StrengthModifiers
+        {
+            get
+            {
+                return this.strengthModifiers;
+            }
+        }
+
         public float ModifiedStrength
         {
             get
             {
                 float returnValue = this.Strength;
 
-                for (int i = 0; i < this.modifiers.Count; ++i)
+                for (int i = 0; i < this.strengthModifiers.Count; ++i)
                 {
-                    returnValue = this.modifiers[i].ProcessStrength(returnValue);
+                    returnValue = this.strengthModifiers[i].Evaluate(this.rawTime) * returnValue;
                 }
 
                 return returnValue;
@@ -229,6 +243,54 @@ namespace Slerpy.Unity3D
             {
                 this.enabled = value;
             }
+        }
+
+        public void AddSpeedModifier(AnimationCurve modifier)
+        {
+            this.speedModifiers.Add(modifier);
+        }
+
+        /// <summary>
+        /// Clones the <paramref name="baseModifier"/> and offsets it by current time, before adding it and returning it.
+        /// </summary>
+        /// <param name="baseModifier">The modifier to clone from.</param>
+        /// <returns>The transformed modifier curve.</returns>
+        public AnimationCurve InjectSpeedModifier(AnimationCurve baseModifier)
+        {
+            AnimationCurve newModifier = this.OffsetCurveByRawTime(baseModifier);
+
+            this.AddSpeedModifier(newModifier);
+
+            return newModifier;
+        }
+
+        public void RemoveSpeedModifier(AnimationCurve modifier)
+        {
+            this.speedModifiers.Remove(modifier);
+        }
+
+        public void AddStrengthModifier(AnimationCurve modifier)
+        {
+            this.strengthModifiers.Add(modifier);
+        }
+
+        /// <summary>
+        /// Clones the <paramref name="baseModifier"/> and offsets it by current time, before adding it and returning it.
+        /// </summary>
+        /// <param name="baseModifier">The modifier to clone from.</param>
+        /// <returns>The transformed modifier curve.</returns>
+        public AnimationCurve InjectStrengthModifier(AnimationCurve baseModifier)
+        {
+            AnimationCurve newModifier = this.OffsetCurveByRawTime(baseModifier);
+
+            this.AddStrengthModifier(newModifier);
+
+            return newModifier;
+        }
+
+        public void RemoveStrengthModifier(AnimationCurve modifier)
+        {
+            this.strengthModifiers.Remove(modifier);
         }
 
         public void SetWeights(params WeightType[] newWeights)
@@ -300,11 +362,6 @@ namespace Slerpy.Unity3D
             this.rawTime = 0.0f;
             this.simulatedTime = 0.0f;
 
-            for (int i = 0; i < this.modifiers.Count; ++i)
-            {
-                this.modifiers[i].Rewind();
-            }
-
             this.AddRawTime(this.timeOptions.Offset + UnityEngine.Random.Range(0.0f, this.timeOptions.Randomness));
         }
 
@@ -328,15 +385,6 @@ namespace Slerpy.Unity3D
         protected void Start()
         {
             this.Rewind();
-            
-            Modifier[] modifiers = this.gameObject.GetComponents<Modifier>();
-            for (int i = 0; i < modifiers.Length; ++i)
-            {
-                if (modifiers[i].enabled && !this.modifiers.Contains(modifiers[i]))
-                {
-                    this.modifiers.Add(modifiers[i]);
-                }
-            }
 
             this.ProcessEffect(this.CalculateWeight(), this.ModifiedStrength);
         }
@@ -348,6 +396,24 @@ namespace Slerpy.Unity3D
             this.ProcessEffect(this.CalculateWeight(), this.ModifiedStrength);
         }
 
+        private AnimationCurve OffsetCurveByRawTime(AnimationCurve baseCurve)
+        {
+            AnimationCurve offsetCurve = new AnimationCurve();
+
+            offsetCurve.preWrapMode = baseCurve.preWrapMode;
+            offsetCurve.postWrapMode = baseCurve.postWrapMode;
+
+            Keyframe[] keys = baseCurve.keys;
+            for (int i = 0; i < keys.Length; ++i)
+            {
+                keys[i].time += this.rawTime;
+
+                offsetCurve.AddKey(keys[i]);
+            }
+
+            return offsetCurve;
+        }
+
         private void AddRawTime(float deltaTime)
         {
             this.rawTime += deltaTime;
@@ -355,35 +421,6 @@ namespace Slerpy.Unity3D
             deltaTime *= this.ModifiedSpeed;
 
             this.SimulatedTime += deltaTime;
-        }
-
-        public abstract class Modifier : MonoBehaviour
-        {
-            public abstract float ProcessSpeed(float speed);
-            public abstract float ProcessStrength(float strength);
-
-            [ContextMenu("Rewind")]
-            public abstract void Rewind();
-
-            protected void OnEnable()
-            {
-                Effect[] effects = this.gameObject.GetComponents<Effect>();
-                for (int i = 0; i < effects.Length; ++i)
-                {
-                    effects[i].modifiers.Add(this);
-                }
-            }
-
-            protected void OnDisable()
-            {
-                Effect[] effects = this.gameObject.GetComponents<Effect>();
-                for (int i = 0; i < effects.Length; ++i)
-                {
-                    effects[i].modifiers.Remove(this);
-                }
-            }
-
-            protected virtual void Start() { }
         }
     }
 }
