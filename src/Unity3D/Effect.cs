@@ -30,6 +30,11 @@ namespace Slerpy.Unity3D
             {
                 return this.offset;
             }
+
+            set
+            {
+                this.offset = value;
+            }
         }
 
         public float Randomness
@@ -37,6 +42,11 @@ namespace Slerpy.Unity3D
             get
             {
                 return this.randomness;
+            }
+
+            set
+            {
+                this.randomness = value;
             }
         }
 
@@ -46,6 +56,11 @@ namespace Slerpy.Unity3D
             {
                 return this.useUnscaledDelta;
             }
+
+            set
+            {
+                this.useUnscaledDelta = value;
+            }
         }
 
         public bool ClampToDuration
@@ -53,6 +68,11 @@ namespace Slerpy.Unity3D
             get
             {
                 return this.clampToDuration;
+            }
+
+            set
+            {
+                this.clampToDuration = value;
             }
         }
     }
