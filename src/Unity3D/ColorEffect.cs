@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Slerpy.Unity3D
 {
@@ -20,7 +21,7 @@ namespace Slerpy.Unity3D
         private TimeWrapType timeWrap = TimeWrapType.PingPong;
 
         [SerializeField]
-        [Tooltip("Color property to set.\nDefault: _Color")]
+        [Tooltip("Color property to set on materials. Ignored for UI Image color.\nDefault: _Color")]
         private string materialProperty = "_Color";
 
         [SerializeField]
@@ -117,13 +118,24 @@ namespace Slerpy.Unity3D
                 weight, 
                 this.interpolate);
 
-            Renderer[] renderers = this.gameObject.GetComponents<Renderer>();
-            for (int i = 0; i < renderers.Length; ++i)
+            if (this.transform is RectTransform)
             {
-                Material[] materials = renderers[i].materials;
-                for (int k = 0; k < materials.Length; ++k)
+                Image[] images = this.gameObject.GetComponents<Image>();
+                for (int i = 0; i < images.Length; ++i)
                 {
-                    materials[k].SetColor(materialProperty, interpolatedColor);
+                    images[i].color = interpolatedColor;
+                }
+            }
+            else
+            {
+                Renderer[] renderers = this.gameObject.GetComponents<Renderer>();
+                for (int i = 0; i < renderers.Length; ++i)
+                {
+                    Material[] materials = renderers[i].materials;
+                    for (int k = 0; k < materials.Length; ++k)
+                    {
+                        materials[k].SetColor(materialProperty, interpolatedColor);
+                    }
                 }
             }
         }
