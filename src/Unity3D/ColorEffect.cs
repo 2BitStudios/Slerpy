@@ -21,7 +21,7 @@ namespace Slerpy.Unity3D
         private TimeWrapType timeWrap = TimeWrapType.PingPong;
 
         [SerializeField]
-        [Tooltip("Color property to set on materials. Ignored for UI Image color.\nDefault: _Color")]
+        [Tooltip("Color property to set on materials. Ignored for UI color.\nDefault: _Color")]
         private string materialProperty = "_Color";
 
         [SerializeField]
@@ -120,10 +120,10 @@ namespace Slerpy.Unity3D
 
             if (this.transform is RectTransform)
             {
-                Image[] images = this.gameObject.GetComponents<Image>();
-                for (int i = 0; i < images.Length; ++i)
+                Graphic[] graphics = this.gameObject.GetComponents<Graphic>();
+                for (int i = 0; i < graphics.Length; ++i)
                 {
-                    images[i].color = interpolatedColor;
+                    graphics[i].color = interpolatedColor;
                 }
             }
             else
