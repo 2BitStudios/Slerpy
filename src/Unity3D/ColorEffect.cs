@@ -21,7 +21,7 @@ namespace Slerpy.Unity3D
         private TimeWrapType timeWrap = TimeWrapType.PingPong;
 
         [SerializeField]
-        [Tooltip("Color property to set on materials. Ignored for UI color.\nDefault: _Color")]
+        [Tooltip("Color property to set on materials. Ignored for UI and light color.\nDefault: _Color")]
         private string materialProperty = "_Color";
 
         [SerializeField]
@@ -136,7 +136,7 @@ namespace Slerpy.Unity3D
 
             if (this.transform is RectTransform)
             {
-                Graphic[] graphics = this.affectChildren ? this.gameObject.GetComponentsInChildren<Graphic>() : this.gameObject.GetComponents<Graphic>();
+                Graphic[] graphics = this.GetTargetComponents<Graphic>();
                 for (int i = 0; i < graphics.Length; ++i)
                 {
                     graphics[i].color = interpolatedColor;
@@ -144,7 +144,7 @@ namespace Slerpy.Unity3D
             }
             else
             {
-                Renderer[] renderers = this.affectChildren ? this.gameObject.GetComponentsInChildren<Renderer>() : this.gameObject.GetComponents<Renderer>();
+                Renderer[] renderers = this.GetTargetComponents<Renderer>();
                 for (int i = 0; i < renderers.Length; ++i)
                 {
                     Material[] materials = renderers[i].materials;
@@ -153,7 +153,19 @@ namespace Slerpy.Unity3D
                         materials[k].SetColor(materialProperty, interpolatedColor);
                     }
                 }
+
+                Light[] lights = this.GetTargetComponents<Light>();
+                for (int i = 0; i < lights.Length; ++i)
+                {
+                    lights[i].color = interpolatedColor;
+                }
             }
+        }
+
+        private TComponent[] GetTargetComponents<TComponent>()
+            where TComponent : Component
+        {
+            return this.affectChildren ? this.gameObject.GetComponentsInChildren<TComponent>() : this.gameObject.GetComponents<TComponent>();
         }
     }
 }
