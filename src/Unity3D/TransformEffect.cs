@@ -55,15 +55,15 @@ namespace Slerpy.Unity3D
         private TimeWrapType timeWrap = TimeWrapType.Cycle;
 
         [SerializeField]
-        [Tooltip("Maximum position change at a weight of 1.0. Can be exceeded or negated by weight modifiers or time wrap type.")]
+        [Tooltip("Maximum local-space position change at a weight of 1.0. Can be exceeded or negated by weight modifiers or time wrap type.")]
         private Vector3 positionExtent = Vector3.zero;
 
         [SerializeField]
-        [Tooltip("Maximum rotation change at a weight of 1.0. Can be exceeded or negated by weight modifiers or time wrap type.")]
+        [Tooltip("Maximum local-space rotation change at a weight of 1.0. Can be exceeded or negated by weight modifiers or time wrap type.")]
         private Vector3 rotationExtent = Vector3.zero;
 
         [SerializeField]
-        [Tooltip("Maximum scale change at a weight of 1.0. Can be exceeded or negated by weight modifiers or time wrap type.")]
+        [Tooltip("Maximum local-space scale change at a weight of 1.0. Can be exceeded or negated by weight modifiers or time wrap type.")]
         private Vector3 scaleExtent = Vector3.zero;
 
         [SerializeField]
