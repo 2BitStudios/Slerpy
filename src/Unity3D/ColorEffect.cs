@@ -25,6 +25,9 @@ namespace Slerpy.Unity3D
         private string materialProperty = "_Color";
 
         [SerializeField]
+        private bool affectChildren = false;
+
+        [SerializeField]
         [Tooltip("Color to blend from.")]
         private Color fromColor = Color.white;
 
@@ -84,6 +87,19 @@ namespace Slerpy.Unity3D
             }
         }
 
+        public bool AffectChildren
+        {
+            get
+            {
+                return this.affectChildren;
+            }
+
+            set
+            {
+                this.affectChildren = value;
+            }
+        }
+
         public Color FromColor
         {
             get
@@ -120,7 +136,7 @@ namespace Slerpy.Unity3D
 
             if (this.transform is RectTransform)
             {
-                Graphic[] graphics = this.gameObject.GetComponents<Graphic>();
+                Graphic[] graphics = this.affectChildren ? this.gameObject.GetComponentsInChildren<Graphic>() : this.gameObject.GetComponents<Graphic>();
                 for (int i = 0; i < graphics.Length; ++i)
                 {
                     graphics[i].color = interpolatedColor;
@@ -128,7 +144,7 @@ namespace Slerpy.Unity3D
             }
             else
             {
-                Renderer[] renderers = this.gameObject.GetComponents<Renderer>();
+                Renderer[] renderers = this.affectChildren ? this.gameObject.GetComponentsInChildren<Renderer>() : this.gameObject.GetComponents<Renderer>();
                 for (int i = 0; i < renderers.Length; ++i)
                 {
                     Material[] materials = renderers[i].materials;
