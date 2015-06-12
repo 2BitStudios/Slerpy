@@ -229,6 +229,8 @@ namespace Slerpy.Unity3D
                 {
                     this.simulatedTime = value;
                 }
+
+                this.ProcessEffect(this.CalculateWeight(), this.ModifiedStrength);
             }
         }
 
@@ -392,8 +394,6 @@ namespace Slerpy.Unity3D
         protected void Update()
         {
             this.AddRawTime(this.timeOptions.UseUnscaledDelta ? Time.unscaledDeltaTime : Time.deltaTime);
-
-            this.ProcessEffect(this.CalculateWeight(), this.ModifiedStrength);
         }
 
         private AnimationCurve OffsetCurveByRawTime(AnimationCurve baseCurve)
