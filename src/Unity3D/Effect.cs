@@ -9,46 +9,12 @@ namespace Slerpy.Unity3D
     public sealed class TimeOptions
     {
         [SerializeField]
-        [Tooltip("Raw time to begin the effect at.")]
-        private float offset = 0.0f;
-
-        [SerializeField]
-        [Tooltip("Random time range to add to the effect at start.")]
-        private float randomness = 0.0f;
-
-        [SerializeField]
         [Tooltip("Whether to ignore engine time scaling (such as pauses). Does not ignore local scaling via 'speedScale'.")]
         private bool useUnscaledDelta = false;
 
         [SerializeField]
         [Tooltip("Whether to lock simulated time to 'duration' (clamping between 0 and 'duration').")]
         private bool clampToDuration = false;
-
-        public float Offset
-        {
-            get
-            {
-                return this.offset;
-            }
-
-            set
-            {
-                this.offset = value;
-            }
-        }
-
-        public float Randomness
-        {
-            get
-            {
-                return this.randomness;
-            }
-
-            set
-            {
-                this.randomness = value;
-            }
-        }
 
         public bool UseUnscaledDelta
         {
@@ -368,8 +334,6 @@ namespace Slerpy.Unity3D
         {
             this.rawTime = 0.0f;
             this.simulatedTime = 0.0f;
-
-            this.AddRawTime(this.timeOptions.Offset + UnityEngine.Random.Range(0.0f, this.timeOptions.Randomness));
         }
 
         public float CalculateWeight()
@@ -391,8 +355,6 @@ namespace Slerpy.Unity3D
         
         protected void Start()
         {
-            this.Rewind();
-
             this.ProcessEffect(this.CalculateWeight(), this.ModifiedStrength);
         }
 
