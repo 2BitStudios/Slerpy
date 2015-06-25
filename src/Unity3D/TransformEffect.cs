@@ -70,8 +70,16 @@ namespace Slerpy.Unity3D
         [HideInInspector]
         private TransformEffectPreset previousPreset = PRESET_DEFAULT;
 
+        [SerializeField]
+        [HideInInspector]
         private Vector3 positionOffset = Vector3.zero;
+
+        [SerializeField]
+        [HideInInspector]
         private Quaternion rotationOffset = Quaternion.identity;
+
+        [SerializeField]
+        [HideInInspector]
         private Vector3 scaleOffset = Vector3.zero;
 
         public override InterpolateType Interpolate

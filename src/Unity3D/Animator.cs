@@ -31,6 +31,8 @@ namespace Slerpy.Unity3D
         [SerializeField]
         private ColorAnimation[] colorAnimations = null;
 
+        [SerializeField]
+        [HideInInspector]
         private float timeRunning = 0.0f;
 
         public IEnumerable<BoolAnimation> BoolAnimations

@@ -39,6 +39,8 @@ namespace Slerpy.Unity3D.Timers
         [SerializeField]
         private float triggerTime = 1.0f;
 
+        [SerializeField]
+        [HideInInspector]
         private float runningTime = 0.0f;
 
         public TTarget Target

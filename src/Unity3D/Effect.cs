@@ -107,7 +107,12 @@ namespace Slerpy.Unity3D
         [Tooltip("List of weight modifiers to be applied to the base weight of the effect. Will be applied in order they appear here.")]
         private WeightType[] weights = new WeightType[] { WeightType.Linear };
 
+        [SerializeField]
+        [HideInInspector]
         private float rawTime = 0.0f;
+
+        [SerializeField]
+        [HideInInspector]
         private float simulatedTime = 0.0f;
 
         public TimeOptions TimeOptions
