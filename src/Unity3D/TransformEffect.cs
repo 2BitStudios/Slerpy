@@ -39,10 +39,6 @@ namespace Slerpy.Unity3D
         };
 
         [SerializeField]
-        [Tooltip(Effect.TOOLTIP_INTERPOLATE)]
-        private InterpolateType interpolate = InterpolateType.Standard;
-
-        [SerializeField]
         [Tooltip("Pre-defined common settings for the values that follow.")]
         private TransformEffectPreset preset = PRESET_DEFAULT;
 
@@ -81,19 +77,6 @@ namespace Slerpy.Unity3D
         [SerializeField]
         [HideInInspector]
         private Vector3 scaleOffset = Vector3.zero;
-
-        public override InterpolateType Interpolate
-        {
-            get
-            {
-                return this.interpolate;
-            }
-
-            set
-            {
-                this.interpolate = value;
-            }
-        }
 
         public TransformEffectPreset Preset
         {
@@ -280,19 +263,19 @@ namespace Slerpy.Unity3D
                 Vector3.zero, 
                 this.positionExtent * strength, 
                 weight, 
-                this.interpolate);
+                InterpolateType.Standard);
 
             this.RotationOffset = Quaternion.Euler(Extensions.Interpolate(
                 Vector3.zero, 
                 this.rotationExtent * strength, 
-                weight, 
-                this.interpolate));
+                weight,
+                InterpolateType.Standard));
 
             this.ScaleOffset = Extensions.Interpolate(
                 Vector3.zero, 
                 this.scaleExtent * strength, 
-                weight, 
-                this.interpolate);
+                weight,
+                InterpolateType.Standard);
         }
 
         private void TrySetToPreset()

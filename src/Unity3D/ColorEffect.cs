@@ -9,10 +9,6 @@ namespace Slerpy.Unity3D
     public sealed class ColorEffect : Effect
     {
         [SerializeField]
-        [Tooltip(Effect.TOOLTIP_INTERPOLATE)]
-        private InterpolateType interpolate = InterpolateType.Standard;
-
-        [SerializeField]
         [Tooltip(Effect.TOOLTIP_DURATION)]
         private float duration = 1.0f;
         
@@ -34,19 +30,6 @@ namespace Slerpy.Unity3D
         [SerializeField]
         [Tooltip("Color to blend towards.")]
         private Color toColor = Color.red;
-
-        public override InterpolateType Interpolate
-        {
-            get
-            {
-                return this.interpolate;
-            }
-
-            set
-            {
-                this.interpolate = value;
-            }
-        }
 
         public override float Duration
         {
@@ -131,8 +114,8 @@ namespace Slerpy.Unity3D
             Color interpolatedColor = Extensions.Interpolate(
                 this.fromColor * strength, 
                 this.toColor * strength, 
-                weight, 
-                this.interpolate);
+                weight,
+                InterpolateType.Standard);
 
             if (this.transform is RectTransform)
             {

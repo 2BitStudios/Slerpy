@@ -52,7 +52,6 @@ namespace Slerpy.Unity3D
 
     public abstract class Effect : MonoBehaviour
     {
-        protected const string TOOLTIP_INTERPOLATE = "Weight interpolation method.";
         protected const string TOOLTIP_DURATION = "Run time of the effect, affected by 'speed'.";
         protected const string TOOLTIP_TIMEWRAP = "How time continues to affect the effect once the duration ends.";
 
@@ -183,8 +182,6 @@ namespace Slerpy.Unity3D
                 return this.weights;
             }
         }
-
-        public abstract InterpolateType Interpolate { get; set; }
 
         public abstract float Duration { get; set; }
 
