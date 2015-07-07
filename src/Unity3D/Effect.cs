@@ -43,6 +43,13 @@ namespace Slerpy.Unity3D
         }
     }
 
+    public enum EffectDirection
+    {
+        Stalled = 0,
+        Forward = 1,
+        Backward = 2
+    }
+
     public abstract class Effect : MonoBehaviour
     {
         protected const string TOOLTIP_INTERPOLATE = "Weight interpolation method.";
@@ -122,6 +129,14 @@ namespace Slerpy.Unity3D
                 }
 
                 return returnValue;
+            }
+        }
+
+        public EffectDirection Direction
+        {
+            get
+            {
+                return this.speed > 0.0f ? EffectDirection.Forward : (this.speed < 0.0f ? EffectDirection.Backward : EffectDirection.Stalled);
             }
         }
 
@@ -302,7 +317,7 @@ namespace Slerpy.Unity3D
         {
             this.Play();
 
-            if (this.speed < 0.0f)
+            if (this.Direction == EffectDirection.Backward)
             {
                 this.speed = -this.speed;
             }
@@ -312,7 +327,7 @@ namespace Slerpy.Unity3D
         {
             this.Play();
 
-            if (this.speed > 0.0f)
+            if (this.Direction == EffectDirection.Forward)
             {
                 this.speed = -this.speed;
             }
