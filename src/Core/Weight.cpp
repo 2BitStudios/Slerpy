@@ -183,7 +183,7 @@ namespace Slerpy
         }
         else if (weightAbs < 1.0f)
         {
-            float overflow = weightAbs - THRESHOLD;
+            float const overflow = weightAbs - THRESHOLD;
 
             float const overflowStrength = (1.0f - overflow / THRESHOLD_HEAD);
 

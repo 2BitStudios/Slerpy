@@ -52,6 +52,6 @@
 
 #define MATH_SIGN(value) ((float)(value > 0.0f ? 1.0f : (value < 0.0f ? -1.0f : 0.0f)))
 
-#define MATH_FMOD(dividend, divisor) (MATH_ABS(dividend) - (MATH_ABS(divisor) * (MATH_FLOOR(MATH_ABS(dividend) / MATH_ABS(divisor))))) * MATH_SIGN(dividend)
+#define MATH_FMOD(dividend, divisor) ((MATH_ABS(dividend) - (MATH_ABS(divisor) * (MATH_FLOOR(MATH_ABS(dividend) / MATH_ABS(divisor))))) * MATH_SIGN(dividend))
 
 #endif //__SLERPYCORE_SYSTEMDEFINES__
