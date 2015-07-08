@@ -107,12 +107,12 @@ namespace Slerpy.Unity3D.Timers
 
         public void Start()
         {
-            this.enabled = true;
+            this.IsRunning = true;
         }
 
         public void Stop()
         {
-            this.enabled = false;
+            this.IsRunning = false;
         }
 
         [ContextMenu("Rewind")]
@@ -138,9 +138,8 @@ namespace Slerpy.Unity3D.Timers
 
                         break;
                     case TimerMode.Repeatable:
-                        this.enabled = false;
-
-                        this.runningTime = 0.0f;
+                        this.Stop();
+                        this.Rewind();
 
                         break;
                     case TimerMode.Looping:

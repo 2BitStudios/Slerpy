@@ -205,7 +205,7 @@ namespace Slerpy.Unity3D
 
         public void Play()
         {
-            this.enabled = true;
+            this.IsPlaying = true;
         }
 
         public void PlayForward()
@@ -230,7 +230,7 @@ namespace Slerpy.Unity3D
 
         public void Stop()
         {
-            this.enabled = false;
+            this.IsPlaying = false;
         }
 
         [ContextMenu("Reverse")]
