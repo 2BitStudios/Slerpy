@@ -12,12 +12,6 @@ namespace Slerpy.Unity3D.Timers
     public abstract class Timer<TTarget> : MonoBehaviour
         where TTarget : class
     {
-        public static TTimer Set<TTimer>(GameObject owner, float triggerTime, TimerMode mode = TimerMode.OneShot)
-            where TTimer : Timer<GameObject>
-        {
-            return Timer<GameObject>.Set<TTimer>(owner, triggerTime, owner, mode);
-        }
-
         public static TTimer Set<TTimer>(GameObject owner, float triggerTime, TTarget target, TimerMode mode = TimerMode.OneShot)
             where TTimer : Timer<TTarget>
         {
@@ -98,8 +92,31 @@ namespace Slerpy.Unity3D.Timers
             }
         }
 
-        [ContextMenu("Reset Countdown")]
-        public void ResetCountdown()
+        public bool IsRunning
+        {
+            get
+            {
+                return this.enabled;
+            }
+
+            set
+            {
+                this.enabled = value;
+            }
+        }
+
+        public void Start()
+        {
+            this.enabled = true;
+        }
+
+        public void Stop()
+        {
+            this.enabled = false;
+        }
+
+        [ContextMenu("Rewind")]
+        public void Rewind()
         {
             this.runningTime = 0.0f;
         }
