@@ -15,6 +15,10 @@ namespace Slerpy.Unity3D
         [Tooltip("Effects to stop on new ghosts.")]
         private Effect[] corporealEffects = new Effect[0];
 
+        [SerializeField]
+        [Tooltip("Specific components to preserve on ghosts, in addition to the types preserved by default: 'Transform', 'Slerpy.Unity3D.Ghoster', 'Renderer', 'MeshFilter', and 'Slerpy.Unity3D.Effect'.")]
+        private List<Component> preservedComponents = new List<Component>();
+
         private readonly LinkedList<Ghoster> ghosts = new LinkedList<Ghoster>();
 
         public IEnumerable<Ghoster> Ghosts
@@ -126,7 +130,8 @@ namespace Slerpy.Unity3D
                         || component is Ghoster 
                         || component is Renderer 
                         || component is MeshFilter 
-                        || component is Effect))
+                        || component is Effect)
+                    && !this.preservedComponents.Contains(component))
                 {
                     Component.Destroy(component);
                 }
