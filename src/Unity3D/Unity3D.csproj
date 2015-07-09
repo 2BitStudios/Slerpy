@@ -49,6 +49,7 @@
     </Compile>
     <Compile Include="Extensions.cs" />
     <Compile Include="ColorEffect.cs" />
+    <Compile Include="Ghoster.cs" />
     <Compile Include="Timers\StopAnimation.cs" />
     <Compile Include="Timers\PlayAnimation.cs" />
     <Compile Include="Timers\DeactivateGameObject.cs" />
