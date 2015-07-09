@@ -9,27 +9,15 @@ namespace Slerpy.Unity3D
     {
         [SerializeField]
         [Tooltip("Effects to play on new ghosts.")]
-        private Effect[] ghostEffects = null;
+        private Effect[] ghostEffects = new Effect[0];
 
         [SerializeField]
         [Tooltip("Effects to stop on new ghosts.")]
-        private Effect[] corporealEffects = null;
+        private Effect[] corporealEffects = new Effect[0];
 
-        [SerializeField]
-        [HideInInspector]
-        private bool isGhost = true;
+        private readonly LinkedList<Ghoster> ghosts = new LinkedList<Ghoster>();
 
-        private readonly LinkedList<Ghost> ghosts = new LinkedList<Ghost>();
-
-        public bool IsGhost
-        {
-            get
-            {
-                return isGhost;
-            }
-        }
-
-        public IEnumerable<Ghost> Ghosts
+        public IEnumerable<Ghoster> Ghosts
         {
             get
             {
@@ -44,22 +32,43 @@ namespace Slerpy.Unity3D
                 return this.ghosts.Count;
             }
         }
-        
-        public Ghost SpawnTemporaryAndGet(Func<bool> sustainQuery)
+
+        public bool IsGhost
         {
-            if (Application.isPlaying)
+            get
             {
-                bool wasGhost = this.isGhost;
+                return this.SustainQuery != null;
+            }
+        }
 
-                this.isGhost = false;
+        public Ghoster Origin { get; private set; }
 
-                Ghost newGhost = Ghost.Create(this.gameObject, sustainQuery);
+        private Func<bool> SustainQuery { get; set; }
+        
+        public Ghoster SpawnAndGetTemporary(Func<bool> sustainQuery)
+        {
+            if (Application.isPlaying && sustainQuery != null)
+            {
+                Ghoster ghost = (Ghoster)GameObject.Instantiate(this);
 
-                this.isGhost = wasGhost;
+                ghost.Origin = this;
+                ghost.SustainQuery = sustainQuery;
 
-                this.ghosts.AddLast(newGhost);
+                ghost.transform.parent = this.transform.parent;
 
-                return newGhost;
+                ghost.transform.localPosition = this.transform.localPosition;
+                ghost.transform.localRotation = this.transform.localRotation;
+                ghost.transform.localScale = this.transform.localScale;
+
+                ghost.transform.parent = null;
+
+                ghost.gameObject.hideFlags = HideFlags.HideAndDontSave;
+
+                ghost.CleanObject(ghost.gameObject);
+
+                this.ghosts.AddLast(ghost);
+
+                return ghost;
             }
 
             return null;
@@ -67,171 +76,96 @@ namespace Slerpy.Unity3D
 
         public void SpawnTemporary(Func<bool> sustainQuery)
         {
-            this.SpawnTemporaryAndGet(sustainQuery);
+            this.SpawnAndGetTemporary(sustainQuery);
         }
 
-        public Ghost SpawnTemporaryAndGet(float lifeTime)
+        public Ghoster SpawnAndGetTemporary(float lifeTime)
         {
             float endTime = Time.timeSinceLevelLoad + lifeTime;
 
-            return this.SpawnTemporaryAndGet(() => Time.timeSinceLevelLoad < endTime);
+            return this.SpawnAndGetTemporary(() => Time.timeSinceLevelLoad < endTime);
         }
 
         public void SpawnTemporary(float lifeTime)
         {
-            this.SpawnTemporaryAndGet(lifeTime);
+            this.SpawnAndGetTemporary(lifeTime);
         }
 
         [ContextMenu("Spawn")]
-        public Ghost SpawnPermanentAndGet()
+        public Ghoster SpawnAndGetPermanent()
         {
-            return this.SpawnTemporaryAndGet(() => true);
+            return this.SpawnAndGetTemporary(() => true);
         }
 
         public void SpawnPermanent()
         {
-            this.SpawnPermanentAndGet();
+            this.SpawnAndGetPermanent();
         }
 
         [ContextMenu("Clear")]
-        public void Clear()
+        public void ClearGhosts()
         {
-            foreach (Ghost ghost in this.ghosts)
+            foreach (Ghoster ghost in this.ghosts)
             {
-                ghost.Dispose();
+                Destroy(ghost.gameObject);
             }
 
             this.ghosts.Clear();
         }
 
-        private void LateUpdate()
+        private void CleanObject(GameObject target)
         {
-            LinkedListNode<Ghost> ghostNode = this.ghosts.First;
-            while (ghostNode != null)
+            foreach (Transform child in target.transform)
             {
-                if (!ghostNode.Value.AttemptSustain())
+                this.CleanObject(child.gameObject);
+            }
+
+            foreach (Component component in target.GetComponents<Component>())
+            {
+                if (!(component is Transform
+                        || component is Ghoster 
+                        || component is Renderer 
+                        || component is MeshFilter 
+                        || component is Effect))
                 {
-                    LinkedListNode<Ghost> deadNode = ghostNode;
-
-                    ghostNode = ghostNode.Previous;
-
-                    this.ghosts.Remove(deadNode);
-
-                    if (ghostNode == null)
-                    {
-                        break;
-                    }
+                    Component.Destroy(component);
                 }
-
-                ghostNode = ghostNode.Next;
             }
         }
 
-        private void Awake()
+        private void LateUpdate()
         {
-            this.isGhost = !this.isGhost;
+            if (this.IsGhost && !this.SustainQuery.Invoke())
+            {
+                GameObject.Destroy(this.gameObject);
+            }
         }
 
         private void Start()
         {
             foreach (Effect effect in this.ghostEffects)
             {
-                effect.IsPlaying = this.isGhost;
+                effect.IsPlaying = this.IsGhost;
             }
 
             foreach (Effect effect in this.corporealEffects)
             {
-                effect.IsPlaying = !this.isGhost;
+                effect.IsPlaying = !this.IsGhost;
             }
         }
 
         private void OnDestroy()
         {
-            this.Clear();
-        }
+            this.ClearGhosts();
 
-        public sealed class Ghost : IDisposable
-        {
-            public static Ghost Create(GameObject target, Func<bool> sustainQuery)
+            if (this.IsGhost)
             {
-                GameObject proxy = (GameObject)GameObject.Instantiate(target);
+                GameObject.Destroy(this.gameObject);
 
-                proxy.transform.parent = target.transform.parent;
-
-                proxy.transform.localPosition = target.transform.localPosition;
-                proxy.transform.localRotation = target.transform.localRotation;
-                proxy.transform.localScale = target.transform.localScale;
-
-                proxy.transform.parent = null;
-
-                proxy.hideFlags = HideFlags.HideAndDontSave;
-
-                Ghost.CleanObject(proxy);
-
-                return new Ghost(proxy, sustainQuery);
-            }
-
-            private static void CleanObject(GameObject target)
-            {
-                foreach (Transform child in target.transform)
+                if (this.Origin != null)
                 {
-                    Ghost.CleanObject(child.gameObject);
+                    this.Origin.ghosts.Remove(this);
                 }
-
-                foreach (Component component in target.GetComponents<Component>())
-                {
-                    if (!(component is Transform || component is Ghoster || component is Renderer || component is MeshFilter || component is Effect))
-                    {
-                        Component.Destroy(component);
-                    }
-                }
-            }
-
-            public GameObject Proxy { get; private set; }
-
-            public Func<bool> SustainQuery { get; private set; }
-
-            public bool IsAlive
-            {
-                get
-                {
-                    return this.Proxy != null;
-                }
-            }
-
-            private Ghost(GameObject proxy, Func<bool> sustainQuery)
-            {
-                this.Proxy = proxy;
-
-                this.SustainQuery = sustainQuery;
-            }
-
-            public bool AttemptSustain()
-            {
-                if (this.IsAlive)
-                {
-                    if (!this.SustainQuery.Invoke())
-                    {
-                        this.Dispose();
-                    }
-                    else
-                    {
-                        return true;
-                    }
-                }
-
-                return false;
-            }
-
-            public TComponent AddComponent<TComponent>()
-                where TComponent : Component
-            {
-                return this.Proxy.AddComponent<TComponent>();
-            }
-
-            public void Dispose()
-            {
-                GameObject.Destroy(this.Proxy);
             }
         }
     }
