@@ -54,6 +54,7 @@
     <Compile Include="Timers\PlayAnimation.cs" />
     <Compile Include="Timers\DeactivateGameObject.cs" />
     <Compile Include="Timers\ActivateGameObject.cs" />
+    <Compile Include="AnimationEffect.cs" />
     <Compile Include="UI\ChainEvent.cs" />
     <Compile Include="UI\StaticHelper.cs" />
     <Compile Include="Timers\RaiseEvent.cs" />
