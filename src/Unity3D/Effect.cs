@@ -246,11 +246,11 @@ namespace Slerpy.Unity3D
             this.simulatedTime = 0.0f;
         }
 
-        public float CalculateWeight()
+        public float CalculateWeight(float time)
         {
             float weight = Weight.FromTime(
                 this.TimeWrap,
-                this.SimulatedTime,
+                time,
                 this.Duration);
 
             for (int i = 0; i < this.weights.Length; ++i)
@@ -259,6 +259,11 @@ namespace Slerpy.Unity3D
             }
 
             return weight;
+        }
+
+        public float CalculateWeight()
+        {
+            return this.CalculateWeight(this.SimulatedTime);
         }
 
         protected abstract void ProcessEffect(float weight, float strength);
