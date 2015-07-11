@@ -2,43 +2,56 @@
 using System.Collections.Generic;
 
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Slerpy.Unity3D
 {
+    public enum EffectSettingTimeScaling
+    {
+        Scaled = 0,
+        Unscaled = 1
+    }
+
+    public enum EffectSettingReverseClamp
+    {
+        Never = 0,
+        ByTimeWrap = 1
+    }
+
     [Serializable]
-    public sealed class TimeOptions
+    public sealed class EffectSettings
     {
         [SerializeField]
-        [Tooltip("Whether to ignore engine time scaling (such as pauses).")]
-        private bool useUnscaledDelta = false;
+        [Tooltip("How to handle engine time scaling (such as pauses).")]
+        private EffectSettingTimeScaling timeScaling = EffectSettingTimeScaling.Scaled;
 
         [SerializeField]
-        [Tooltip("Whether to lock simulated time to 'duration' (clamping between 0 and 'duration').")]
-        private bool clampToDuration = false;
+        [Tooltip("Whether to clamp simulated time between 0.0 and 'duration' when effect is reversed.")]
+        private EffectSettingReverseClamp reverseClamp = EffectSettingReverseClamp.ByTimeWrap;
 
-        public bool UseUnscaledDelta
+        public EffectSettingTimeScaling TimeScaling
         {
             get
             {
-                return this.useUnscaledDelta;
+                return this.timeScaling;
             }
 
             set
             {
-                this.useUnscaledDelta = value;
+                this.timeScaling = value;
             }
         }
 
-        public bool ClampToDuration
+        public EffectSettingReverseClamp ReverseClamp
         {
             get
             {
-                return this.clampToDuration;
+                return this.reverseClamp;
             }
 
             set
             {
-                this.clampToDuration = value;
+                this.reverseClamp = value;
             }
         }
     }
@@ -56,8 +69,8 @@ namespace Slerpy.Unity3D
         protected const string TOOLTIP_TIMEWRAP = "How time continues to affect the effect once the duration ends.";
 
         [SerializeField]
-        [Tooltip("Time settings, such as offsets and boundaries.")]
-        private TimeOptions timeOptions = new TimeOptions();
+        [Tooltip("General settings.")]
+        private EffectSettings settings = new EffectSettings();
 
         [SerializeField]
         [Tooltip("Rate that time passes. Speeds up or slows down effects.")]
@@ -79,11 +92,11 @@ namespace Slerpy.Unity3D
         [HideInInspector]
         private float simulatedTime = 0.0f;
 
-        public TimeOptions TimeOptions
+        public EffectSettings Settings
         {
             get
             {
-                return this.timeOptions;
+                return this.settings;
             }
         }
 
@@ -150,7 +163,7 @@ namespace Slerpy.Unity3D
 
             set
             {
-                if (this.timeOptions.ClampToDuration)
+                if (this.settings.ReverseClamp == EffectSettingReverseClamp.ByTimeWrap && this.TimeWrap == TimeWrapType.Clamp)
                 {
                     this.simulatedTime = Mathf.Clamp(value, 0.0f, this.Duration);
                 }
@@ -214,7 +227,7 @@ namespace Slerpy.Unity3D
 
             if (this.Direction == EffectDirection.Backward)
             {
-                this.speed = -this.speed;
+                this.Reverse();
             }
         }
 
@@ -224,7 +237,7 @@ namespace Slerpy.Unity3D
 
             if (this.Direction == EffectDirection.Forward)
             {
-                this.speed = -this.speed;
+                this.Reverse();
             }
         }
 
@@ -275,7 +288,7 @@ namespace Slerpy.Unity3D
 
         protected void Update()
         {
-            this.AddRawTime(this.timeOptions.UseUnscaledDelta ? Time.unscaledDeltaTime : Time.deltaTime);
+            this.AddRawTime(this.settings.TimeScaling == EffectSettingTimeScaling.Unscaled ? Time.unscaledDeltaTime : Time.deltaTime);
         }
 
         private void AddRawTime(float deltaTime)
