@@ -259,19 +259,19 @@ namespace Slerpy.Unity3D
 
         protected override void ProcessEffect(float weight, float strength)
         {
-            this.PositionOffset = Extensions.Interpolate(
+            this.PositionOffset = Extensions.InterpolateVector3(
                 Vector3.zero, 
                 this.positionExtent * strength, 
                 weight, 
                 InterpolateType.Standard);
 
-            this.RotationOffset = Quaternion.Euler(Extensions.Interpolate(
+            this.RotationOffset = Quaternion.Euler(Extensions.InterpolateVector3(
                 Vector3.zero, 
                 this.rotationExtent * strength, 
                 weight,
                 InterpolateType.Standard));
 
-            this.ScaleOffset = Extensions.Interpolate(
+            this.ScaleOffset = Extensions.InterpolateVector3(
                 Vector3.zero, 
                 this.scaleExtent * strength, 
                 weight,
