@@ -124,8 +124,13 @@ namespace Slerpy.Unity3D
                 this.CleanObject(child.gameObject);
             }
 
-            foreach (Component component in target.GetComponents<Component>())
+            // Reverse iteration is a partial solution to required components, as they are added recursively
+            // Note that re-ordering the required components will still break the cleaning process
+            Component[] components = target.GetComponents<Component>();
+            for (int i = components.Length - 1; i >= 0; --i)
             {
+                Component component = components[i];
+
                 if (!(component is Transform
                         || component is Ghoster 
                         || component is Renderer 
