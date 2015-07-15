@@ -25,19 +25,19 @@ namespace Slerpy
         {
         case TimeWrapType::PingPong:
             {
-                float weight = MATH_FMOD(timeCurrent, timeMax * 2.0f) / timeMax;
+                float const weight = MATH_FMOD(timeCurrent, timeMax * 2.0f) / timeMax;
 
                 return weight >= 1.0f ? 2.0f - weight : weight;
             }
         case TimeWrapType::Repeat:
             {
-                float weight = timeCurrent / timeMax;
+                float const weight = timeCurrent / timeMax;
 
                 return MATH_FMOD(weight, 1.0f);
             }
         case TimeWrapType::Cycle :
             {
-                float weight = MATH_FMOD(timeCurrent, timeMax * 4.0f) / timeMax;
+                float const weight = MATH_FMOD(timeCurrent, timeMax * 4.0f) / timeMax;
 
                 if (weight >= 2.0f)
                 {
@@ -51,7 +51,7 @@ namespace Slerpy
         case TimeWrapType::Clamp:
         default:
             {
-                float weight = timeCurrent / timeMax;
+                float const weight = timeCurrent / timeMax;
 
                 return MATH_CLAMP01(weight);
             }

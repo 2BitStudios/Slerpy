@@ -256,7 +256,8 @@ namespace Slerpy.Unity3D
         public void Rewind()
         {
             this.rawTime = 0.0f;
-            this.simulatedTime = 0.0f;
+
+            this.SimulatedTime = 0.0f;
         }
 
         public float CalculateWeight(float time)
