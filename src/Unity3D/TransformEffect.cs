@@ -26,16 +26,16 @@ namespace Slerpy.Unity3D
 
         private static readonly Dictionary<TransformEffectPreset, PresetData> presetData = new Dictionary<TransformEffectPreset, PresetData>()
         {
-            { TransformEffectPreset.ShakeX, new PresetData(0.1f, TimeWrapType.Cycle, new Vector3(0.1f, 0.0f, 0.0f), Vector3.zero, Vector3.zero) },
-            { TransformEffectPreset.ShakeY, new PresetData(0.1f, TimeWrapType.Cycle, new Vector3(0.0f, 0.1f, 0.0f), Vector3.zero, Vector3.zero) },
-            { TransformEffectPreset.ShakeZ, new PresetData(0.1f, TimeWrapType.Cycle, new Vector3(0.0f, 0.0f, 0.1f), Vector3.zero, Vector3.zero) },
-            { TransformEffectPreset.TwistX, new PresetData(0.5f, TimeWrapType.Cycle, Vector3.zero, new Vector3(180.0f, 0.0f, 0.0f), Vector3.zero) },
-            { TransformEffectPreset.TwistY, new PresetData(0.5f, TimeWrapType.Cycle, Vector3.zero, new Vector3(0.0f, 180.0f, 0.0f), Vector3.zero) },
-            { TransformEffectPreset.TwistZ, new PresetData(0.5f, TimeWrapType.Cycle, Vector3.zero, new Vector3(0.0f, 0.0f, 180.0f), Vector3.zero) },
-            { TransformEffectPreset.Throb, new PresetData(0.5f, TimeWrapType.Cycle, Vector3.zero, Vector3.zero, new Vector3(0.1f, 0.1f, 0.1f)) },
-            { TransformEffectPreset.Raise, new PresetData(1.0f, TimeWrapType.Clamp, new Vector3(0.0f, 1.0f, 0.0f), Vector3.zero, Vector3.zero) },
-            { TransformEffectPreset.Flip, new PresetData(1.0f, TimeWrapType.Clamp, Vector3.zero, new Vector3(180.0f, 0.0f, 0.0f), Vector3.zero) },
-            { TransformEffectPreset.Expand, new PresetData(1.0f, TimeWrapType.Clamp, Vector3.zero, Vector3.zero, new Vector3(1.0f, 1.0f, 1.0f)) }
+            { TransformEffectPreset.ShakeX, new PresetData(0.1f, WrapType.Cycle, new Vector3(0.1f, 0.0f, 0.0f), Vector3.zero, Vector3.zero) },
+            { TransformEffectPreset.ShakeY, new PresetData(0.1f, WrapType.Cycle, new Vector3(0.0f, 0.1f, 0.0f), Vector3.zero, Vector3.zero) },
+            { TransformEffectPreset.ShakeZ, new PresetData(0.1f, WrapType.Cycle, new Vector3(0.0f, 0.0f, 0.1f), Vector3.zero, Vector3.zero) },
+            { TransformEffectPreset.TwistX, new PresetData(0.5f, WrapType.Cycle, Vector3.zero, new Vector3(180.0f, 0.0f, 0.0f), Vector3.zero) },
+            { TransformEffectPreset.TwistY, new PresetData(0.5f, WrapType.Cycle, Vector3.zero, new Vector3(0.0f, 180.0f, 0.0f), Vector3.zero) },
+            { TransformEffectPreset.TwistZ, new PresetData(0.5f, WrapType.Cycle, Vector3.zero, new Vector3(0.0f, 0.0f, 180.0f), Vector3.zero) },
+            { TransformEffectPreset.Throb, new PresetData(0.5f, WrapType.Cycle, Vector3.zero, Vector3.zero, new Vector3(0.1f, 0.1f, 0.1f)) },
+            { TransformEffectPreset.Raise, new PresetData(1.0f, WrapType.Clamp, new Vector3(0.0f, 1.0f, 0.0f), Vector3.zero, Vector3.zero) },
+            { TransformEffectPreset.Flip, new PresetData(1.0f, WrapType.Clamp, Vector3.zero, new Vector3(180.0f, 0.0f, 0.0f), Vector3.zero) },
+            { TransformEffectPreset.Expand, new PresetData(1.0f, WrapType.Clamp, Vector3.zero, Vector3.zero, new Vector3(1.0f, 1.0f, 1.0f)) }
         };
 
         [SerializeField]
@@ -48,7 +48,7 @@ namespace Slerpy.Unity3D
         
         [SerializeField]
         [Tooltip(Effect.TOOLTIP_TIMEWRAP)]
-        private TimeWrapType timeWrap = TimeWrapType.Cycle;
+        private WrapType timeWrap = WrapType.Cycle;
 
         [SerializeField]
         [Tooltip("Maximum local-space position change at a weight of 1.0. Can be exceeded or negated by weight modifiers or time wrap type.")]
@@ -126,7 +126,7 @@ namespace Slerpy.Unity3D
             }
         }
 
-        public override TimeWrapType TimeWrap
+        public override WrapType TimeWrap
         {
             get
             {
@@ -302,13 +302,13 @@ namespace Slerpy.Unity3D
         {
             private readonly float duration;
 
-            private readonly TimeWrapType timeWrap;
+            private readonly WrapType timeWrap;
 
             private readonly Vector3 positionExtent;
             private readonly Vector3 rotationExtent;
             private readonly Vector3 scaleExtent;
 
-            public PresetData(float duration, TimeWrapType timeWrap, Vector3 positionExtent, Vector3 rotationExtent, Vector3 scaleExtent)
+            public PresetData(float duration, WrapType timeWrap, Vector3 positionExtent, Vector3 rotationExtent, Vector3 scaleExtent)
             {
                 this.duration = duration;
 
@@ -327,7 +327,7 @@ namespace Slerpy.Unity3D
                 }
             }
 
-            public TimeWrapType TimeWrap
+            public WrapType TimeWrap
             {
                 get
                 {

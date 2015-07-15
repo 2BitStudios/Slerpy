@@ -144,7 +144,7 @@ namespace Slerpy.Unity3D
 
         public abstract float Duration { get; set; }
 
-        public abstract TimeWrapType TimeWrap { get; set; }
+        public abstract WrapType TimeWrap { get; set; }
 
         public float RawTime
         {
@@ -246,7 +246,7 @@ namespace Slerpy.Unity3D
 
             if (this.settings.ReverseClamp == EffectSettingReverseClamp.ByTimeWrap)
             {
-                if (this.TimeWrap == TimeWrapType.Clamp)
+                if (this.TimeWrap == WrapType.Clamp)
                 {
                     this.SimulatedTime = Mathf.Clamp(this.SimulatedTime, 0.0f, this.Duration);
                 }

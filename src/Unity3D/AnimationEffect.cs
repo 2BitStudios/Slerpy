@@ -13,7 +13,7 @@ namespace Slerpy.Unity3D
         
         [SerializeField]
         [Tooltip(Effect.TOOLTIP_TIMEWRAP)]
-        private TimeWrapType timeWrap = TimeWrapType.Clamp;
+        private WrapType timeWrap = WrapType.Clamp;
 
         [SerializeField]
         [Tooltip("Independent sequences in the effect.")]
@@ -32,7 +32,7 @@ namespace Slerpy.Unity3D
             }
         }
 
-        public override TimeWrapType TimeWrap
+        public override WrapType TimeWrap
         {
             get
             {

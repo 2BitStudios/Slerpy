@@ -14,7 +14,7 @@ namespace Slerpy.Unity3D
         
         [SerializeField]
         [Tooltip(Effect.TOOLTIP_TIMEWRAP)]
-        private TimeWrapType timeWrap = TimeWrapType.PingPong;
+        private WrapType timeWrap = WrapType.PingPong;
 
         [SerializeField]
         [Tooltip("Color property to set on materials. Ignored for UI and light color.\nDefault: _Color")]
@@ -44,7 +44,7 @@ namespace Slerpy.Unity3D
             }
         }
 
-        public override TimeWrapType TimeWrap
+        public override WrapType TimeWrap
         {
             get
             {

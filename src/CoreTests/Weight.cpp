@@ -14,33 +14,33 @@ namespace Slerpy
             [Test]
             static void FromTime()
             {
-                Assert::AreEqual(0.0f, Slerpy::Weight::FromTime(TimeWrapType::Clamp, 0.0f, 1.0f), EPSILON);
-                Assert::AreEqual(0.5f, Slerpy::Weight::FromTime(TimeWrapType::Clamp, 0.5f, 1.0f), EPSILON);
-                Assert::AreEqual(1.0f, Slerpy::Weight::FromTime(TimeWrapType::Clamp, 1.0f, 1.0f), EPSILON);
-                Assert::AreEqual(1.0f, Slerpy::Weight::FromTime(TimeWrapType::Clamp, 1.5f, 1.0f), EPSILON);
-                Assert::AreEqual(1.0f, Slerpy::Weight::FromTime(TimeWrapType::Clamp, 2.0f, 1.0f), EPSILON);
+                Assert::AreEqual(0.0f, Slerpy::Weight::FromTime(WrapType::Clamp, 0.0f, 1.0f), EPSILON);
+                Assert::AreEqual(0.5f, Slerpy::Weight::FromTime(WrapType::Clamp, 0.5f, 1.0f), EPSILON);
+                Assert::AreEqual(1.0f, Slerpy::Weight::FromTime(WrapType::Clamp, 1.0f, 1.0f), EPSILON);
+                Assert::AreEqual(1.0f, Slerpy::Weight::FromTime(WrapType::Clamp, 1.5f, 1.0f), EPSILON);
+                Assert::AreEqual(1.0f, Slerpy::Weight::FromTime(WrapType::Clamp, 2.0f, 1.0f), EPSILON);
 
-                Assert::AreEqual(0.0f, Slerpy::Weight::FromTime(TimeWrapType::PingPong, 0.0f, 1.0f), EPSILON);
-                Assert::AreEqual(0.5f, Slerpy::Weight::FromTime(TimeWrapType::PingPong, 0.5f, 1.0f), EPSILON);
-                Assert::AreEqual(1.0f, Slerpy::Weight::FromTime(TimeWrapType::PingPong, 1.0f, 1.0f), EPSILON);
-                Assert::AreEqual(0.5f, Slerpy::Weight::FromTime(TimeWrapType::PingPong, 1.5f, 1.0f), EPSILON);
-                Assert::AreEqual(0.0f, Slerpy::Weight::FromTime(TimeWrapType::PingPong, 2.0f, 1.0f), EPSILON);
+                Assert::AreEqual(0.0f, Slerpy::Weight::FromTime(WrapType::PingPong, 0.0f, 1.0f), EPSILON);
+                Assert::AreEqual(0.5f, Slerpy::Weight::FromTime(WrapType::PingPong, 0.5f, 1.0f), EPSILON);
+                Assert::AreEqual(1.0f, Slerpy::Weight::FromTime(WrapType::PingPong, 1.0f, 1.0f), EPSILON);
+                Assert::AreEqual(0.5f, Slerpy::Weight::FromTime(WrapType::PingPong, 1.5f, 1.0f), EPSILON);
+                Assert::AreEqual(0.0f, Slerpy::Weight::FromTime(WrapType::PingPong, 2.0f, 1.0f), EPSILON);
 
-                Assert::AreEqual(0.0f, Slerpy::Weight::FromTime(TimeWrapType::Repeat, 0.0f, 1.0f), EPSILON);
-                Assert::AreEqual(0.5f, Slerpy::Weight::FromTime(TimeWrapType::Repeat, 0.5f, 1.0f), EPSILON);
-                Assert::AreEqual(0.0f, Slerpy::Weight::FromTime(TimeWrapType::Repeat, 1.0f, 1.0f), EPSILON);
-                Assert::AreEqual(0.5f, Slerpy::Weight::FromTime(TimeWrapType::Repeat, 1.5f, 1.0f), EPSILON);
-                Assert::AreEqual(0.75f, Slerpy::Weight::FromTime(TimeWrapType::Repeat, 1.75f, 1.0f), EPSILON);
+                Assert::AreEqual(0.0f, Slerpy::Weight::FromTime(WrapType::Repeat, 0.0f, 1.0f), EPSILON);
+                Assert::AreEqual(0.5f, Slerpy::Weight::FromTime(WrapType::Repeat, 0.5f, 1.0f), EPSILON);
+                Assert::AreEqual(0.0f, Slerpy::Weight::FromTime(WrapType::Repeat, 1.0f, 1.0f), EPSILON);
+                Assert::AreEqual(0.5f, Slerpy::Weight::FromTime(WrapType::Repeat, 1.5f, 1.0f), EPSILON);
+                Assert::AreEqual(0.75f, Slerpy::Weight::FromTime(WrapType::Repeat, 1.75f, 1.0f), EPSILON);
 
-                Assert::AreEqual(0.0f, Slerpy::Weight::FromTime(TimeWrapType::Cycle, 0.0f, 1.0f), EPSILON);
-                Assert::AreEqual(0.5f, Slerpy::Weight::FromTime(TimeWrapType::Cycle, 0.5f, 1.0f), EPSILON);
-                Assert::AreEqual(1.0f, Slerpy::Weight::FromTime(TimeWrapType::Cycle, 1.0f, 1.0f), EPSILON);
-                Assert::AreEqual(0.5f, Slerpy::Weight::FromTime(TimeWrapType::Cycle, 1.5f, 1.0f), EPSILON);
-                Assert::AreEqual(0.0f, Slerpy::Weight::FromTime(TimeWrapType::Cycle, 2.0f, 1.0f), EPSILON);
-                Assert::AreEqual(-0.5f, Slerpy::Weight::FromTime(TimeWrapType::Cycle, 2.5f, 1.0f), EPSILON);
-                Assert::AreEqual(-1.0f, Slerpy::Weight::FromTime(TimeWrapType::Cycle, 3.0f, 1.0f), EPSILON);
-                Assert::AreEqual(-0.5f, Slerpy::Weight::FromTime(TimeWrapType::Cycle, 3.5f, 1.0f), EPSILON);
-                Assert::AreEqual(0.0f, Slerpy::Weight::FromTime(TimeWrapType::Cycle, 4.0f, 1.0f), EPSILON);
+                Assert::AreEqual(0.0f, Slerpy::Weight::FromTime(WrapType::Cycle, 0.0f, 1.0f), EPSILON);
+                Assert::AreEqual(0.5f, Slerpy::Weight::FromTime(WrapType::Cycle, 0.5f, 1.0f), EPSILON);
+                Assert::AreEqual(1.0f, Slerpy::Weight::FromTime(WrapType::Cycle, 1.0f, 1.0f), EPSILON);
+                Assert::AreEqual(0.5f, Slerpy::Weight::FromTime(WrapType::Cycle, 1.5f, 1.0f), EPSILON);
+                Assert::AreEqual(0.0f, Slerpy::Weight::FromTime(WrapType::Cycle, 2.0f, 1.0f), EPSILON);
+                Assert::AreEqual(-0.5f, Slerpy::Weight::FromTime(WrapType::Cycle, 2.5f, 1.0f), EPSILON);
+                Assert::AreEqual(-1.0f, Slerpy::Weight::FromTime(WrapType::Cycle, 3.0f, 1.0f), EPSILON);
+                Assert::AreEqual(-0.5f, Slerpy::Weight::FromTime(WrapType::Cycle, 3.5f, 1.0f), EPSILON);
+                Assert::AreEqual(0.0f, Slerpy::Weight::FromTime(WrapType::Cycle, 4.0f, 1.0f), EPSILON);
             }
 
             [Test]

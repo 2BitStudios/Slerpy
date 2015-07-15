@@ -32,7 +32,7 @@ namespace Slerpy
     public
 #endif //_MANAGED
 
-    enum class TimeWrapType
+    enum class WrapType
     {
         Clamp = 0,
         PingPong = 1,
@@ -81,7 +81,7 @@ extern "C"
 {
 #endif //_MANAGED
 
-    DECLARATION_PREFIX float TRANSLATE_FUNCTION_NAME(FromTime)(TimeWrapType type, float timeCurrent, float timeMax);
+    DECLARATION_PREFIX float TRANSLATE_FUNCTION_NAME(FromTime)(WrapType type, float timeCurrent, float timeMax);
 
 #define WEIGHT_PARAMS_STANDARD float weight
 

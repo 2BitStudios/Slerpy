@@ -19,23 +19,23 @@ namespace Slerpy
 
 #endif //_MANAGED
 
-    float TRANSLATE_FUNCTION_NAME(FromTime)(TimeWrapType type, float timeCurrent, float timeMax)
+    float TRANSLATE_FUNCTION_NAME(FromTime)(WrapType type, float timeCurrent, float timeMax)
     {
         switch (type)
         {
-        case TimeWrapType::PingPong:
+        case WrapType::PingPong:
             {
                 float const weight = MATH_FMOD(timeCurrent, timeMax * 2.0f) / timeMax;
 
                 return weight >= 1.0f ? 2.0f - weight : weight;
             }
-        case TimeWrapType::Repeat:
+        case WrapType::Repeat:
             {
                 float const weight = timeCurrent / timeMax;
 
                 return MATH_FMOD(weight, 1.0f);
             }
-        case TimeWrapType::Cycle :
+        case WrapType::Cycle:
             {
                 float const weight = MATH_FMOD(timeCurrent, timeMax * 4.0f) / timeMax;
 
@@ -48,7 +48,7 @@ namespace Slerpy
                     return weight >= 1.0f ? 2.0f - weight : weight;
                 }
             }
-        case TimeWrapType::Clamp:
+        case WrapType::Clamp:
         default:
             {
                 float const weight = timeCurrent / timeMax;
