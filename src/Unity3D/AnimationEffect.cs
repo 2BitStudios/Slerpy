@@ -53,7 +53,7 @@ namespace Slerpy.Unity3D
             }
         }
 
-        protected override void ProcessEffect(float weight, float strength)
+        protected override void ProcessEffect(float weight)
         {
             for (int i = 0; i < this.channels.Count; ++i)
             {

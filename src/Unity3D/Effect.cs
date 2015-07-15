@@ -73,16 +73,12 @@ namespace Slerpy.Unity3D
         private EffectSettings settings = new EffectSettings();
 
         [SerializeField]
-        [Tooltip("Rate that time passes. Speeds up or slows down effects.")]
-        private float speed = 1.0f;
-
-        [SerializeField]
-        [Tooltip("Strength of effect. For example, an effect that moves the object would move twice as far with a strength of 2.0.")]
-        private float strength = 1.0f;
-
-        [SerializeField]
         [Tooltip("List of weight modifiers to be applied to the base weight of the effect. Will be applied in order they appear here.")]
         private WeightType[] weights = new WeightType[] { WeightType.Linear };
+
+        [SerializeField]
+        [Tooltip("Rate that time passes. Speeds up or slows down effects.")]
+        private float speed = 1.0f;
 
         [SerializeField]
         [HideInInspector]
@@ -97,6 +93,14 @@ namespace Slerpy.Unity3D
             get
             {
                 return this.settings;
+            }
+        }
+
+        public IEnumerable<WeightType> Weights
+        {
+            get
+            {
+                return this.weights;
             }
         }
 
@@ -118,27 +122,6 @@ namespace Slerpy.Unity3D
             get
             {
                 return this.speed > 0.0f ? EffectDirection.Forward : (this.speed < 0.0f ? EffectDirection.Backward : EffectDirection.Stalled);
-            }
-        }
-
-        public float Strength
-        {
-            get
-            {
-                return this.strength;
-            }
-
-            set
-            {
-                this.strength = value;
-            }
-        }
-
-        public IEnumerable<WeightType> Weights
-        {
-            get
-            {
-                return this.weights;
             }
         }
 
@@ -165,7 +148,7 @@ namespace Slerpy.Unity3D
             {
                 this.simulatedTime = value;
 
-                this.ProcessEffect(this.CalculateWeight(), this.Strength);
+                this.ProcessEffect(this.CalculateWeight());
             }
         }
 
@@ -281,11 +264,11 @@ namespace Slerpy.Unity3D
             return this.CalculateWeight(this.SimulatedTime);
         }
 
-        protected abstract void ProcessEffect(float weight, float strength);
+        protected abstract void ProcessEffect(float weight);
         
         protected void Start()
         {
-            this.ProcessEffect(this.CalculateWeight(), this.Strength);
+            this.ProcessEffect(this.CalculateWeight());
         }
 
         protected void Update()

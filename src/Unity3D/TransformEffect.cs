@@ -39,6 +39,10 @@ namespace Slerpy.Unity3D
         };
 
         [SerializeField]
+        [Tooltip("Strength of effect. For example, an effect that moves the object would move twice as far with a strength of 2.0.")]
+        private float strength = 1.0f;
+
+        [SerializeField]
         [Tooltip("Pre-defined common settings for the values that follow.")]
         private TransformEffectPreset preset = PRESET_DEFAULT;
 
@@ -77,6 +81,19 @@ namespace Slerpy.Unity3D
         [SerializeField]
         [HideInInspector]
         private Vector3 scaleOffset = Vector3.zero;
+
+        public float Strength
+        {
+            get
+            {
+                return this.strength;
+            }
+
+            set
+            {
+                this.strength = value;
+            }
+        }
 
         public TransformEffectPreset Preset
         {
@@ -257,23 +274,23 @@ namespace Slerpy.Unity3D
             this.ScaleOffset = Vector3.zero;
         }
 
-        protected override void ProcessEffect(float weight, float strength)
+        protected override void ProcessEffect(float weight)
         {
             this.PositionOffset = Extensions.InterpolateVector3(
                 Vector3.zero, 
-                this.positionExtent * strength, 
+                this.positionExtent * this.strength, 
                 weight, 
                 InterpolateType.Standard);
 
             this.RotationOffset = Quaternion.Euler(Extensions.InterpolateVector3(
-                Vector3.zero, 
-                this.rotationExtent * strength, 
+                Vector3.zero,
+                this.rotationExtent * this.strength, 
                 weight,
                 InterpolateType.Standard));
 
             this.ScaleOffset = Extensions.InterpolateVector3(
-                Vector3.zero, 
-                this.scaleExtent * strength, 
+                Vector3.zero,
+                this.scaleExtent * this.strength, 
                 weight,
                 InterpolateType.Standard);
         }

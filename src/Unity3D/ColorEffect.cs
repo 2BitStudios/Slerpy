@@ -109,11 +109,11 @@ namespace Slerpy.Unity3D
             }
         }
 
-        protected override void ProcessEffect(float weight, float strength)
+        protected override void ProcessEffect(float weight)
         {
             Color interpolatedColor = Extensions.InterpolateColor(
-                this.fromColor * strength, 
-                this.toColor * strength, 
+                this.fromColor, 
+                this.toColor, 
                 weight,
                 InterpolateType.Standard);
 
