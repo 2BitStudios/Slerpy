@@ -26,7 +26,7 @@ namespace Slerpy.Unity3D
         private EffectSettingTimeScaling timeScaling = EffectSettingTimeScaling.Scaled;
 
         [SerializeField]
-        [Tooltip("Whether to clamp simulated time between 0.0 and 'duration' when effect is reversed.")]
+        [Tooltip("How to clamp simulated time when effect is reversed. Necessary to play some time wraps (such as Clamp) backward smoothly.")]
         private EffectSettingReverseClamp reverseClamp = EffectSettingReverseClamp.ByTimeWrap;
 
         public EffectSettingTimeScaling TimeScaling
@@ -163,14 +163,7 @@ namespace Slerpy.Unity3D
 
             set
             {
-                if (this.settings.ReverseClamp == EffectSettingReverseClamp.ByTimeWrap && this.TimeWrap == TimeWrapType.Clamp)
-                {
-                    this.simulatedTime = Mathf.Clamp(value, 0.0f, this.Duration);
-                }
-                else
-                {
-                    this.simulatedTime = value;
-                }
+                this.simulatedTime = value;
 
                 this.ProcessEffect(this.CalculateWeight(), this.Strength);
             }
@@ -250,6 +243,14 @@ namespace Slerpy.Unity3D
         public void Reverse()
         {
             this.speed = -this.speed;
+
+            if (this.settings.ReverseClamp == EffectSettingReverseClamp.ByTimeWrap)
+            {
+                if (this.TimeWrap == TimeWrapType.Clamp)
+                {
+                    this.SimulatedTime = Mathf.Clamp(this.SimulatedTime, 0.0f, this.Duration);
+                }
+            }
         }
 
         [ContextMenu("Rewind")]
