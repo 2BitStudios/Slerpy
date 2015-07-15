@@ -81,7 +81,9 @@ extern "C"
 {
 #endif //_MANAGED
 
-    DECLARATION_PREFIX float TRANSLATE_FUNCTION_NAME(FromTime)(WrapType type, float timeCurrent, float timeMax);
+    DECLARATION_PREFIX float TRANSLATE_FUNCTION_NAME(FromValueInRange)(WrapType type, float currentValue, float minValue, float maxValue);
+    DECLARATION_PREFIX float TRANSLATE_FUNCTION_NAME(FromTime)(WrapType type, float currentTime, float maxTime);
+    DECLARATION_PREFIX float TRANSLATE_FUNCTION_NAME(FromAngle)(float currentAngleDegrees, float wrapAngleDegrees);
 
 #define WEIGHT_PARAMS_STANDARD float weight
 

@@ -18,30 +18,40 @@ namespace Slerpy
 #else //_MANAGED
 
 #endif //_MANAGED
-
-    float TRANSLATE_FUNCTION_NAME(FromTime)(WrapType type, float timeCurrent, float timeMax)
+    
+    float TRANSLATE_FUNCTION_NAME(FromValueInRange)(WrapType type, float currentValue, float minValue, float maxValue)
     {
+        float const scaledCurrentValue = currentValue - minValue;
+        float const scaledMaxValue = maxValue - minValue;
+        
         switch (type)
         {
         case WrapType::PingPong:
             {
-                float const weight = MATH_FMOD(timeCurrent, timeMax * 2.0f) / timeMax;
+                float weight = MATH_ABS(MATH_FMOD(scaledCurrentValue, scaledMaxValue * 2.0f) / scaledMaxValue);
 
                 return weight >= 1.0f ? 2.0f - weight : weight;
             }
         case WrapType::Repeat:
             {
-                float const weight = timeCurrent / timeMax;
+                float weight = scaledCurrentValue / scaledMaxValue;
 
-                return MATH_FMOD(weight, 1.0f);
+                weight = MATH_FMOD(weight, 1.0f);
+                
+                if (weight < 0.0f)
+                {
+                    weight = 1.0f + weight;
+                }
+                
+                return weight;
             }
         case WrapType::Cycle:
             {
-                float const weight = MATH_FMOD(timeCurrent, timeMax * 4.0f) / timeMax;
+                float const weight = MATH_FMOD(scaledCurrentValue, scaledMaxValue * 4.0f) / scaledMaxValue;
 
                 if (weight >= 2.0f)
                 {
-                    return weight >= 3.0f ? weight - 4.0f: 2.0f - weight;
+                    return weight >= 3.0f ? weight - 4.0f : 2.0f - weight;
                 }
                 else
                 {
@@ -51,11 +61,23 @@ namespace Slerpy
         case WrapType::Clamp:
         default:
             {
-                float const weight = timeCurrent / timeMax;
+                float const weight = scaledCurrentValue / scaledMaxValue;
 
                 return MATH_CLAMP01(weight);
             }
         }
+    }
+
+    float TRANSLATE_FUNCTION_NAME(FromTime)(WrapType type, float currentTime, float maxTime)
+    {
+        return TRANSLATE_FUNCTION_NAME(FromValueInRange)(type, currentTime, 0.0f, maxTime);
+    }
+
+    float TRANSLATE_FUNCTION_NAME(FromAngle)(float currentAngleDegrees, float wrapAngleDegrees)
+    {
+        float const scaledWrapAngle = MATH_FMOD(wrapAngleDegrees, 360.0f);
+
+        return TRANSLATE_FUNCTION_NAME(FromValueInRange)(WrapType::PingPong, currentAngleDegrees, scaledWrapAngle - 180.0f, scaledWrapAngle);
     }
 
     float TRANSLATE_FUNCTION_NAME(WithType)(WeightType type, WEIGHT_PARAMS_STANDARD)
