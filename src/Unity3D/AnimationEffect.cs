@@ -53,6 +53,25 @@ namespace Slerpy.Unity3D
             }
         }
 
+        public void AddChannel(Channel channel)
+        {
+            this.channels.Add(channel);
+        }
+
+        public Channel AddChannel(float threshold, float span, IEnumerable<Effect> effects)
+        {
+            Channel newChannel = new Channel(threshold, span, effects);
+
+            this.AddChannel(newChannel);
+
+            return newChannel;
+        }
+
+        public void RemoveChannel(Channel channel)
+        {
+            this.channels.Remove(channel);
+        }
+
         protected override void ProcessEffect(float weight)
         {
             for (int i = 0; i < this.channels.Count; ++i)
@@ -76,16 +95,23 @@ namespace Slerpy.Unity3D
             [Tooltip("All effects to play. They will never be stopped, only played forward and backward.")]
             private List<Effect> effects = new List<Effect>();
 
+            public Channel()
+            {
+            }
+
+            public Channel(float threshold, float span, IEnumerable<Effect> effects)
+            {
+                this.threshold = threshold;
+                this.span = span;
+
+                this.effects.AddRange(effects);
+            }
+
             public float Threshold
             {
                 get
                 {
                     return this.threshold;
-                }
-
-                set
-                {
-                    this.threshold = value;
                 }
             }
 
@@ -94,11 +120,6 @@ namespace Slerpy.Unity3D
                 get
                 {
                     return this.span;
-                }
-
-                set
-                {
-                    this.span = value;
                 }
             }
 
