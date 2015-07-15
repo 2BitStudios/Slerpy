@@ -21,6 +21,12 @@ namespace Slerpy
                 Assert::AreEqual(1.0f, Slerpy::Weight::FromValueInRange(WrapType::Clamp, 2.0f, 0.5f, 2.0f), EPSILON);
                 Assert::AreEqual(1.0f, Slerpy::Weight::FromValueInRange(WrapType::Clamp, 2.5f, 0.5f, 2.0f), EPSILON);
                 
+                Assert::AreEqual(1.0f, Slerpy::Weight::FromValueInRange(WrapType::PingPong, -4.0f, 0.5f, 2.0f), EPSILON);
+                Assert::AreEqual(0.6666f, Slerpy::Weight::FromValueInRange(WrapType::PingPong, -3.5f, 0.5f, 2.0f), EPSILON);
+                Assert::AreEqual(0.3333f, Slerpy::Weight::FromValueInRange(WrapType::PingPong, -3.0f, 0.5f, 2.0f), EPSILON);
+                Assert::AreEqual(0.0f, Slerpy::Weight::FromValueInRange(WrapType::PingPong, -2.5f, 0.5f, 2.0f), EPSILON);
+                Assert::AreEqual(0.3333f, Slerpy::Weight::FromValueInRange(WrapType::PingPong, -2.0f, 0.5f, 2.0f), EPSILON);
+                Assert::AreEqual(0.6666f, Slerpy::Weight::FromValueInRange(WrapType::PingPong, -1.5f, 0.5f, 2.0f), EPSILON);
                 Assert::AreEqual(1.0f, Slerpy::Weight::FromValueInRange(WrapType::PingPong, -1.0f, 0.5f, 2.0f), EPSILON);
                 Assert::AreEqual(0.6666f, Slerpy::Weight::FromValueInRange(WrapType::PingPong, -0.5f, 0.5f, 2.0f), EPSILON);
                 Assert::AreEqual(0.3333f, Slerpy::Weight::FromValueInRange(WrapType::PingPong, 0.0f, 0.5f, 2.0f), EPSILON);
@@ -35,6 +41,12 @@ namespace Slerpy
                 Assert::AreEqual(0.6666f, Slerpy::Weight::FromValueInRange(WrapType::PingPong, 4.5f, 0.5f, 2.0f), EPSILON);
                 Assert::AreEqual(1.0f, Slerpy::Weight::FromValueInRange(WrapType::PingPong, 5.0f, 0.5f, 2.0f), EPSILON);
 
+                Assert::AreEqual(0.0f, Slerpy::Weight::FromValueInRange(WrapType::Repeat, -4.0f, 0.5f, 2.0f), EPSILON);
+                Assert::AreEqual(0.3333f, Slerpy::Weight::FromValueInRange(WrapType::Repeat, -3.5f, 0.5f, 2.0f), EPSILON);
+                Assert::AreEqual(0.6666f, Slerpy::Weight::FromValueInRange(WrapType::Repeat, -3.0f, 0.5f, 2.0f), EPSILON);
+                Assert::AreEqual(0.0f, Slerpy::Weight::FromValueInRange(WrapType::Repeat, -2.5f, 0.5f, 2.0f), EPSILON);
+                Assert::AreEqual(0.3333f, Slerpy::Weight::FromValueInRange(WrapType::Repeat, -2.0f, 0.5f, 2.0f), EPSILON);
+                Assert::AreEqual(0.6666f, Slerpy::Weight::FromValueInRange(WrapType::Repeat, -1.5f, 0.5f, 2.0f), EPSILON);
                 Assert::AreEqual(0.0f, Slerpy::Weight::FromValueInRange(WrapType::Repeat, -1.0f, 0.5f, 2.0f), EPSILON);
                 Assert::AreEqual(0.3333f, Slerpy::Weight::FromValueInRange(WrapType::Repeat, -0.5f, 0.5f, 2.0f), EPSILON);
                 Assert::AreEqual(0.6666f, Slerpy::Weight::FromValueInRange(WrapType::Repeat, 0.0f, 0.5f, 2.0f), EPSILON);
@@ -46,6 +58,12 @@ namespace Slerpy
                 Assert::AreEqual(0.6666f, Slerpy::Weight::FromValueInRange(WrapType::Repeat, 3.0f, 0.5f, 2.0f), EPSILON);
                 Assert::AreEqual(0.0f, Slerpy::Weight::FromValueInRange(WrapType::Repeat, 3.5f, 0.5f, 2.0f), EPSILON);
 
+                Assert::AreEqual(1.0f, Slerpy::Weight::FromValueInRange(WrapType::Cycle, -4.0f, 0.5f, 2.0f), EPSILON);
+                Assert::AreEqual(0.6666f, Slerpy::Weight::FromValueInRange(WrapType::Cycle, -3.5f, 0.5f, 2.0f), EPSILON);
+                Assert::AreEqual(0.3333f, Slerpy::Weight::FromValueInRange(WrapType::Cycle, -3.0f, 0.5f, 2.0f), EPSILON);
+                Assert::AreEqual(-0.0f, Slerpy::Weight::FromValueInRange(WrapType::Cycle, -2.5f, 0.5f, 2.0f), EPSILON);
+                Assert::AreEqual(-0.3333f, Slerpy::Weight::FromValueInRange(WrapType::Cycle, -2.0f, 0.5f, 2.0f), EPSILON);
+                Assert::AreEqual(-0.6666f, Slerpy::Weight::FromValueInRange(WrapType::Cycle, -1.5f, 0.5f, 2.0f), EPSILON);
                 Assert::AreEqual(-1.0f, Slerpy::Weight::FromValueInRange(WrapType::Cycle, -1.0f, 0.5f, 2.0f), EPSILON);
                 Assert::AreEqual(-0.6666f, Slerpy::Weight::FromValueInRange(WrapType::Cycle, -0.5f, 0.5f, 2.0f), EPSILON);
                 Assert::AreEqual(-0.3333f, Slerpy::Weight::FromValueInRange(WrapType::Cycle, 0.0f, 0.5f, 2.0f), EPSILON);

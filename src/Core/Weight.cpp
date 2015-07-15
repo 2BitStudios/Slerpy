@@ -48,14 +48,15 @@ namespace Slerpy
         case WrapType::Cycle:
             {
                 float const weight = MATH_FMOD(scaledCurrentValue, scaledMaxValue * 4.0f) / scaledMaxValue;
+                float const weightAbs = MATH_ABS(weight);
 
-                if (weight >= 2.0f)
+                if (weightAbs >= 2.0f)
                 {
-                    return weight >= 3.0f ? weight - 4.0f : 2.0f - weight;
+                    return (weightAbs >= 3.0f ? weightAbs - 4.0f : 2.0f - weightAbs) * MATH_SIGN(weight);
                 }
                 else
                 {
-                    return weight >= 1.0f ? 2.0f - weight : weight;
+                    return (weightAbs >= 1.0f ? 2.0f - weightAbs : weightAbs) * MATH_SIGN(weight);
                 }
             }
         case WrapType::Clamp:
