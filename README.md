@@ -1,6 +1,6 @@
 Slerpy
 ======
-A collection of juice effects and workflow helpers for video games.
+A collection of juicy animation effects for video games.
 
 Platforms
 ---------
