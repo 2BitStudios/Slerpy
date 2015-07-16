@@ -56,6 +56,41 @@ namespace Slerpy.Unity3D
         }
     }
 
+    public enum EffectCustomWeightStimulus
+    {
+        CalculatedWeight = 0,
+        RawWeight = 1,
+        Time = 2
+    }
+
+    [Serializable]
+    public sealed class EffectCustomWeight
+    {
+        [SerializeField]
+        [Tooltip("The source of the value that drives the curve.")]
+        private EffectCustomWeightStimulus stimulus = EffectCustomWeightStimulus.CalculatedWeight;
+
+        [SerializeField]
+        [Tooltip("The curve to evaluate against the 'stimulus'.")]
+        private AnimationCurve curve = AnimationCurve.Linear(0.0f, 1.0f, 1.0f, 1.0f);
+
+        public EffectCustomWeightStimulus Stimulus
+        {
+            get
+            {
+                return this.stimulus;
+            }
+        }
+
+        public AnimationCurve Curve
+        {
+            get
+            {
+                return this.curve;
+            }
+        }
+    }
+
     public enum EffectDirection
     {
         Stalled = 0,
@@ -73,8 +108,12 @@ namespace Slerpy.Unity3D
         private EffectSettings settings = new EffectSettings();
 
         [SerializeField]
-        [Tooltip("List of weight modifiers to be applied to the base weight of the effect. Will be applied in order they appear here.")]
+        [Tooltip("List of weight modifiers to be applied while calculating the weight of the effect. Will be applied in order they appear here.")]
         private WeightType[] weights = new WeightType[] { WeightType.Linear };
+
+        [SerializeField]
+        [Tooltip("Custom weight modifier to be applied while calculating the weight of the effect. Will be applied after all other modifiers.")]
+        private EffectCustomWeight customWeight = new EffectCustomWeight();
 
         [SerializeField]
         [Tooltip("Rate that time passes. Speeds up or slows down effects.")]
@@ -101,6 +140,14 @@ namespace Slerpy.Unity3D
             get
             {
                 return this.weights;
+            }
+        }
+
+        public EffectCustomWeight CustomWeight
+        {
+            get
+            {
+                return this.customWeight;
             }
         }
 
@@ -251,12 +298,33 @@ namespace Slerpy.Unity3D
                 time,
                 this.Duration);
 
+            float rawWeight = weight;
+
             for (int i = 0; i < this.weights.Length; ++i)
             {
                 weight = Weight.WithType(this.weights[i], weight);
             }
 
-            return weight;
+            float customWeightStimulus = 0.0f;
+
+            switch (this.customWeight.Stimulus)
+            {
+                case EffectCustomWeightStimulus.RawWeight:
+                    customWeightStimulus = rawWeight;
+
+                    break;
+                case EffectCustomWeightStimulus.Time:
+                    customWeightStimulus = time;
+
+                    break;
+                case EffectCustomWeightStimulus.CalculatedWeight:
+                default:
+                    customWeightStimulus = weight;
+
+                    break;
+            }
+
+            return weight * this.customWeight.Curve.Evaluate(customWeightStimulus);
         }
 
         public float CalculateWeight()
