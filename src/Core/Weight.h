@@ -37,7 +37,8 @@ namespace Slerpy
         Clamp = 0,
         PingPong = 1,
         Repeat = 2,
-        Cycle = 3
+        Cycle = 3,
+        MirrorClamp = 4
     };
 
 #ifdef _MANAGED

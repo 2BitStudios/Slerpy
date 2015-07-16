@@ -280,6 +280,11 @@ namespace Slerpy.Unity3D
                 {
                     this.SimulatedTime = Mathf.Clamp(this.SimulatedTime, 0.0f, this.Duration);
                 }
+
+                if (this.TimeWrap == WrapType.MirrorClamp)
+                {
+                    this.SimulatedTime = Mathf.Clamp(this.SimulatedTime, 0.0f, this.Duration * 2.0f);
+                }
             }
         }
 

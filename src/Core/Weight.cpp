@@ -59,6 +59,19 @@ namespace Slerpy
                     return (weightAbs >= 1.0f ? 2.0f - weightAbs : weightAbs) * MATH_SIGN(weight);
                 }
             }
+        case WrapType::MirrorClamp:
+            {
+                float weight = scaledCurrentValue / scaledMaxValue;
+
+                weight = MATH_CLAMP(weight, 0.0f, 2.0f);
+
+                if (weight > 1.0f)
+                {
+                    weight = 2.0f - weight;
+                }
+
+                return weight;
+            }
         case WrapType::Clamp:
         default:
             {
