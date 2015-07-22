@@ -138,7 +138,7 @@ namespace Slerpy.Unity3D
                         || component is Effect)
                     && !this.preservedComponents.Contains(component))
                 {
-                    Component.Destroy(component);
+                    Component.DestroyImmediate(component);
                 }
             }
         }
