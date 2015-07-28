@@ -28,7 +28,7 @@ namespace Slerpy
         {
         case WrapType::PingPong:
             {
-                float weight = MATH_ABS(MATH_FMOD(scaledCurrentValue, scaledMaxValue * 2.0f) / scaledMaxValue);
+                float const weight = MATH_ABS(MATH_FMOD(scaledCurrentValue, scaledMaxValue * 2.0f) / scaledMaxValue);
 
                 return weight >= 1.0f ? 2.0f - weight : weight;
             }
