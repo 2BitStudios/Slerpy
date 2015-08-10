@@ -66,7 +66,7 @@ namespace Slerpy.Unity3D
 
                 ghost.transform.parent = null;
 
-                ghost.gameObject.hideFlags = HideFlags.HideAndDontSave;
+                ghost.gameObject.hideFlags = HideFlags.HideInHierarchy | HideFlags.NotEditable;
 
                 ghost.CleanObject(ghost.gameObject);
 
