@@ -49,7 +49,7 @@ namespace Slerpy.Unity3D
 
         private Func<bool> SustainQuery { get; set; }
         
-        public Ghoster SpawnAndGetTemporary(Func<bool> sustainQuery)
+        public Ghoster SpawnTemporary(Func<bool> sustainQuery)
         {
             if (Application.isPlaying && sustainQuery != null)
             {
@@ -78,32 +78,27 @@ namespace Slerpy.Unity3D
             return null;
         }
 
-        public void SpawnTemporary(Func<bool> sustainQuery)
-        {
-            this.SpawnAndGetTemporary(sustainQuery);
-        }
-
-        public Ghoster SpawnAndGetTemporary(float lifeTime)
+        public Ghoster SpawnTemporary(float lifeTime)
         {
             float endTime = Time.timeSinceLevelLoad + lifeTime;
 
-            return this.SpawnAndGetTemporary(() => Time.timeSinceLevelLoad < endTime);
+            return this.SpawnTemporary(() => Time.timeSinceLevelLoad < endTime);
         }
 
-        public void SpawnTemporary(float lifeTime)
+        public void UI_SpawnTemporary(float lifeTime)
         {
-            this.SpawnAndGetTemporary(lifeTime);
+            this.SpawnTemporary(lifeTime);
         }
 
         [ContextMenu("Spawn")]
-        public Ghoster SpawnAndGetPermanent()
+        public Ghoster SpawnPermanent()
         {
-            return this.SpawnAndGetTemporary(() => true);
+            return this.SpawnTemporary(() => true);
         }
 
-        public void SpawnPermanent()
+        public void UI_SpawnPermanent()
         {
-            this.SpawnAndGetPermanent();
+            this.SpawnPermanent();
         }
 
         [ContextMenu("Clear")]
