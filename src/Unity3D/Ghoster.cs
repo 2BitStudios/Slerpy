@@ -7,6 +7,34 @@ namespace Slerpy.Unity3D
 {
     public sealed class Ghoster : MonoBehaviour
     {
+        public static readonly Type[] defaultPreservedTypes = new Type[]
+        {
+            typeof(Renderer),
+            typeof(MeshFilter),
+            typeof(Effect)
+        };
+
+        public static IEnumerable<Type> DefaultPreservedTypes
+        {
+            get
+            {
+                return Ghoster.defaultPreservedTypes;
+            }
+        }
+
+        private static bool TypeListContains(IEnumerator<Type> list, Type target)
+        {
+            while (list.MoveNext())
+            {
+                if (list.Current.IsAssignableFrom(target))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         [SerializeField]
         [Tooltip("Effects to play on new ghosts.")]
         private Effect[] ghostEffects = new Effect[0];
@@ -49,7 +77,7 @@ namespace Slerpy.Unity3D
 
         private Func<bool> SustainQuery { get; set; }
         
-        public Ghoster SpawnTemporary(Func<bool> sustainQuery)
+        public Ghoster SpawnTemporary(Func<bool> sustainQuery, IEnumerable<Type> preservedTypes = null)
         {
             if (Application.isPlaying && sustainQuery != null)
             {
@@ -68,7 +96,7 @@ namespace Slerpy.Unity3D
 
                 ghost.gameObject.hideFlags = HideFlags.HideInHierarchy | HideFlags.NotEditable;
 
-                ghost.CleanObject(ghost.gameObject);
+                ghost.CleanObject(ghost.gameObject, preservedTypes == null ? Ghoster.DefaultPreservedTypes : preservedTypes);
 
                 this.ghosts.AddLast(ghost);
 
@@ -78,11 +106,11 @@ namespace Slerpy.Unity3D
             return null;
         }
 
-        public Ghoster SpawnTemporary(float lifeTime)
+        public Ghoster SpawnTemporary(float lifeTime, IEnumerable<Type> preservedTypes = null)
         {
             float endTime = Time.timeSinceLevelLoad + lifeTime;
 
-            return this.SpawnTemporary(() => Time.timeSinceLevelLoad < endTime);
+            return this.SpawnTemporary(() => Time.timeSinceLevelLoad < endTime, preservedTypes);
         }
 
         public void UI_SpawnTemporary(float lifeTime)
@@ -91,9 +119,9 @@ namespace Slerpy.Unity3D
         }
 
         [ContextMenu("Spawn")]
-        public Ghoster SpawnPermanent()
+        public Ghoster SpawnPermanent(IEnumerable<Type> preservedTypes = null)
         {
-            return this.SpawnTemporary(() => true);
+            return this.SpawnTemporary(() => true, preservedTypes);
         }
 
         public void UI_SpawnPermanent()
@@ -112,13 +140,15 @@ namespace Slerpy.Unity3D
             this.ghosts.Clear();
         }
 
-        private void CleanObject(GameObject target)
+        private void CleanObject(GameObject target, IEnumerable<Type> preservedTypes)
         {
             foreach (Transform child in target.transform)
             {
-                this.CleanObject(child.gameObject);
+                this.CleanObject(child.gameObject, preservedTypes);
             }
 
+            IEnumerator<Type> preservedTypesEnumerator = preservedTypes.GetEnumerator();
+            
             // Reverse iteration is a partial solution to required components, as they are added recursively
             // Note that re-ordering the required components will still break the cleaning process
             Component[] components = target.GetComponents<Component>();
@@ -126,15 +156,15 @@ namespace Slerpy.Unity3D
             {
                 Component component = components[i];
 
-                if (!(component is Transform
-                        || component is Ghoster 
-                        || component is Renderer 
-                        || component is MeshFilter 
-                        || component is Effect)
-                    && !this.preservedComponents.Contains(component))
+                if (!(component is Transform)
+                    && !(component is Ghoster)
+                    && !this.preservedComponents.Contains(component) 
+                    && !Ghoster.TypeListContains(preservedTypesEnumerator, component.GetType()))
                 {
                     Component.DestroyImmediate(component);
                 }
+
+                preservedTypesEnumerator.Reset();
             }
         }
 
