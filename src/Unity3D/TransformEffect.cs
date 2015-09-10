@@ -17,7 +17,10 @@ namespace Slerpy.Unity3D
         Throb = 7,
         Raise = 8,
         Flip = 9,
-        Expand = 10
+        Expand = 10,
+        RotateX = 11,
+        RotateY = 12,
+        RotateZ = 13
     }
 
     public sealed class TransformEffect : Effect
@@ -35,7 +38,10 @@ namespace Slerpy.Unity3D
             { TransformEffectPreset.Throb, new PresetData(0.5f, WrapType.Cycle, Vector3.zero, Vector3.zero, new Vector3(0.1f, 0.1f, 0.1f)) },
             { TransformEffectPreset.Raise, new PresetData(1.0f, WrapType.Clamp, new Vector3(0.0f, 1.0f, 0.0f), Vector3.zero, Vector3.zero) },
             { TransformEffectPreset.Flip, new PresetData(1.0f, WrapType.Clamp, Vector3.zero, new Vector3(180.0f, 0.0f, 0.0f), Vector3.zero) },
-            { TransformEffectPreset.Expand, new PresetData(1.0f, WrapType.Clamp, Vector3.zero, Vector3.zero, new Vector3(1.0f, 1.0f, 1.0f)) }
+            { TransformEffectPreset.Expand, new PresetData(1.0f, WrapType.Clamp, Vector3.zero, Vector3.zero, new Vector3(1.0f, 1.0f, 1.0f)) },
+            { TransformEffectPreset.RotateX, new PresetData(1.0f, WrapType.Repeat, Vector3.zero, new Vector3(360.0f, 0.0f, 0.0f), Vector3.zero) },
+            { TransformEffectPreset.RotateY, new PresetData(1.0f, WrapType.Repeat, Vector3.zero, new Vector3(0.0f, 360.0f, 0.0f), Vector3.zero) },
+            { TransformEffectPreset.RotateZ, new PresetData(1.0f, WrapType.Repeat, Vector3.zero, new Vector3(0.0f, 0.0f, 360.0f), Vector3.zero) }
         };
 
         [SerializeField]
