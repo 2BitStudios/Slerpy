@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Slerpy.Unity3D
 {
     public enum EffectSettingTimeScaling
     {
         Scaled = 0,
-        Unscaled = 1
+        Unscaled = 1,
+        ByTransformType = 2
     }
 
     public enum EffectSettingReverseClamp
@@ -23,7 +23,7 @@ namespace Slerpy.Unity3D
     {
         [SerializeField]
         [Tooltip("How to handle engine time scaling (such as pauses).")]
-        private EffectSettingTimeScaling timeScaling = EffectSettingTimeScaling.Scaled;
+        private EffectSettingTimeScaling timeScaling = EffectSettingTimeScaling.ByTransformType;
 
         [SerializeField]
         [Tooltip("How to clamp simulated time when effect is reversed. Necessary to play some time wraps (such as Clamp) backward smoothly.")]
@@ -346,7 +346,14 @@ namespace Slerpy.Unity3D
 
         protected void Update()
         {
-            this.AddRawTime(this.settings.TimeScaling == EffectSettingTimeScaling.Unscaled ? Time.unscaledDeltaTime : Time.deltaTime);
+            EffectSettingTimeScaling timeScaling = this.settings.TimeScaling;
+
+            if (timeScaling == EffectSettingTimeScaling.ByTransformType)
+            {
+                timeScaling = this.transform is RectTransform ? EffectSettingTimeScaling.Unscaled : EffectSettingTimeScaling.Scaled;
+            }
+
+            this.AddRawTime(timeScaling == EffectSettingTimeScaling.Unscaled ? Time.unscaledDeltaTime : Time.deltaTime);
         }
 
         private void AddRawTime(float deltaTime)
