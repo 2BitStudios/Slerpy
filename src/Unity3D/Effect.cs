@@ -254,6 +254,13 @@ namespace Slerpy.Unity3D
             }
         }
 
+        public void PlayForward(float speed)
+        {
+            this.PlayForward();
+
+            this.Speed = Mathf.Abs(speed);
+        }
+
         public void PlayBackward()
         {
             this.Play();
@@ -262,6 +269,13 @@ namespace Slerpy.Unity3D
             {
                 this.Reverse();
             }
+        }
+
+        public void PlayBackward(float speed)
+        {
+            this.PlayBackward();
+
+            this.Speed = -Mathf.Abs(speed);
         }
 
         public void Stop()
