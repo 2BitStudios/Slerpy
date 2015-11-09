@@ -103,6 +103,16 @@ namespace Slerpy.Unity3D
         protected const string TOOLTIP_DURATION = "Run time of the effect, affected by 'speed'.";
         protected const string TOOLTIP_TIMEWRAP = "How time continues to affect the effect once the duration ends.";
 
+        public static float CalculateWeight(float rawWeight, params WeightType[] weightModifiers)
+        {
+            for (int i = 0; i < weightModifiers.Length; ++i)
+            {
+                rawWeight = Weight.WithType(weightModifiers[i], rawWeight);
+            }
+
+            return rawWeight;
+        }
+
         [SerializeField]
         [Tooltip("General settings.")]
         private EffectSettings settings = new EffectSettings();
@@ -319,10 +329,7 @@ namespace Slerpy.Unity3D
 
             float rawWeight = weight;
 
-            for (int i = 0; i < this.weights.Length; ++i)
-            {
-                weight = Weight.WithType(this.weights[i], weight);
-            }
+            weight = Effect.CalculateWeight(rawWeight, this.weights);
 
             float customWeightStimulus = 0.0f;
 
