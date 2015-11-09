@@ -1,13 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 namespace Slerpy.Unity3D
 {
     public sealed class ColorEffect : Effect
     {
+        public static Color CalculateColor(float weight, Color fromColor, Color toColor)
+        {
+            return Extensions.InterpolateColor(
+                fromColor, 
+                toColor, 
+                weight,
+                InterpolateType.Standard);
+        }
+
         [SerializeField]
         [Tooltip(Effect.TOOLTIP_DURATION)]
         private float duration = 1.0f;
@@ -111,11 +117,7 @@ namespace Slerpy.Unity3D
 
         protected override void ProcessEffect(float weight)
         {
-            Color interpolatedColor = Extensions.InterpolateColor(
-                this.fromColor, 
-                this.toColor, 
-                weight,
-                InterpolateType.Standard);
+            Color interpolatedColor = ColorEffect.CalculateColor(weight, this.fromColor, this.toColor);
 
             if (this.transform is RectTransform)
             {
