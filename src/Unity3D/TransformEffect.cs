@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 using UnityEngine;
 
@@ -24,6 +25,10 @@ namespace Slerpy.Unity3D
 
     public sealed class TransformEffect : Effect
     {
+        private const string TOOLTIP_POSITIONEXTENT = "Maximum local-space position change at a weight of 1.0. Can be exceeded or inverted by weight modifiers or time wrap type.";
+        private const string TOOLTIP_ROTATIONEXTENT = "Maximum local-space rotation change at a weight of 1.0. Can be exceeded or inverted by weight modifiers or time wrap type.";
+        private const string TOOLTIP_SCALEEXTENT = "Maximum local-space scale change at a weight of 1.0. Can be exceeded or inverted by weight modifiers or time wrap type.";
+
         private const TransformEffectPreset PRESET_DEFAULT = TransformEffectPreset.Custom;
 
         private static readonly Dictionary<TransformEffectPreset, PresetData> presetData = new Dictionary<TransformEffectPreset, PresetData>()
@@ -75,7 +80,7 @@ namespace Slerpy.Unity3D
             return Matrix4x4.TRS(
                 TransformEffect.CalculatePositionOffset(weight, positionExtent),
                 TransformEffect.CalculateRotationOffset(weight, rotationExtent),
-                TransformEffect.CalculateScaleOffset(weight, scaleExtent));
+                Vector3.one + TransformEffect.CalculateScaleOffset(weight, scaleExtent));
         }
 
         [SerializeField]
@@ -95,15 +100,15 @@ namespace Slerpy.Unity3D
         private WrapType timeWrap = WrapType.Cycle;
 
         [SerializeField]
-        [Tooltip("Maximum local-space position change at a weight of 1.0. Can be exceeded or inverted by weight modifiers or time wrap type.")]
+        [Tooltip(TransformEffect.TOOLTIP_POSITIONEXTENT)]
         private Vector3 positionExtent = Vector3.zero;
 
         [SerializeField]
-        [Tooltip("Maximum local-space rotation change at a weight of 1.0. Can be exceeded or inverted by weight modifiers or time wrap type.")]
+        [Tooltip(TransformEffect.TOOLTIP_ROTATIONEXTENT)]
         private Vector3 rotationExtent = Vector3.zero;
 
         [SerializeField]
-        [Tooltip("Maximum local-space scale change at a weight of 1.0. Can be exceeded or inverted by weight modifiers or time wrap type.")]
+        [Tooltip(TransformEffect.TOOLTIP_SCALEEXTENT)]
         private Vector3 scaleExtent = Vector3.zero;
 
         [SerializeField]
@@ -422,6 +427,66 @@ namespace Slerpy.Unity3D
                 target.scaleExtent = this.scaleExtent;
 
                 target.Preset = TransformEffectPreset.Custom;
+            }
+        }
+
+        [Serializable]
+        public sealed class Detachable : Effect.Detachable<Matrix4x4>
+        {
+            [SerializeField]
+            [Tooltip(TransformEffect.TOOLTIP_POSITIONEXTENT)]
+            private Vector3 positionExtent = Vector3.zero;
+
+            [SerializeField]
+            [Tooltip(TransformEffect.TOOLTIP_ROTATIONEXTENT)]
+            private Vector3 rotationExtent = Vector3.zero;
+
+            [SerializeField]
+            [Tooltip(TransformEffect.TOOLTIP_SCALEEXTENT)]
+            private Vector3 scaleExtent = Vector3.zero;
+
+            public Vector3 PositionExtent
+            {
+                get
+                {
+                    return this.positionExtent;
+                }
+
+                set
+                {
+                    this.positionExtent = value;
+                }
+            }
+
+            public Vector3 RotationExtent
+            {
+                get
+                {
+                    return this.rotationExtent;
+                }
+
+                set
+                {
+                    this.rotationExtent = value;
+                }
+            }
+
+            public Vector3 ScaleExtent
+            {
+                get
+                {
+                    return this.scaleExtent;
+                }
+
+                set
+                {
+                    this.scaleExtent = value;
+                }
+            }
+
+            protected override Matrix4x4 Internal_CalculateState(float weight)
+            {
+                return TransformEffect.CalculateOffsets(weight, this.positionExtent, this.rotationExtent, this.scaleExtent);
             }
         }
     }

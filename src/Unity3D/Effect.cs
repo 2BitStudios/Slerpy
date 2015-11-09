@@ -100,6 +100,7 @@ namespace Slerpy.Unity3D
 
     public abstract class Effect : MonoBehaviour
     {
+        protected const string TOOLTIP_WEIGHTS = "List of weight modifiers to be applied while calculating the weight of the effect. Will be applied in order they appear here.";
         protected const string TOOLTIP_DURATION = "Run time of the effect, affected by 'speed'.";
         protected const string TOOLTIP_TIMEWRAP = "How time continues to affect the effect once the duration ends.";
 
@@ -118,7 +119,7 @@ namespace Slerpy.Unity3D
         private EffectSettings settings = new EffectSettings();
 
         [SerializeField]
-        [Tooltip("List of weight modifiers to be applied while calculating the weight of the effect. Will be applied in order they appear here.")]
+        [Tooltip(Effect.TOOLTIP_WEIGHTS)]
         private WeightType[] weights = new WeightType[] { WeightType.Linear };
 
         [SerializeField]
@@ -231,15 +232,8 @@ namespace Slerpy.Unity3D
         {
             WeightType[] newWeights = new WeightType[this.weights.Length + additionalWeights.Length];
 
-            for (int i = 0; i < this.weights.Length; ++i)
-            {
-                newWeights[i] = this.weights[i];
-            }
-
-            for (int i = 0; i < additionalWeights.Length; ++i)
-            {
-                newWeights[i + this.weights.Length] = additionalWeights[i];
-            }
+            this.weights.CopyTo(newWeights, 0);
+            additionalWeights.CopyTo(newWeights, this.weights.Length);
 
             this.SetWeights(newWeights);
         }
@@ -384,6 +378,49 @@ namespace Slerpy.Unity3D
             deltaTime *= this.Speed;
 
             this.SimulatedTime += deltaTime;
+        }
+
+        [Serializable]
+        public abstract class Detachable<TState>
+        {
+            [SerializeField]
+            [Tooltip(Effect.TOOLTIP_WEIGHTS)]
+            private WeightType[] weights = new WeightType[] { WeightType.Linear };
+
+            public IEnumerable<WeightType> Weights
+            {
+                get
+                {
+                    return this.weights;
+                }
+            }
+
+            public void SetWeights(params WeightType[] newWeights)
+            {
+                this.weights = newWeights;
+            }
+
+            public void AddWeights(params WeightType[] additionalWeights)
+            {
+                WeightType[] newWeights = new WeightType[this.weights.Length + additionalWeights.Length];
+
+                this.weights.CopyTo(newWeights, 0);
+                additionalWeights.CopyTo(newWeights, this.weights.Length);
+
+                this.SetWeights(newWeights);
+            }
+
+            public void ClearWeights()
+            {
+                this.weights = new WeightType[0];
+            }
+
+            public TState CalculateState(float rawWeight)
+            {
+                return this.Internal_CalculateState(Effect.CalculateWeight(rawWeight, this.weights));
+            }
+
+            protected abstract TState Internal_CalculateState(float weight);
         }
     }
 }

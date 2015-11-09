@@ -1,10 +1,14 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace Slerpy.Unity3D
 {
     public sealed class ColorEffect : Effect
     {
+        private const string TOOLTIP_FROMCOLOR = "Color to blend from.";
+        private const string TOOLTIP_TOCOLOR = "Color to blend towards.";
+
         public static Color CalculateColor(float weight, Color fromColor, Color toColor)
         {
             return Extensions.InterpolateColor(
@@ -30,11 +34,11 @@ namespace Slerpy.Unity3D
         private bool affectChildren = false;
 
         [SerializeField]
-        [Tooltip("Color to blend from.")]
+        [Tooltip(ColorEffect.TOOLTIP_FROMCOLOR)]
         private Color fromColor = Color.white;
 
         [SerializeField]
-        [Tooltip("Color to blend towards.")]
+        [Tooltip(ColorEffect.TOOLTIP_TOCOLOR)]
         private Color toColor = Color.red;
 
         public override float Duration
@@ -151,6 +155,49 @@ namespace Slerpy.Unity3D
             where TComponent : Component
         {
             return this.affectChildren ? this.gameObject.GetComponentsInChildren<TComponent>() : this.gameObject.GetComponents<TComponent>();
+        }
+
+        [Serializable]
+        public sealed class Detachable : Detachable<Color>
+        {
+            [SerializeField]
+            [Tooltip(ColorEffect.TOOLTIP_FROMCOLOR)]
+            private Color fromColor = Color.white;
+
+            [SerializeField]
+            [Tooltip(ColorEffect.TOOLTIP_TOCOLOR)]
+            private Color toColor = Color.red;
+
+            public Color FromColor
+            {
+                get
+                {
+                    return this.fromColor;
+                }
+
+                set
+                {
+                    this.fromColor = value;
+                }
+            }
+
+            public Color ToColor
+            {
+                get
+                {
+                    return this.toColor;
+                }
+
+                set
+                {
+                    this.toColor = value;
+                }
+            }
+
+            protected override Color Internal_CalculateState(float weight)
+            {
+                return ColorEffect.CalculateColor(weight, this.fromColor, this.toColor);
+            }
         }
     }
 }
