@@ -43,6 +43,41 @@ namespace Slerpy.Unity3D
             { TransformEffectPreset.RotateZ, new PresetData(1.0f, WrapType.Repeat, Vector3.zero, new Vector3(0.0f, 0.0f, 360.0f), Vector3.zero) }
         };
 
+        public static Vector3 CalculatePositionOffset(float weight, Vector3 extent)
+        {
+            return Extensions.InterpolateVector3(
+                Vector3.zero, 
+                extent, 
+                weight, 
+                InterpolateType.Standard);
+        }
+
+        public static Quaternion CalculateRotationOffset(float weight, Vector3 extent)
+        {
+            return Quaternion.Euler(Extensions.InterpolateVector3(
+                Vector3.zero,
+                extent, 
+                weight,
+                InterpolateType.Standard));
+        }
+
+        public static Vector3 CalculateScaleOffset(float weight, Vector3 extent)
+        {
+            return Extensions.InterpolateVector3(
+                Vector3.zero,
+                extent, 
+                weight,
+                InterpolateType.Standard);
+        }
+
+        public static Matrix4x4 CalculateOffsets(float weight, Vector3 positionExtent, Vector3 rotationExtent, Vector3 scaleExtent)
+        {
+            return Matrix4x4.TRS(
+                TransformEffect.CalculatePositionOffset(weight, positionExtent),
+                TransformEffect.CalculateRotationOffset(weight, rotationExtent),
+                TransformEffect.CalculateScaleOffset(weight, scaleExtent));
+        }
+
         [SerializeField]
         [Tooltip("Strength of effect. For example, an effect that moves the object would move twice as far with a strength of 2.0.")]
         private float strength = 1.0f;
@@ -281,23 +316,9 @@ namespace Slerpy.Unity3D
 
         protected override void ProcessEffect(float weight)
         {
-            this.PositionOffset = Extensions.InterpolateVector3(
-                Vector3.zero, 
-                this.positionExtent * this.strength, 
-                weight, 
-                InterpolateType.Standard);
-
-            this.RotationOffset = Quaternion.Euler(Extensions.InterpolateVector3(
-                Vector3.zero,
-                this.rotationExtent * this.strength, 
-                weight,
-                InterpolateType.Standard));
-
-            this.ScaleOffset = Extensions.InterpolateVector3(
-                Vector3.zero,
-                this.scaleExtent * this.strength, 
-                weight,
-                InterpolateType.Standard);
+            this.PositionOffset = TransformEffect.CalculatePositionOffset(weight, this.positionExtent * this.strength);
+            this.RotationOffset = TransformEffect.CalculateRotationOffset(weight, this.rotationExtent * this.strength);
+            this.ScaleOffset = TransformEffect.CalculateScaleOffset(weight, this.scaleExtent * this.strength);
         }
 
         private void TrySetToPreset()
