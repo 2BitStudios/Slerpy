@@ -354,7 +354,7 @@ namespace Slerpy.Unity3D
 
         protected abstract void ProcessEffect(float weight);
         
-        protected void Start()
+        protected virtual void Start()
         {
             this.ProcessEffect(this.CalculateWeight());
         }
