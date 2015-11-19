@@ -144,7 +144,7 @@ namespace Slerpy.Unity3D
 
         private void Update()
         {
-            this.timePlaying += Time.deltaTime;
+            this.timePlaying += Time.unscaledDeltaTime;
 
             this.SetVerticesDirty();
         }
