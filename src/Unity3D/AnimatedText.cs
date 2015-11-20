@@ -99,11 +99,11 @@ namespace Slerpy.Unity3D
             this.timePlaying = 0.0f;
         }
 
-        protected override void OnFillVBO(List<UIVertex> vbo)
+        protected override void OnPopulateMesh(VertexHelper toFill)
         {
-            base.OnFillVBO(vbo);
-        
-            for (int i = 0; i < vbo.Count; i += 4)
+            base.OnPopulateMesh(toFill);
+            
+            for (int i = 0; i < toFill.currentVertCount; i += 4)
             {
                 float rawWeight = Weight.FromTime(this.timeWrap, Mathf.Max(this.timePlaying - i * this.interval, 0.0f), this.duration);
 
@@ -125,19 +125,25 @@ namespace Slerpy.Unity3D
 
                 for (int k = 0; k < 4; ++k)
                 {
-                    centre += vbo[i + k].position;
+                    UIVertex vertex = default(UIVertex);
+
+                    toFill.PopulateUIVertex(ref vertex, i + k);
+
+                    centre += vertex.position;
                 }
 
                 centre /= 4;
 
                 for (int k = 0; k < 4; ++k)
                 {
-                    UIVertex vertex = vbo[i + k];
-                
+                    UIVertex vertex = default(UIVertex);
+
+                    toFill.PopulateUIVertex(ref vertex, i + k);
+                    
                     vertex.position = transformResult.MultiplyPoint(vertex.position - centre) + centre;
                     vertex.color *= colorResult;
-                
-                    vbo[i + k] = vertex;
+                    
+                    toFill.SetUIVertex(vertex, i + k);
                 }
             }
         }
