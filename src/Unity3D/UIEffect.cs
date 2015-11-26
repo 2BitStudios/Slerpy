@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System;
+
+using UnityEngine;
 
 namespace Slerpy.Unity3D
 {
@@ -11,6 +13,9 @@ namespace Slerpy.Unity3D
     [RequireComponent(typeof(RectTransform))]
     public sealed class UIEffect : Effect
     {
+        private const string TOOLTIP_ANCHORMODE = "Canvas-space units of anchor transformation.";
+        private const string TOOLTIP_ANCHOREXTENT = "Maximum anchor position change at a weight of 1.0. Can be exceeded or inverted by weight modifiers or time wrap type.";
+
         private const UIEffectAnchorMode ANCHORMODE_DEFAULT = UIEffectAnchorMode.Relative;
 
         public static Vector2 CalculateAnchorOffset(float weight, Vector2 extent)
@@ -31,11 +36,11 @@ namespace Slerpy.Unity3D
         private WrapType timeWrap = WrapType.Cycle;
 
         [SerializeField]
-        [Tooltip("Canvas-space units of anchor transformation.")]
+        [Tooltip(UIEffect.TOOLTIP_ANCHORMODE)]
         private UIEffectAnchorMode anchorMode = ANCHORMODE_DEFAULT;
 
         [SerializeField]
-        [Tooltip("Maximum anchor position change at a weight of 1.0. Can be exceeded or inverted by weight modifiers or time wrap type.")]
+        [Tooltip(UIEffect.TOOLTIP_ANCHOREXTENT)]
         private Vector2 anchorExtent = Vector2.zero;
 
         [SerializeField]
@@ -160,6 +165,49 @@ namespace Slerpy.Unity3D
                 this.anchorMode = this.previousAnchorMode;
 
                 this.AnchorMode = newAnchorMode;
+            }
+        }
+
+        [Serializable]
+        public sealed class Detachable : Effect.Detachable<Vector2>
+        {
+            [SerializeField]
+            [Tooltip(UIEffect.TOOLTIP_ANCHORMODE)]
+            private UIEffectAnchorMode anchorMode = ANCHORMODE_DEFAULT;
+
+            [SerializeField]
+            [Tooltip(UIEffect.TOOLTIP_ANCHOREXTENT)]
+            private Vector2 anchorExtent = Vector2.zero;
+
+            public UIEffectAnchorMode AnchorMode
+            {
+                get
+                {
+                    return this.anchorMode;
+                }
+
+                set
+                {
+                    this.anchorMode = value;
+                }
+            }
+
+            public Vector2 AnchorExtent
+            {
+                get
+                {
+                    return this.anchorExtent;
+                }
+
+                set
+                {
+                    this.anchorExtent = value;
+                }
+            }
+
+            protected override Vector2 Internal_CalculateState(float weight)
+            {
+                return UIEffect.CalculateAnchorOffset(weight, this.anchorExtent);
             }
         }
     }
