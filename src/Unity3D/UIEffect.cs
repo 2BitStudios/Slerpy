@@ -4,6 +4,42 @@ using UnityEngine;
 
 namespace Slerpy.Unity3D
 {
+    public struct AnchorOffset
+    {
+        public Vector2 AbsolutePosition { get; private set; }
+        public Vector2 RelativePosition { get; private set; }
+
+        public AnchorOffset(Vector2 absolutePosition, Vector2 relativePosition)
+        {
+            this.AbsolutePosition = absolutePosition;
+            this.RelativePosition = relativePosition;
+        }
+
+        public void AddTo(RectTransform target)
+        {
+            target.anchoredPosition += this.AbsolutePosition;
+
+            target.anchorMin += this.RelativePosition;
+            target.anchorMax += this.RelativePosition;
+        }
+
+        public void SubtractFrom(RectTransform target)
+        {
+            target.anchoredPosition -= this.AbsolutePosition;
+
+            target.anchorMin -= this.RelativePosition;
+            target.anchorMax -= this.RelativePosition;
+        }
+
+        public void WriteTo(RectTransform target)
+        {
+            target.anchoredPosition = this.AbsolutePosition;
+
+            target.anchorMin = this.RelativePosition;
+            target.anchorMax = this.RelativePosition;
+        }
+    }
+
     public enum UIEffectAnchorMode
     {
         Absolute = 0,
@@ -18,13 +54,22 @@ namespace Slerpy.Unity3D
 
         private const UIEffectAnchorMode ANCHORMODE_DEFAULT = UIEffectAnchorMode.Relative;
 
-        public static Vector2 CalculateAnchorOffset(float weight, Vector2 extent)
+        public static AnchorOffset CalculateAnchorOffset(float weight, UIEffectAnchorMode anchorMode, Vector2 extent)
         {
-            return Extensions.InterpolateVector2(
+            Vector2 anchorOffset = Extensions.InterpolateVector2(
                 Vector2.zero, 
                 extent, 
                 weight, 
                 InterpolateType.Standard);
+
+            switch (anchorMode)
+            {
+                case UIEffectAnchorMode.Relative:
+                    return new AnchorOffset(Vector2.zero, anchorOffset);
+                case UIEffectAnchorMode.Absolute:
+                default:
+                    return new AnchorOffset(anchorOffset, Vector2.zero);
+            }
         }
 
         [SerializeField]
@@ -49,7 +94,7 @@ namespace Slerpy.Unity3D
 
         [SerializeField]
         [HideInInspector]
-        private Vector2 anchorOffset = Vector2.zero;
+        private AnchorOffset anchorOffset = new AnchorOffset(Vector2.zero, Vector2.zero);
 
         public RectTransform RectTransform { get; private set; }
 
@@ -90,13 +135,13 @@ namespace Slerpy.Unity3D
             {
                 if (this.anchorMode != value)
                 {
-                    Vector2 anchorOffset = this.AnchorOffset;
+                    AnchorOffset anchorOffset = this.AnchorOffset;
 
-                    this.AnchorOffset = Vector2.zero;
+                    this.AnchorOffset = new AnchorOffset(Vector2.zero, Vector2.zero);
 
                     this.anchorMode = value;
 
-                    this.AnchorOffset = anchorOffset;
+                    this.AnchorOffset = new AnchorOffset(anchorOffset.RelativePosition, anchorOffset.AbsolutePosition);
 
                     this.previousAnchorMode = this.anchorMode;
                 }
@@ -116,7 +161,7 @@ namespace Slerpy.Unity3D
             }
         }
 
-        public Vector2 AnchorOffset
+        public AnchorOffset AnchorOffset
         {
             get
             {
@@ -125,28 +170,17 @@ namespace Slerpy.Unity3D
 
             set
             {
-                Vector2 anchorOffsetDelta = value - this.anchorOffset;
+                this.anchorOffset.SubtractFrom(this.RectTransform);
 
                 this.anchorOffset = value;
 
-                switch (this.anchorMode)
-                {
-                    case UIEffectAnchorMode.Absolute:
-                        this.RectTransform.anchoredPosition += anchorOffsetDelta;
-
-                        break;
-                    case UIEffectAnchorMode.Relative:
-                        this.RectTransform.anchorMin += anchorOffsetDelta;
-                        this.RectTransform.anchorMax += anchorOffsetDelta;
-
-                        break;
-                }
+                this.anchorOffset.AddTo(this.RectTransform);
             }
         }
 
         protected override void ProcessEffect(float weight)
         {
-            this.AnchorOffset = UIEffect.CalculateAnchorOffset(weight, this.anchorExtent);
+            this.AnchorOffset = UIEffect.CalculateAnchorOffset(weight, this.anchorMode, this.anchorExtent);
         }
 
         protected override void Start()
@@ -169,7 +203,7 @@ namespace Slerpy.Unity3D
         }
 
         [Serializable]
-        public sealed class Detachable : Effect.Detachable<Vector2>
+        public sealed class Detachable : Effect.Detachable<AnchorOffset>
         {
             [SerializeField]
             [Tooltip(UIEffect.TOOLTIP_ANCHORMODE)]
@@ -205,9 +239,9 @@ namespace Slerpy.Unity3D
                 }
             }
 
-            protected override Vector2 Internal_CalculateState(float weight)
+            protected override AnchorOffset Internal_CalculateState(float weight)
             {
-                return UIEffect.CalculateAnchorOffset(weight, this.anchorExtent);
+                return UIEffect.CalculateAnchorOffset(weight, this.anchorMode, this.anchorExtent);
             }
         }
     }
