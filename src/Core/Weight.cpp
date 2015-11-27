@@ -209,7 +209,8 @@ namespace Slerpy
         static float const THRESHOLD = 0.6f;
         static float const THRESHOLD_HEAD = 1.0f - THRESHOLD;
 
-        static int const BOUNCES = 4;
+        static int const BOUNCES = 2;
+        static float const BOUNCE_STRENGTH = 0.5f;
 
         float const weightAbs = MATH_ABS(weight);
 
@@ -225,8 +226,8 @@ namespace Slerpy
 
             weight = 
                 (1.0f +
-                    THRESHOLD_HEAD / BOUNCES * (overflowStrength * overflowStrength)
-                    * MATH_SIN((overflow / THRESHOLD_HEAD) * (0.5f * BOUNCES * MATH_PI)))
+                    THRESHOLD_HEAD / BOUNCES * (overflowStrength) * BOUNCE_STRENGTH
+                    * MATH_SIN((overflow / THRESHOLD_HEAD) * (BOUNCES * MATH_PI)))
                 * MATH_SIGN(weight);
         }
 

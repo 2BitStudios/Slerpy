@@ -283,17 +283,17 @@ namespace Slerpy
                 Assert::AreEqual(0.0f, Slerpy::Weight::WithType(WeightType::Elastic, 0.0f), EPSILON);
                 Assert::AreEqual(0.4166f, Slerpy::Weight::WithType(WeightType::Elastic, 0.25f), EPSILON);
                 Assert::AreEqual(0.8333f, Slerpy::Weight::WithType(WeightType::Elastic, 0.5f), EPSILON);
-                Assert::AreEqual(1.0562f, Slerpy::Weight::WithType(WeightType::Elastic, 0.7f), EPSILON);
+                Assert::AreEqual(1.075f, Slerpy::Weight::WithType(WeightType::Elastic, 0.7f), EPSILON);
                 Assert::AreEqual(1.0f, Slerpy::Weight::WithType(WeightType::Elastic, 0.8f), EPSILON);
-                Assert::AreEqual(0.9937f, Slerpy::Weight::WithType(WeightType::Elastic, 0.9f), EPSILON);
+                Assert::AreEqual(0.9749f, Slerpy::Weight::WithType(WeightType::Elastic, 0.9f), EPSILON);
                 Assert::AreEqual(1.0f, Slerpy::Weight::WithType(WeightType::Elastic, 1.0f), EPSILON);
 
                 Assert::AreEqual(0.0f, Slerpy::Weight::WithType(WeightType::Elastic, 0.0f), EPSILON);
                 Assert::AreEqual(-0.4166f, Slerpy::Weight::WithType(WeightType::Elastic, -0.25f), EPSILON);
                 Assert::AreEqual(-0.8333f, Slerpy::Weight::WithType(WeightType::Elastic, -0.5f), EPSILON);
-                Assert::AreEqual(-1.0562f, Slerpy::Weight::WithType(WeightType::Elastic, -0.7f), EPSILON);
+                Assert::AreEqual(-1.075f, Slerpy::Weight::WithType(WeightType::Elastic, -0.7f), EPSILON);
                 Assert::AreEqual(-1.0f, Slerpy::Weight::WithType(WeightType::Elastic, -0.8f), EPSILON);
-                Assert::AreEqual(-0.9937f, Slerpy::Weight::WithType(WeightType::Elastic, -0.9f), EPSILON);
+                Assert::AreEqual(-0.9749f, Slerpy::Weight::WithType(WeightType::Elastic, -0.9f), EPSILON);
                 Assert::AreEqual(-1.0f, Slerpy::Weight::WithType(WeightType::Elastic, -1.0f), EPSILON);
             }
         };
