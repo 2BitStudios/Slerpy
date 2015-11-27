@@ -49,4 +49,4 @@ namespace Slerpy
 
 #endif //_MANAGED
 
-#undef TRANSLATE_SYMBOL_NAME
+#undef TRANSLATE_FUNCTION_NAME
