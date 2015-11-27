@@ -114,6 +114,8 @@ namespace Slerpy
             return TRANSLATE_FUNCTION_NAME(Snap)(weight);
         case WeightType::Elastic:
             return TRANSLATE_FUNCTION_NAME(Elastic)(weight);
+        case WeightType::Bounce:
+            return TRANSLATE_FUNCTION_NAME(Bounce)(weight);
         case WeightType::Linear:
         default:
             return TRANSLATE_FUNCTION_NAME(Linear)(weight);
@@ -225,10 +227,54 @@ namespace Slerpy
             float const overflowStrength = (1.0f - overflow / THRESHOLD_HEAD);
 
             weight = 
-                (1.0f +
-                    THRESHOLD_HEAD / BOUNCES * (overflowStrength) * BOUNCE_STRENGTH
+                (1.0f
+                    + THRESHOLD_HEAD / BOUNCES * (overflowStrength) * BOUNCE_STRENGTH
                     * MATH_SIN((overflow / THRESHOLD_HEAD) * (BOUNCES * MATH_PI)))
                 * MATH_SIGN(weight);
+        }
+
+        return weight;
+    }
+
+    float TRANSLATE_FUNCTION_NAME(Bounce)(WEIGHT_PARAMS_STANDARD)
+    {
+        static float const THRESHOLD = 0.4f;
+        static float const THRESHOLD_HEAD = 1.0f - THRESHOLD;
+
+        static int const BOUNCES = 3;
+        static float const BOUNCE_STRENGTH = 0.5f;
+
+        float const weightAbs = MATH_ABS(weight);
+
+        if (weightAbs < THRESHOLD)
+        {
+	        weight = weight / THRESHOLD;
+        }
+        else if (weightAbs < 1.0f)
+        {
+            float const overflow = weightAbs - THRESHOLD;
+
+            float const bounceProgress = overflow / THRESHOLD_HEAD;
+
+            float previousBounceInterval = 0.0f;
+
+            for (int bounceNumber = 1; bounceNumber <= BOUNCES; ++bounceNumber)
+            {
+                float const bounceInterval = MATH_LOG2(1.0f + 1.0f / BOUNCES * bounceNumber * 3.0f) * 0.5f;
+
+                if (bounceProgress <= bounceInterval)
+                {
+                    weight =
+                        (1.0f
+                            + THRESHOLD_HEAD / bounceNumber * BOUNCE_STRENGTH
+                            * -MATH_SIN((bounceProgress - previousBounceInterval) / (bounceInterval - previousBounceInterval) * MATH_PI))
+                        * MATH_SIGN(weight);
+
+                    break;
+                }
+
+                previousBounceInterval = bounceInterval;
+            }
         }
 
         return weight;
