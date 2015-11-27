@@ -1,7 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 using UnityEngine;
 using UnityEngine.UI;
+
+using Random = UnityEngine.Random;
 
 namespace Slerpy.Unity3D
 {
@@ -21,10 +24,7 @@ namespace Slerpy.Unity3D
         private float duration = 1.0f;
 
         [SerializeField]
-        private Vector2 randomness = Vector2.zero;
-
-        [SerializeField]
-        private UIEffect.Detachable effect = null;
+        private List<ParticleEffect> effects = new List<ParticleEffect>();
 
         private readonly Queue<Particle> particles = new Queue<Particle>();
 
@@ -82,29 +82,11 @@ namespace Slerpy.Unity3D
             }
         }
 
-        public Vector2 Randomness
+        public IEnumerable<ParticleEffect> Effects
         {
             get
             {
-                return this.randomness;
-            }
-
-            set
-            {
-                this.randomness = value;
-            }
-        }
-
-        public UIEffect.Detachable Effect
-        {
-            get
-            {
-                return this.effect;
-            }
-
-            set
-            {
-                this.effect = value;
+                return this.effects;
             }
         }
 
@@ -116,17 +98,34 @@ namespace Slerpy.Unity3D
             }
 
             float durationMod = 1.0f / this.duration;
+
+            int previousRandomSeed = Random.seed;
             
             foreach (Particle particle in this.particles)
             {
+                particle.Image.rectTransform.anchoredPosition = Vector2.zero;
+                particle.Image.rectTransform.anchorMin = new Vector2(0.5f, 0.5f);
+                particle.Image.rectTransform.anchorMax = new Vector2(0.5f, 0.5f);
+
                 float rawWeight = (Time.time - particle.StartTime) * durationMod;
 
-                this.effect.AnchorExtent += particle.RandomExtentMod;
-                
-                this.effect.CalculateState(rawWeight).WriteTo(particle.Image.rectTransform);
+                foreach (ParticleEffect effect in this.effects)
+                {
+                    Random.seed = particle.RandomSeed;
 
-                this.effect.AnchorExtent -= particle.RandomExtentMod;
+                    Vector2 randomExtentMod = new Vector2(
+                        Random.Range(-effect.Randomness.x, effect.Randomness.x),
+                        Random.Range(-effect.Randomness.y, effect.Randomness.y));
+
+                    effect.Effect.AnchorExtent += randomExtentMod;
+
+                    effect.Effect.CalculateState(rawWeight).AddTo(particle.Image.rectTransform);
+
+                    effect.Effect.AnchorExtent -= randomExtentMod;
+                }
             }
+
+            Random.seed = previousRandomSeed;
 
             this.spawnPressure += Time.deltaTime;
 
@@ -143,12 +142,43 @@ namespace Slerpy.Unity3D
 
                 particleImage.sprite = this.sprite;
 
-                this.particles.Enqueue(
-                    new Particle(
-                        particleImage, 
-                        new Vector2(
-                            Random.Range(-this.randomness.x, this.randomness.x),
-                            Random.Range(-this.randomness.y, this.randomness.y))));
+                this.particles.Enqueue(new Particle(particleImage));
+            }
+        }
+
+        [Serializable]
+        public sealed class ParticleEffect
+        {
+            [SerializeField]
+            private UIEffect.Detachable effect = null;
+
+            [SerializeField]
+            private Vector2 randomness = Vector2.zero;
+
+            public UIEffect.Detachable Effect
+            {
+                get
+                {
+                    return this.effect;
+                }
+
+                set
+                {
+                    this.effect = value;
+                }
+            }
+
+            public Vector2 Randomness
+            {
+                get
+                {
+                    return this.randomness;
+                }
+
+                set
+                {
+                    this.randomness = value;
+                }
             }
         }
 
@@ -157,14 +187,14 @@ namespace Slerpy.Unity3D
             public Image Image { get; private set; }
 
             public float StartTime { get; private set; }
-            public Vector2 RandomExtentMod { get; private set; }
+            public int RandomSeed { get; private set; }
 
-            public Particle(Image image, Vector2 randomExtentMod)
+            public Particle(Image image)
             {
                 this.Image = image;
 
                 this.StartTime = Time.time;
-                this.RandomExtentMod = randomExtentMod;
+                this.RandomSeed = (int)DateTime.Now.Ticks;
             }
         }
     }
