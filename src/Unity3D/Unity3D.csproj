@@ -51,6 +51,9 @@
     <Compile Include="Extensions.cs" />
     <Compile Include="ColorEffect.cs" />
     <Compile Include="Ghoster.cs" />
+    <Compile Include="Timers\StopEffect.cs" />
+    <Compile Include="Timers\ReverseEffect.cs" />
+    <Compile Include="Timers\PlayEffect.cs" />
     <Compile Include="UIEffect.cs" />
     <Compile Include="Timers\StopAnimation.cs" />
     <Compile Include="Timers\PlayAnimation.cs" />
