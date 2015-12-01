@@ -118,12 +118,12 @@ namespace Slerpy.Unity3D
             this.SpawnTemporary(lifeTime);
         }
 
-        [ContextMenu("Spawn")]
         public Ghoster SpawnPermanent(IEnumerable<Type> preservedTypes = null)
         {
             return this.SpawnTemporary(() => true, preservedTypes);
         }
 
+        [ContextMenu("Spawn")]
         public void UI_SpawnPermanent()
         {
             this.SpawnPermanent();
