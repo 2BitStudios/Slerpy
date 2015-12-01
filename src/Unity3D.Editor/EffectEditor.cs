@@ -87,10 +87,12 @@ namespace Slerpy.Unity3D.Editor
 
                     GUI.color = new Color(0.0f, 0.0f, 0.0f, 0.3f);
 
+                    float topLineY = weightCurveRect.y + weightCurveRect.height * ((MAX_WEIGHT - 1.0f) / (MAX_WEIGHT * 2.0f));
+
                     GUI.DrawTexture(
                         new Rect(
                             weightCurveRect.x,
-                            weightCurveRect.y + weightCurveRect.height * ((MAX_WEIGHT - 1.0f) / (MAX_WEIGHT * 2.0f)),
+                            topLineY,
                             weightCurveRect.width,
                             1.0f),
                         this.lineTexture);
@@ -128,7 +130,7 @@ namespace Slerpy.Unity3D.Editor
                     EditorGUI.LabelField(
                         new Rect(
                             weightCurveRect.x + 5.0f,
-                            weightCurveRect.y + 14.0f,
+                            topLineY + 5.0f,
                             95.0f,
                             16.0f),
                         "Time: " + targetEffect.SimulatedTime.ToString("0.00"));
@@ -136,7 +138,7 @@ namespace Slerpy.Unity3D.Editor
                     EditorGUI.LabelField(
                         new Rect(
                             weightCurveRect.x + 5.0f,
-                            weightCurveRect.y + 30.0f,
+                            topLineY + 21.0f,
                             95.0f,
                             16.0f),
                         "Weight: " + targetEffect.CalculateWeight().ToString("0.00"));
