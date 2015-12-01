@@ -3,13 +3,14 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-using Slerpy;
-using Slerpy.Unity3D;
-
 namespace Slerpy.Unity3D
 {
     public sealed class AnimatedText : Text
     {
+        [SerializeField]
+        [Tooltip("How to handle engine time scaling (such as pauses).")]
+        private bool useUnscaledTime = true;
+
         [SerializeField]
         [Tooltip("How time continues to affect the text once the duration ends.")]
         private WrapType timeWrap = WrapType.PingPong;
@@ -150,7 +151,7 @@ namespace Slerpy.Unity3D
 
         private void Update()
         {
-            this.timePlaying += Time.unscaledDeltaTime;
+            this.timePlaying += this.useUnscaledTime ? Time.unscaledDeltaTime : Time.deltaTime;
 
             this.SetVerticesDirty();
         }

@@ -12,6 +12,9 @@ namespace Slerpy.Unity3D
     public sealed class UIParticles : MonoBehaviour
     {
         [SerializeField]
+        private bool useUnscaledTime = true;
+
+        [SerializeField]
         private Sprite sprite = null;
 
         [SerializeField]
@@ -90,9 +93,21 @@ namespace Slerpy.Unity3D
             }
         }
 
+        private float GetParticleLifeTime(Particle particle)
+        {
+            if (this.useUnscaledTime)
+            {
+                return Time.unscaledTime - particle.UnscaledStartTime;
+            }
+            else
+            {
+                return Time.time - particle.ScaledStartTime;
+            }
+        }
+
         private void Update()
         {
-            while (this.particles.Count > 0 && (Time.time - this.particles.Peek().StartTime) > this.duration)
+            while (this.particles.Count > 0 && this.GetParticleLifeTime(this.particles.Peek()) > this.duration)
             {
                 GameObject.Destroy(this.particles.Dequeue().Image.gameObject);
             }
@@ -107,7 +122,7 @@ namespace Slerpy.Unity3D
                 particle.Image.rectTransform.anchorMin = new Vector2(0.5f, 0.5f);
                 particle.Image.rectTransform.anchorMax = new Vector2(0.5f, 0.5f);
 
-                float rawWeight = (Time.time - particle.StartTime) * durationMod;
+                float rawWeight = this.GetParticleLifeTime(particle) * durationMod;
 
                 foreach (ParticleEffect effect in this.effects)
                 {
@@ -186,14 +201,16 @@ namespace Slerpy.Unity3D
         {
             public Image Image { get; private set; }
 
-            public float StartTime { get; private set; }
+            public float ScaledStartTime { get; private set; }
+            public float UnscaledStartTime { get; private set; }
             public int RandomSeed { get; private set; }
 
             public Particle(Image image)
             {
                 this.Image = image;
 
-                this.StartTime = Time.time;
+                this.ScaledStartTime = Time.time;
+                this.UnscaledStartTime = Time.unscaledTime;
                 this.RandomSeed = (int)DateTime.Now.Ticks;
             }
         }
