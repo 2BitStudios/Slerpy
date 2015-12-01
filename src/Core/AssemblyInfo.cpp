@@ -7,7 +7,7 @@ using namespace System::Runtime::InteropServices;
 
 [assembly:ComVisible(false)];
 
-[assembly:Guid(L"1DB253F9-C884-4C44-A6DE-6AB9280789CE")];
+[assembly:Guid(L"EEB1E35D-5A42-49C8-886E-985404C91AB0")];
 
 [assembly:AssemblyVersion(L"0.0.0.0")];
 [assembly:AssemblyFileVersion(L"0.0.0.0")];

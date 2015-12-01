@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 
 [assembly: ComVisible(false)]
 
-[assembly: Guid("2cdb8705-fd1d-4137-9e8b-79fb3ac40e38")]
+[assembly: Guid("F4F44CCE-F6FB-4470-9F5D-61AC783DCD1A")]
 
 [assembly: AssemblyVersion("0.0.0.0")]
 [assembly: AssemblyFileVersion("0.0.0.0")]
