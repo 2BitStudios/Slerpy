@@ -170,6 +170,8 @@ namespace Slerpy.Unity3D
 
                 Image particleImage = new GameObject("Particle", typeof(Image)).GetComponent<Image>();
 
+                particleImage.gameObject.hideFlags = HideFlags.HideInHierarchy | HideFlags.NotEditable;
+
                 particleImage.rectTransform.SetParent(this.transform, false);
                 particleImage.rectTransform.sizeDelta = new Vector2(this.size, this.size);
 
