@@ -1,13 +1,14 @@
 ﻿using UnityEditor;
 
-using Slerpy.Unity3D;
-
-[CustomEditor(typeof(AnimatedText))]
-[CanEditMultipleObjects]
-public sealed class AnimatedTextEditor : Editor
+namespace Slerpy.Unity3D.Editor
 {
-    public override void OnInspectorGUI()
+    [CustomEditor(typeof(AnimatedText))]
+    [CanEditMultipleObjects]
+    public sealed class AnimatedTextEditor : UnityEditor.Editor
     {
-        base.OnInspectorGUI();
+        public override void OnInspectorGUI()
+        {
+            base.OnInspectorGUI();
+        }
     }
 }
