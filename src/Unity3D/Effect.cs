@@ -102,7 +102,7 @@ namespace Slerpy.Unity3D
     {
         protected const string TOOLTIP_WEIGHTS = "List of weight modifiers to be applied while calculating the weight of the effect. Will be applied in order they appear here.";
         protected const string TOOLTIP_DURATION = "Run time of the effect, affected by 'speed'.";
-        protected const string TOOLTIP_TIMEWRAP = "How time continues to affect the effect once the duration ends.";
+        protected const string TOOLTIP_TIMEWRAP = "How time continues to affect the effect once the duration is reached.";
 
         public static float CalculateWeight(float rawWeight, params WeightType[] weightModifiers)
         {

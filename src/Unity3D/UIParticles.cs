@@ -12,18 +12,23 @@ namespace Slerpy.Unity3D
     public sealed class UIParticles : MonoBehaviour
     {
         [SerializeField]
-        private bool useUnscaledTime = true;
-
-        [SerializeField]
+        [Tooltip("Sprite to use for each spawned particle.")]
         private Sprite sprite = null;
 
         [SerializeField]
+        [Tooltip("Number of particle spawns per second.")]
         private float rate = 10.0f;
 
         [SerializeField]
+        [Tooltip("Pixel size of each spawned particle.")]
         private float size = 10.0f;
 
         [SerializeField]
+        [Tooltip("How to handle engine time scaling (such as pauses).")]
+        private bool useUnscaledTime = true;
+
+        [SerializeField]
+        [Tooltip("Life time of all particles, as well as the duration of applied Effects.")]
         private float duration = 1.0f;
 
         [SerializeField]
@@ -69,6 +74,19 @@ namespace Slerpy.Unity3D
             set
             {
                 this.size = value;
+            }
+        }
+
+        public bool UseUnscaledTime
+        {
+            get
+            {
+                return this.useUnscaledTime;
+            }
+
+            set
+            {
+                this.useUnscaledTime = value;
             }
         }
 

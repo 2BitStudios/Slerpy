@@ -12,7 +12,7 @@ namespace Slerpy.Unity3D
         private bool useUnscaledTime = true;
 
         [SerializeField]
-        [Tooltip("How time continues to affect the text once the duration ends.")]
+        [Tooltip("How time continues to affect the text once the duration is reached.")]
         private WrapType timeWrap = WrapType.PingPong;
 
         [SerializeField]
@@ -20,7 +20,7 @@ namespace Slerpy.Unity3D
         private float duration = 1.0f;
 
         [SerializeField]
-        [Tooltip("Time delay before each character of the text (can stagger the effect or reverse it.")]
+        [Tooltip("Time delay before each character of the text (can stagger the effect or reverse it).")]
         private float interval = 0.1f;
 
         [SerializeField]
@@ -30,6 +30,19 @@ namespace Slerpy.Unity3D
         private ColorEffect.Detachable[] colorEffects = new ColorEffect.Detachable[0];
 
         private float timePlaying = 0.0f;
+
+        public bool UseUnscaledTime
+        {
+            get
+            {
+                return this.useUnscaledTime;
+            }
+
+            set
+            {
+                this.useUnscaledTime = value;
+            }
+        }
 
         public WrapType TimeWrap
         {
