@@ -89,6 +89,7 @@ namespace Slerpy.Unity3D.Editor
 
                     float topLineY = weightCurveRect.y + weightCurveRect.height * ((MAX_WEIGHT - 1.0f) / (MAX_WEIGHT * 2.0f));
 
+                    // Top Line
                     GUI.DrawTexture(
                         new Rect(
                             weightCurveRect.x,
@@ -97,6 +98,7 @@ namespace Slerpy.Unity3D.Editor
                             1.0f),
                         this.lineTexture);
 
+                    // Bottom Line
                     GUI.DrawTexture(
                         new Rect(
                             weightCurveRect.x,
@@ -107,26 +109,29 @@ namespace Slerpy.Unity3D.Editor
 
                     GUI.color = new Color(0.0f, 0.0f, 0.0f, 1.0f);
 
-                    float middleThickness = 1.0f + (weightCurveRect.height % 2.0f == 1.0f ? 0.0f : 1.0f);
+                    // Middle Horizontal Line
+                    float middleLineThickness = 1.0f + (weightCurveRect.height % 2.0f == 1.0f ? 0.0f : 1.0f);
                     GUI.DrawTexture(
                         new Rect(
                             weightCurveRect.x,
-                            weightCurveRect.y + weightCurveRect.height * 0.5f - (int)(middleThickness / 2.0f),
+                            weightCurveRect.y + weightCurveRect.height * 0.5f - (int)(middleLineThickness / 2.0f),
                             weightCurveRect.width,
-                            middleThickness),
+                            middleLineThickness),
                         this.lineTexture);
 
-                    middleThickness = 1.0f + (weightCurveRect.width % 2.0f == 1.0f ? 0.0f : 1.0f);
+                    //Middle Vertical Line
+                    middleLineThickness = 1.0f + (weightCurveRect.width % 2.0f == 1.0f ? 0.0f : 1.0f);
                     GUI.DrawTexture(
                         new Rect(
-                            weightCurveRect.x + weightCurveRect.width * 0.5f - (int)(middleThickness / 2.0f),
+                            weightCurveRect.x + weightCurveRect.width * 0.5f - (int)(middleLineThickness / 2.0f),
                             weightCurveRect.y,
-                            middleThickness,
+                            middleLineThickness,
                             weightCurveRect.height),
                         this.lineTexture);
 
                     GUI.color = new Color(0.0f, 0.0f, 0.0f, 0.5f);
 
+                    // Time Text
                     EditorGUI.LabelField(
                         new Rect(
                             weightCurveRect.x + 5.0f,
@@ -135,6 +140,7 @@ namespace Slerpy.Unity3D.Editor
                             16.0f),
                         "Time: " + targetEffect.SimulatedTime.ToString("0.00"));
 
+                    // Weight Text
                     EditorGUI.LabelField(
                         new Rect(
                             weightCurveRect.x + 5.0f,
