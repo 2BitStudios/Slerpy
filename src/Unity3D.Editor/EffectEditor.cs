@@ -11,6 +11,8 @@ namespace Slerpy.Unity3D.Editor
 
         private Texture2D lineTexture = null;
 
+        private GUIStyle errorStyle = null;
+
         public void OnEnable()
         {
             this.lineTexture = new Texture2D(1, 1);
@@ -25,16 +27,35 @@ namespace Slerpy.Unity3D.Editor
 
         public override void OnInspectorGUI()
         {
+            EditorGUILayout.Space();
+
+            Rect weightCurveRect = GUILayoutUtility.GetAspectRect(2.0f);
+
+            Color previousGUIColor = GUI.color;
+            GUI.color = Color.black;
+
+            GUI.DrawTexture(
+                new Rect(
+                    weightCurveRect.x - 1.0f,
+                    weightCurveRect.y - 1.0f,
+                    weightCurveRect.width + 2.0f,
+                    weightCurveRect.height + 2.0f),
+                this.lineTexture);
+
+            GUI.color = Color.grey;
+
+            GUI.Box(weightCurveRect, "");
+
+            GUI.color = previousGUIColor;
+
+            string error = null;
+
             if (this.targets.Length <= 1)
             {
                 Effect targetEffect = (Effect)this.target;
 
                 if (targetEffect.Duration != 0.0f)
                 {
-                    EditorGUILayout.Space();
-
-                    Rect weightCurveRect = GUILayoutUtility.GetAspectRect(2.0f);
-
                     Keyframe[] weightCurveKeyframes = new Keyframe[(int)(weightCurveRect.width * 0.4f)];
 
                     for (int i = 0; i < weightCurveKeyframes.Length; ++i)
@@ -55,19 +76,6 @@ namespace Slerpy.Unity3D.Editor
                     }
 
                     AnimationCurve weightCurve = new AnimationCurve(weightCurveKeyframes);
-
-                    Color previousGUIColor = GUI.color;
-                    GUI.color = Color.black;
-
-                    GUI.DrawTexture(
-                        new Rect(
-                            weightCurveRect.x - 1.0f,
-                            weightCurveRect.y - 1.0f,
-                            weightCurveRect.width + 2.0f,
-                            weightCurveRect.height + 2.0f),
-                        this.lineTexture);
-
-                    GUI.color = previousGUIColor;
 
                     EditorGUIUtility.DrawRegionSwatch(
                         weightCurveRect,
@@ -148,12 +156,47 @@ namespace Slerpy.Unity3D.Editor
                             95.0f,
                             16.0f),
                         "Weight: " + targetEffect.CalculateWeight().ToString("0.00"));
-
-                    EditorGUILayout.Space();
-
-                    GUI.color = previousGUIColor;
+                }
+                else
+                {
+                    error = "zero duration";
                 }
             }
+            else
+            {
+                error = "multiple objects selected";
+            }
+
+            if (error != null)
+            {
+                if (this.errorStyle == null)
+                {
+                    this.errorStyle = new GUIStyle(GUI.skin.label);
+
+                    this.errorStyle.alignment = TextAnchor.MiddleCenter;
+                }
+
+                GUI.color = Color.black;
+
+                this.errorStyle.fontSize = 72;
+                EditorGUI.LabelField(weightCurveRect, "X", this.errorStyle);
+
+                GUI.color = new Color(1.0f, 1.0f, 1.0f, 0.5f);
+
+                this.errorStyle.fontSize = 16;
+                EditorGUI.LabelField(
+                    new Rect(
+                        weightCurveRect.x,
+                        weightCurveRect.y + weightCurveRect.height * 0.5f,
+                        weightCurveRect.width,
+                        weightCurveRect.height * 0.5f), 
+                    error, 
+                    this.errorStyle);
+            }
+
+            EditorGUILayout.Space();
+
+            GUI.color = previousGUIColor;
 
             base.OnInspectorGUI();
         }
