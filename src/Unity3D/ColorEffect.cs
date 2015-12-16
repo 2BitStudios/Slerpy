@@ -11,11 +11,10 @@ namespace Slerpy.Unity3D
 
         public static Color CalculateColor(float weight, Color fromColor, Color toColor)
         {
-            return Extensions.InterpolateColor(
+            return Interpolate.Color(
                 fromColor, 
                 toColor, 
-                weight,
-                InterpolateType.Standard);
+                weight);
         }
 
         [SerializeField]

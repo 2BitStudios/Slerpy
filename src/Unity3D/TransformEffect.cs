@@ -50,29 +50,26 @@ namespace Slerpy.Unity3D
 
         public static Vector3 CalculatePositionOffset(float weight, Vector3 extent)
         {
-            return Extensions.InterpolateVector3(
+            return Interpolate.Vector3(
                 Vector3.zero, 
                 extent, 
-                weight, 
-                InterpolateType.Standard);
+                weight);
         }
 
         public static Quaternion CalculateRotationOffset(float weight, Vector3 extent)
         {
-            return Quaternion.Euler(Extensions.InterpolateVector3(
+            return Quaternion.Euler(Interpolate.Vector3(
                 Vector3.zero,
                 extent, 
-                weight,
-                InterpolateType.Standard));
+                weight));
         }
 
         public static Vector3 CalculateScaleOffset(float weight, Vector3 extent)
         {
-            return Extensions.InterpolateVector3(
+            return Interpolate.Vector3(
                 Vector3.zero,
                 extent, 
-                weight,
-                InterpolateType.Standard);
+                weight);
         }
 
         public static Matrix4x4 CalculateOffsets(float weight, Vector3 positionExtent, Vector3 rotationExtent, Vector3 scaleExtent)

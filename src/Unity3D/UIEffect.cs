@@ -56,11 +56,10 @@ namespace Slerpy.Unity3D
 
         public static AnchorOffset CalculateAnchorOffset(float weight, UIEffectAnchorMode anchorMode, Vector2 extent)
         {
-            Vector2 anchorOffset = Extensions.InterpolateVector2(
+            Vector2 anchorOffset = Interpolate.Vector2(
                 Vector2.zero, 
                 extent, 
-                weight, 
-                InterpolateType.Standard);
+                weight);
 
             switch (anchorMode)
             {
