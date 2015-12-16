@@ -183,6 +183,17 @@ namespace Slerpy.Unity3D
             }
         }
 
+        public float RawWeight
+        {
+            get
+            {
+                return Weight.FromTime(
+                    this.TimeWrap,
+                    this.SimulatedTime,
+                    this.Duration);
+            }
+        }
+
         public abstract float Duration { get; set; }
 
         public abstract WrapType TimeWrap { get; set; }
@@ -316,14 +327,14 @@ namespace Slerpy.Unity3D
 
         public float CalculateWeight(float time)
         {
-            float weight = Weight.FromTime(
+            float rawWeight = Weight.FromTime(
                 this.TimeWrap,
                 time,
                 this.Duration);
 
-            float rawWeight = weight;
+            float weight = rawWeight;
 
-            weight = Effect.CalculateWeight(rawWeight, this.weights);
+            weight = Effect.CalculateWeight(weight, this.weights);
 
             float customWeightStimulus = 0.0f;
 
