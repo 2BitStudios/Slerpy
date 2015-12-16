@@ -22,7 +22,7 @@ namespace Slerpy.Unity3D.Editor
 
         public override bool RequiresConstantRepaint()
         {
-            return true;
+            return Application.isPlaying;
         }
 
         public override void OnInspectorGUI()
