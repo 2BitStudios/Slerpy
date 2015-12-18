@@ -31,6 +31,18 @@ namespace Slerpy
         }
     }
 
+    float TRANSLATE_FUNCTION_NAME(SphericalWithType)(InterpolateType type, INTERPOLATE_PARAMS_STANDARD, float angle)
+    {
+        switch (type)
+        {
+        case InterpolateType::Clamped:
+            return TRANSLATE_FUNCTION_NAME(SphericalClamped)(from, to, weight, angle);
+        case InterpolateType::Standard:
+        default:
+            return TRANSLATE_FUNCTION_NAME(SphericalStandard)(from, to, weight, angle);
+        }
+    }
+
     float TRANSLATE_FUNCTION_NAME(LinearStandard)(INTERPOLATE_PARAMS_STANDARD)
     {
         return MATH_LERP(from, to, weight);
@@ -38,9 +50,19 @@ namespace Slerpy
 
     float TRANSLATE_FUNCTION_NAME(LinearClamped)(INTERPOLATE_PARAMS_STANDARD)
     {
-        weight = MATH_CLAMP(weight, -1.0f, 1.0f);
+        return LinearStandard(from, to, MATH_CLAMP(weight, -1.0f, 1.0f));
+    }
 
-        return MATH_LERP(from, to, weight);
+    float TRANSLATE_FUNCTION_NAME(SphericalStandard)(INTERPOLATE_PARAMS_STANDARD, float angle)
+    {
+        float const sinAngle = MATH_SIN(angle);
+
+        return MATH_SIN((1.0f - weight) * angle) / sinAngle * from + MATH_SIN(weight * angle) / sinAngle * to;
+    }
+
+    float TRANSLATE_FUNCTION_NAME(SphericalClamped)(INTERPOLATE_PARAMS_STANDARD, float angle)
+    {
+        return SphericalStandard(from, to, MATH_CLAMP(weight, -1.0f, 1.0f), angle);
     }
 
 #ifdef _MANAGED
