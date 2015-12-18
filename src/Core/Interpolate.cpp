@@ -1,6 +1,6 @@
 #include "Interpolate.h"
 
-#include "SystemDefines.h"
+#include "Math.h"
 
 #ifdef _MANAGED
 

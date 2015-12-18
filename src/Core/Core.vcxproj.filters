@@ -25,13 +25,13 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="SystemDefines.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Weight.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Interpolate.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Math.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

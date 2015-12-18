@@ -1,5 +1,5 @@
-#ifndef __SLERPYCORE_SYSTEMDEFINES__
-#define __SLERPYCORE_SYSTEMDEFINES__
+#ifndef __SLERPYCORE_MATH__
+#define __SLERPYCORE_MATH__
 
 #ifdef _MANAGED
 
@@ -42,16 +42,46 @@
 
 #endif //_MANAGED
 
-#define MATH_LERP(from, to, weight) (from + (to - from) * weight)
+#define MATH_LERP(from, to, weight) Math_Lerp(from, to, weight)
 
-#define MATH_CLAMP(value, min, max) (value < min ? min : (value > max) ? max : value)
+#define MATH_CLAMP(value, min, max) Math_Clamp(value, min, max)
 #define MATH_CLAMP01(value) MATH_CLAMP(value, 0.0f, 1.0f)
 
-#define MATH_DEG2RAD(value) (value * ((MATH_PI * 2.0f) / 360.0f))
-#define MATH_RAD2DEG(value) (value * (360.0f / (MATH_PI * 2.0f)))
+#define MATH_DEG2RAD(value) Math_Deg2Rad(value)
+#define MATH_RAD2DEG(value) Math_Rad2Deg(value)
 
-#define MATH_SIGN(value) ((float)(value > 0.0f ? 1.0f : (value < 0.0f ? -1.0f : 0.0f)))
+#define MATH_SIGN(value) Math_Sign(value)
 
-#define MATH_FMOD(dividend, divisor) ((MATH_ABS(dividend) - (MATH_ABS(divisor) * (MATH_FLOOR(MATH_ABS(dividend) / MATH_ABS(divisor))))) * MATH_SIGN(dividend))
+#define MATH_FMOD(dividend, divisor) Math_Fmod(dividend, divisor)
 
-#endif //__SLERPYCORE_SYSTEMDEFINES__
+inline float Math_Lerp(float from, float to, float weight)
+{
+    return (from + (to - from) * weight);
+}
+
+inline float Math_Clamp(float value, float min, float max)
+{
+    return (value < min ? min : (value > max) ? max : value);
+}
+
+inline float Math_Deg2Rad(float value)
+{
+    return (value * ((MATH_PI * 2.0f) / 360.0f));
+}
+
+inline float Math_Rad2Deg(float value)
+{
+    return (value * (360.0f / (MATH_PI * 2.0f)));
+}
+
+inline float Math_Sign(float value)
+{
+    return ((float)(value > 0.0f ? 1.0f : (value < 0.0f ? -1.0f : 0.0f)));
+}
+
+inline float Math_Fmod(float dividend, float divisor)
+{
+    return ((MATH_ABS(dividend) - (MATH_ABS(divisor) * (MATH_FLOOR(MATH_ABS(dividend) / MATH_ABS(divisor))))) * MATH_SIGN(dividend));
+}
+
+#endif //__SLERPYCORE_MATH__
