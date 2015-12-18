@@ -50,7 +50,7 @@ namespace Slerpy
 
     float TRANSLATE_FUNCTION_NAME(LinearClamped)(INTERPOLATE_PARAMS_STANDARD)
     {
-        return LinearStandard(from, to, MATH_CLAMP(weight, -1.0f, 1.0f));
+        return TRANSLATE_FUNCTION_NAME(LinearStandard)(from, to, MATH_CLAMP(weight, -1.0f, 1.0f));
     }
 
     float TRANSLATE_FUNCTION_NAME(SphericalStandard)(INTERPOLATE_PARAMS_STANDARD, float angle)
@@ -62,7 +62,7 @@ namespace Slerpy
 
     float TRANSLATE_FUNCTION_NAME(SphericalClamped)(INTERPOLATE_PARAMS_STANDARD, float angle)
     {
-        return SphericalStandard(from, to, MATH_CLAMP(weight, -1.0f, 1.0f), angle);
+        return TRANSLATE_FUNCTION_NAME(SphericalStandard)(from, to, MATH_CLAMP(weight, -1.0f, 1.0f), angle);
     }
 
 #ifdef _MANAGED
