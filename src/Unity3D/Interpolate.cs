@@ -7,10 +7,10 @@ namespace Slerpy.Unity3D
         public static Color Color(InterpolateType interpolateType, Color from, Color to, float weight)
         {
             return new Color(
-                Slerpy.Interpolate.WithType(interpolateType, from.r, to.r, weight),
-                Slerpy.Interpolate.WithType(interpolateType, from.g, to.g, weight),
-                Slerpy.Interpolate.WithType(interpolateType, from.b, to.b, weight),
-                Slerpy.Interpolate.WithType(interpolateType, from.a, to.a, weight));
+                Slerpy.Interpolate.LinearWithType(interpolateType, from.r, to.r, weight),
+                Slerpy.Interpolate.LinearWithType(interpolateType, from.g, to.g, weight),
+                Slerpy.Interpolate.LinearWithType(interpolateType, from.b, to.b, weight),
+                Slerpy.Interpolate.LinearWithType(interpolateType, from.a, to.a, weight));
         }
 
         public static Color Color(Color from, Color to, float weight)
@@ -21,8 +21,8 @@ namespace Slerpy.Unity3D
         public static Vector2 Vector2(InterpolateType interpolateType, Vector2 from, Vector2 to, float weight)
         {
             return new Vector2(
-                Slerpy.Interpolate.WithType(interpolateType, from.x, to.x, weight),
-                Slerpy.Interpolate.WithType(interpolateType, from.y, to.y, weight));
+                Slerpy.Interpolate.LinearWithType(interpolateType, from.x, to.x, weight),
+                Slerpy.Interpolate.LinearWithType(interpolateType, from.y, to.y, weight));
         }
 
         public static Vector2 Vector2(Vector2 from, Vector2 to, float weight)
@@ -33,9 +33,9 @@ namespace Slerpy.Unity3D
         public static Vector3 Vector3(InterpolateType interpolateType, Vector3 from, Vector3 to, float weight)
         {
             return new Vector3(
-                Slerpy.Interpolate.WithType(interpolateType, from.x, to.x, weight),
-                Slerpy.Interpolate.WithType(interpolateType, from.y, to.y, weight),
-                Slerpy.Interpolate.WithType(interpolateType, from.z, to.z, weight));
+                Slerpy.Interpolate.LinearWithType(interpolateType, from.x, to.x, weight),
+                Slerpy.Interpolate.LinearWithType(interpolateType, from.y, to.y, weight),
+                Slerpy.Interpolate.LinearWithType(interpolateType, from.z, to.z, weight));
         }
 
         public static Vector3 Vector3(Vector3 from, Vector3 to, float weight)
@@ -46,10 +46,10 @@ namespace Slerpy.Unity3D
         public static Vector4 Vector4(InterpolateType interpolateType, Vector4 from, Vector4 to, float weight)
         {
             return new Vector4(
-                Slerpy.Interpolate.WithType(interpolateType, from.x, to.x, weight),
-                Slerpy.Interpolate.WithType(interpolateType, from.y, to.y, weight),
-                Slerpy.Interpolate.WithType(interpolateType, from.z, to.z, weight),
-                Slerpy.Interpolate.WithType(interpolateType, from.w, to.w, weight));
+                Slerpy.Interpolate.LinearWithType(interpolateType, from.x, to.x, weight),
+                Slerpy.Interpolate.LinearWithType(interpolateType, from.y, to.y, weight),
+                Slerpy.Interpolate.LinearWithType(interpolateType, from.z, to.z, weight),
+                Slerpy.Interpolate.LinearWithType(interpolateType, from.w, to.w, weight));
         }
 
         public static Vector4 Vector4(Vector4 from, Vector4 to, float weight)
@@ -75,10 +75,10 @@ namespace Slerpy.Unity3D
             }
 
             Quaternion result = new Quaternion(
-                Slerpy.Interpolate.WithType(interpolateType, from.x, to.x, weight),
-                Slerpy.Interpolate.WithType(interpolateType, from.y, to.y, weight),
-                Slerpy.Interpolate.WithType(interpolateType, from.z, to.z, weight),
-                Slerpy.Interpolate.WithType(interpolateType, from.w, to.w, weight));
+                Slerpy.Interpolate.LinearWithType(interpolateType, from.x, to.x, weight),
+                Slerpy.Interpolate.LinearWithType(interpolateType, from.y, to.y, weight),
+                Slerpy.Interpolate.LinearWithType(interpolateType, from.z, to.z, weight),
+                Slerpy.Interpolate.LinearWithType(interpolateType, from.w, to.w, weight));
 
             // Normalize the result
             float magnitudeScale = 1.0f / UnityEngine.Quaternion.Dot(result, result);
