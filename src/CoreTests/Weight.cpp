@@ -77,6 +77,16 @@ namespace Slerpy
                 Assert::AreEqual(-0.3333f, Slerpy::Weight::FromValueInRange(WrapType::Cycle, 4.0f, 0.5f, 2.0f), EPSILON);
                 Assert::AreEqual(-0.6666f, Slerpy::Weight::FromValueInRange(WrapType::Cycle, 4.5f, 0.5f, 2.0f), EPSILON);
                 Assert::AreEqual(-1.0f, Slerpy::Weight::FromValueInRange(WrapType::Cycle, 5.0f, 0.5f, 2.0f), EPSILON);
+
+                Assert::AreEqual(0.0f, Slerpy::Weight::FromValueInRange(WrapType::MirrorClamp, 0.0f, 0.5f, 2.0f), EPSILON);
+                Assert::AreEqual(0.0f, Slerpy::Weight::FromValueInRange(WrapType::MirrorClamp, 0.5f, 0.5f, 2.0f), EPSILON);
+                Assert::AreEqual(0.3333f, Slerpy::Weight::FromValueInRange(WrapType::MirrorClamp, 1.0f, 0.5f, 2.0f), EPSILON);
+                Assert::AreEqual(0.6666f, Slerpy::Weight::FromValueInRange(WrapType::MirrorClamp, 1.5f, 0.5f, 2.0f), EPSILON);
+                Assert::AreEqual(1.0f, Slerpy::Weight::FromValueInRange(WrapType::MirrorClamp, 2.0f, 0.5f, 2.0f), EPSILON);
+                Assert::AreEqual(0.6666f, Slerpy::Weight::FromValueInRange(WrapType::MirrorClamp, 2.5f, 0.5f, 2.0f), EPSILON);
+                Assert::AreEqual(0.3333f, Slerpy::Weight::FromValueInRange(WrapType::MirrorClamp, 3.0f, 0.5f, 2.0f), EPSILON);
+                Assert::AreEqual(0.0f, Slerpy::Weight::FromValueInRange(WrapType::MirrorClamp, 3.5f, 0.5f, 2.0f), EPSILON);
+                Assert::AreEqual(0.0f, Slerpy::Weight::FromValueInRange(WrapType::MirrorClamp, 4.5f, 0.5f, 2.0f), EPSILON);
             }
 
             [Test]
