@@ -89,6 +89,154 @@ namespace Slerpy
                 Assert::AreEqual(0.0f, Slerpy::Weight::FromValueInRange(WrapType::MirrorClamp, 4.5f, 0.5f, 2.0f), EPSILON);
             }
 
+            static void FromValueInRange_Metadata_Validate(WeightMetadata^ weightMetadata, int targetWrapCount)
+            {
+                Assert::AreEqual(targetWrapCount, weightMetadata->WrapCount);
+            }
+
+            [Test]
+            static void FromValueInRange_Metadata()
+            {
+                WeightMetadata^ weightMetadata = gcnew WeightMetadata();
+
+                // CLAMP
+                Slerpy::Weight::FromValueInRange(WrapType::Clamp, -2.0f, 0.5f, 2.0f, weightMetadata);
+                FromValueInRange_Metadata_Validate(weightMetadata, 0);
+
+                Slerpy::Weight::FromValueInRange(WrapType::Clamp, -1.0f, 0.5f, 2.0f, weightMetadata);
+                FromValueInRange_Metadata_Validate(weightMetadata, 0);
+
+                Slerpy::Weight::FromValueInRange(WrapType::Clamp, 0.0f, 0.5f, 2.0f, weightMetadata);
+                FromValueInRange_Metadata_Validate(weightMetadata, 0);
+
+                Slerpy::Weight::FromValueInRange(WrapType::Clamp, 1.0f, 0.5f, 2.0f, weightMetadata);
+                FromValueInRange_Metadata_Validate(weightMetadata, 0);
+
+                Slerpy::Weight::FromValueInRange(WrapType::Clamp, 2.0f, 0.5f, 2.0f, weightMetadata);
+                FromValueInRange_Metadata_Validate(weightMetadata, 1);
+
+                Slerpy::Weight::FromValueInRange(WrapType::Clamp, 4.0f, 0.5f, 2.0f, weightMetadata);
+                FromValueInRange_Metadata_Validate(weightMetadata, 1);
+
+                // PINGPONG
+                Slerpy::Weight::FromValueInRange(WrapType::PingPong, -5.5f, 0.5f, 2.0f, weightMetadata);
+                FromValueInRange_Metadata_Validate(weightMetadata, -2);
+
+                Slerpy::Weight::FromValueInRange(WrapType::PingPong, -3.0f, 0.5f, 2.0f, weightMetadata);
+                FromValueInRange_Metadata_Validate(weightMetadata, -1);
+
+                Slerpy::Weight::FromValueInRange(WrapType::PingPong, -2.0f, 0.5f, 2.0f, weightMetadata);
+                FromValueInRange_Metadata_Validate(weightMetadata, 0);
+
+                Slerpy::Weight::FromValueInRange(WrapType::PingPong, -1.0f, 0.5f, 2.0f, weightMetadata);
+                FromValueInRange_Metadata_Validate(weightMetadata, 0);
+
+                Slerpy::Weight::FromValueInRange(WrapType::PingPong, 0.0f, 0.5f, 2.0f, weightMetadata);
+                FromValueInRange_Metadata_Validate(weightMetadata, 0);
+
+                Slerpy::Weight::FromValueInRange(WrapType::PingPong, 1.0f, 0.5f, 2.0f, weightMetadata);
+                FromValueInRange_Metadata_Validate(weightMetadata, 0);
+
+                Slerpy::Weight::FromValueInRange(WrapType::PingPong, 3.0f, 0.5f, 2.0f, weightMetadata);
+                FromValueInRange_Metadata_Validate(weightMetadata, 0);
+
+                Slerpy::Weight::FromValueInRange(WrapType::PingPong, 4.0f, 0.5f, 2.0f, weightMetadata);
+                FromValueInRange_Metadata_Validate(weightMetadata, 1);
+
+                Slerpy::Weight::FromValueInRange(WrapType::PingPong, 6.5f, 0.5f, 2.0f, weightMetadata);
+                FromValueInRange_Metadata_Validate(weightMetadata, 2);
+
+                // REPEAT
+                Slerpy::Weight::FromValueInRange(WrapType::Repeat, -3.0f, 0.5f, 2.0f, weightMetadata);
+                FromValueInRange_Metadata_Validate(weightMetadata, -2);
+
+                Slerpy::Weight::FromValueInRange(WrapType::Repeat, -2.0f, 0.5f, 2.0f, weightMetadata);
+                FromValueInRange_Metadata_Validate(weightMetadata, -1);
+
+                Slerpy::Weight::FromValueInRange(WrapType::Repeat, -1.0f, 0.5f, 2.0f, weightMetadata);
+                FromValueInRange_Metadata_Validate(weightMetadata, -1);
+
+                Slerpy::Weight::FromValueInRange(WrapType::Repeat, 0.0f, 0.5f, 2.0f, weightMetadata);
+                FromValueInRange_Metadata_Validate(weightMetadata, 0);
+
+                Slerpy::Weight::FromValueInRange(WrapType::Repeat, 1.0f, 0.5f, 2.0f, weightMetadata);
+                FromValueInRange_Metadata_Validate(weightMetadata, 0);
+
+                Slerpy::Weight::FromValueInRange(WrapType::Repeat, 2.0f, 0.5f, 2.0f, weightMetadata);
+                FromValueInRange_Metadata_Validate(weightMetadata, 1);
+
+                Slerpy::Weight::FromValueInRange(WrapType::Repeat, 3.0f, 0.5f, 2.0f, weightMetadata);
+                FromValueInRange_Metadata_Validate(weightMetadata, 1);
+
+                Slerpy::Weight::FromValueInRange(WrapType::Repeat, 4.0f, 0.5f, 2.0f, weightMetadata);
+                FromValueInRange_Metadata_Validate(weightMetadata, 2);
+
+                // CYCLE
+                Slerpy::Weight::FromValueInRange(WrapType::Cycle, -11.5f, 0.5f, 2.0f, weightMetadata);
+                FromValueInRange_Metadata_Validate(weightMetadata, -2);
+
+                Slerpy::Weight::FromValueInRange(WrapType::Cycle, -6.0f, 0.5f, 2.0f, weightMetadata);
+                FromValueInRange_Metadata_Validate(weightMetadata, -1);
+
+                Slerpy::Weight::FromValueInRange(WrapType::Cycle, -5.0f, 0.5f, 2.0f, weightMetadata);
+                FromValueInRange_Metadata_Validate(weightMetadata, 0);
+
+                Slerpy::Weight::FromValueInRange(WrapType::Cycle, -3.0f, 0.5f, 2.0f, weightMetadata);
+                FromValueInRange_Metadata_Validate(weightMetadata, 0);
+
+                Slerpy::Weight::FromValueInRange(WrapType::Cycle, -1.0f, 0.5f, 2.0f, weightMetadata);
+                FromValueInRange_Metadata_Validate(weightMetadata, 0);
+
+                Slerpy::Weight::FromValueInRange(WrapType::Cycle, 0.0f, 0.5f, 2.0f, weightMetadata);
+                FromValueInRange_Metadata_Validate(weightMetadata, 0);
+
+                Slerpy::Weight::FromValueInRange(WrapType::Cycle, 1.0f, 0.5f, 2.0f, weightMetadata);
+                FromValueInRange_Metadata_Validate(weightMetadata, 0);
+
+                Slerpy::Weight::FromValueInRange(WrapType::Cycle, 3.0f, 0.5f, 2.0f, weightMetadata);
+                FromValueInRange_Metadata_Validate(weightMetadata, 0);
+
+                Slerpy::Weight::FromValueInRange(WrapType::Cycle, 5.0f, 0.5f, 2.0f, weightMetadata);
+                FromValueInRange_Metadata_Validate(weightMetadata, 0);
+
+                Slerpy::Weight::FromValueInRange(WrapType::Cycle, 6.0f, 0.5f, 2.0f, weightMetadata);
+                FromValueInRange_Metadata_Validate(weightMetadata, 0);
+
+                Slerpy::Weight::FromValueInRange(WrapType::Cycle, 7.0f, 0.5f, 2.0f, weightMetadata);
+                FromValueInRange_Metadata_Validate(weightMetadata, 1);
+
+                Slerpy::Weight::FromValueInRange(WrapType::Cycle, 12.5f, 0.5f, 2.0f, weightMetadata);
+                FromValueInRange_Metadata_Validate(weightMetadata, 2);
+
+                // MIRRORCLAMP
+                Slerpy::Weight::FromValueInRange(WrapType::MirrorClamp, -2.0f, 0.5f, 2.0f, weightMetadata);
+                FromValueInRange_Metadata_Validate(weightMetadata, 0);
+
+                Slerpy::Weight::FromValueInRange(WrapType::MirrorClamp, -1.0f, 0.5f, 2.0f, weightMetadata);
+                FromValueInRange_Metadata_Validate(weightMetadata, 0);
+
+                Slerpy::Weight::FromValueInRange(WrapType::MirrorClamp, 0.0f, 0.5f, 2.0f, weightMetadata);
+                FromValueInRange_Metadata_Validate(weightMetadata, 0);
+
+                Slerpy::Weight::FromValueInRange(WrapType::MirrorClamp, 1.0f, 0.5f, 2.0f, weightMetadata);
+                FromValueInRange_Metadata_Validate(weightMetadata, 0);
+
+                Slerpy::Weight::FromValueInRange(WrapType::MirrorClamp, 2.0f, 0.5f, 2.0f, weightMetadata);
+                FromValueInRange_Metadata_Validate(weightMetadata, 0);
+
+                Slerpy::Weight::FromValueInRange(WrapType::MirrorClamp, 3.0f, 0.5f, 2.0f, weightMetadata);
+                FromValueInRange_Metadata_Validate(weightMetadata, 0);
+
+                Slerpy::Weight::FromValueInRange(WrapType::MirrorClamp, 4.0f, 0.5f, 2.0f, weightMetadata);
+                FromValueInRange_Metadata_Validate(weightMetadata, 1);
+
+                Slerpy::Weight::FromValueInRange(WrapType::MirrorClamp, 5.5f, 0.5f, 2.0f, weightMetadata);
+                FromValueInRange_Metadata_Validate(weightMetadata, 1);
+
+                Slerpy::Weight::FromValueInRange(WrapType::MirrorClamp, 7.0f, 0.5f, 2.0f, weightMetadata);
+                FromValueInRange_Metadata_Validate(weightMetadata, 1);
+            }
+
             [Test]
             static void FromTime()
             {

@@ -5,21 +5,37 @@
 #ifdef _MANAGED
 
 #define TRANSLATE_FUNCTION_NAME(name) Weight::name
+#define POINTER(type) type^
 
 #else //_MANAGED
 
 #define TRANSLATE_FUNCTION_NAME(name) Weight_##name
+#define POINTER(type) type*
 
 #endif //_MANAGED
 
 #ifdef _MANAGED
 namespace Slerpy
 {
+    float TRANSLATE_FUNCTION_NAME(FromValueInRange)(WrapType type, float currentValue, float minValue, float maxValue)
+    {
+        return TRANSLATE_FUNCTION_NAME(FromValueInRange)(type, currentValue, minValue, maxValue, nullptr);
+    }
+
+    float TRANSLATE_FUNCTION_NAME(FromTime)(WrapType type, float currentTime, float maxTime)
+    {
+        return TRANSLATE_FUNCTION_NAME(FromTime)(type, currentTime, maxTime, nullptr);
+    }
+
+    float TRANSLATE_FUNCTION_NAME(FromAngle)(float currentAngleDegrees, float wrapAngleDegrees)
+    {
+        return TRANSLATE_FUNCTION_NAME(FromAngle)(currentAngleDegrees, wrapAngleDegrees, nullptr);
+    }
 #else //_MANAGED
 
 #endif //_MANAGED
     
-    float TRANSLATE_FUNCTION_NAME(FromValueInRange)(WrapType type, float currentValue, float minValue, float maxValue)
+    float TRANSLATE_FUNCTION_NAME(FromValueInRange)(WrapType type, float currentValue, float minValue, float maxValue, POINTER(WeightMetadata) optionalMetadataReceiver)
     {
         float const scaledCurrentValue = currentValue - minValue;
         float const scaledMaxValue = maxValue - minValue;
@@ -30,11 +46,21 @@ namespace Slerpy
             {
                 float const weight = MATH_ABS(MATH_FMOD(scaledCurrentValue, scaledMaxValue * 2.0f) / scaledMaxValue);
 
+                if (optionalMetadataReceiver != nullptr)
+                {
+                    optionalMetadataReceiver->WrapCount = (int)(scaledCurrentValue / (scaledMaxValue * 2.0f));
+                }
+
                 return weight >= 1.0f ? 2.0f - weight : weight;
             }
         case WrapType::Repeat:
             {
                 float weight = scaledCurrentValue / scaledMaxValue;
+
+                if (optionalMetadataReceiver != nullptr)
+                {
+                    optionalMetadataReceiver->WrapCount = (int)weight;
+                }
 
                 weight = MATH_FMOD(weight, 1.0f);
                 
@@ -50,6 +76,11 @@ namespace Slerpy
                 float const weight = MATH_FMOD(scaledCurrentValue, scaledMaxValue * 4.0f) / scaledMaxValue;
                 float const weightAbs = MATH_ABS(weight);
 
+                if (optionalMetadataReceiver != nullptr)
+                {
+                    optionalMetadataReceiver->WrapCount = (int)(scaledCurrentValue / (scaledMaxValue * 4.0f));
+                }
+
                 if (weightAbs >= 2.0f)
                 {
                     return (weightAbs >= 3.0f ? weightAbs - 4.0f : 2.0f - weightAbs) * MATH_SIGN(weight);
@@ -61,9 +92,12 @@ namespace Slerpy
             }
         case WrapType::MirrorClamp:
             {
-                float weight = scaledCurrentValue / scaledMaxValue;
+                float weight = MATH_CLAMP(scaledCurrentValue / scaledMaxValue, 0.0f, 2.0f);
 
-                weight = MATH_CLAMP(weight, 0.0f, 2.0f);
+                if (optionalMetadataReceiver != nullptr)
+                {
+                    optionalMetadataReceiver->WrapCount = (int)(weight * 0.5f);
+                }
 
                 if (weight > 1.0f)
                 {
@@ -75,23 +109,28 @@ namespace Slerpy
         case WrapType::Clamp:
         default:
             {
-                float const weight = scaledCurrentValue / scaledMaxValue;
+                float const weight = MATH_CLAMP01(scaledCurrentValue / scaledMaxValue);
 
-                return MATH_CLAMP01(weight);
+                if (optionalMetadataReceiver != nullptr)
+                {
+                    optionalMetadataReceiver->WrapCount = (int)weight;
+                }
+
+                return weight;
             }
         }
     }
 
-    float TRANSLATE_FUNCTION_NAME(FromTime)(WrapType type, float currentTime, float maxTime)
+    float TRANSLATE_FUNCTION_NAME(FromTime)(WrapType type, float currentTime, float maxTime, POINTER(WeightMetadata) optionalMetadataReceiver)
     {
-        return TRANSLATE_FUNCTION_NAME(FromValueInRange)(type, currentTime, 0.0f, maxTime);
+        return TRANSLATE_FUNCTION_NAME(FromValueInRange)(type, currentTime, 0.0f, maxTime, optionalMetadataReceiver);
     }
 
-    float TRANSLATE_FUNCTION_NAME(FromAngle)(float currentAngleDegrees, float wrapAngleDegrees)
+    float TRANSLATE_FUNCTION_NAME(FromAngle)(float currentAngleDegrees, float wrapAngleDegrees, POINTER(WeightMetadata) optionalMetadataReceiver)
     {
         float const scaledWrapAngle = MATH_FMOD(wrapAngleDegrees, 360.0f);
 
-        return TRANSLATE_FUNCTION_NAME(FromValueInRange)(WrapType::PingPong, currentAngleDegrees, scaledWrapAngle - 180.0f, scaledWrapAngle);
+        return TRANSLATE_FUNCTION_NAME(FromValueInRange)(WrapType::PingPong, currentAngleDegrees, scaledWrapAngle - 180.0f, scaledWrapAngle, optionalMetadataReceiver);
     }
 
     float TRANSLATE_FUNCTION_NAME(WithType)(WeightType type, WEIGHT_PARAMS_STANDARD)
@@ -286,4 +325,5 @@ namespace Slerpy
 
 #endif //_MANAGED
 
+#undef POINTER
 #undef TRANSLATE_FUNCTION_NAME
