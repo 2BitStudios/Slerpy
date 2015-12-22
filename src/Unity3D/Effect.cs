@@ -60,11 +60,22 @@ namespace Slerpy.Unity3D
     [Serializable]
     public sealed class EffectEvents
     {
-        public event Action OnPlay = null;
-        public event Action OnStop = null;
-        public event Action OnDurationReached = null;
-        public event Action OnRawWeightPeak = null;
-        public event Action OnRawWeightValley = null;
+        public enum Trigger
+        {
+            Play = 0,
+            Stop = 1,
+            DurationReached = 2,
+            RawWeightPeak = 3,
+            RawWeightValley = 4
+        }
+
+        public event Action OnSubscriptionChange = null;
+
+        private event Action OnPlay = null;
+        private event Action OnStop = null;
+        private event Action OnDurationReached = null;
+        private event Action OnRawWeightPeak = null;
+        private event Action OnRawWeightValley = null;
 
         [SerializeField]
         private UnityEvent onPlay = new UnityEvent();
@@ -90,29 +101,62 @@ namespace Slerpy.Unity3D
             this.OnRawWeightValley += this.onRawWeightValley.Invoke;
         }
 
-        public void InvokePlay()
+        public bool HasSubscribers()
         {
-            this.OnPlay();
+            return 
+                this.OnPlay.Target != this.onPlay || this.onPlay.GetPersistentEventCount() > 0
+                || this.OnStop.Target != this.onStop || this.onStop.GetPersistentEventCount() > 0
+                || this.OnDurationReached.Target != this.onDurationReached || this.onDurationReached.GetPersistentEventCount() > 0
+                || this.OnRawWeightPeak.Target != this.onRawWeightPeak || this.onRawWeightPeak.GetPersistentEventCount() > 0
+                || this.OnRawWeightValley.Target != this.onRawWeightValley || this.onRawWeightValley.GetPersistentEventCount() > 0;
         }
 
-        public void InvokeStop()
+        public void Register(Trigger trigger, Action callback)
         {
-            this.OnStop();
+            Action targetAction = this.GetEvent(trigger);
+
+            targetAction += callback;
+
+            if (this.OnSubscriptionChange != null)
+            {
+                this.OnSubscriptionChange();
+            }
         }
 
-        public void InvokeDurationReached()
+        public void Invoke(Trigger trigger)
         {
-            this.OnDurationReached();
+            this.GetEvent(trigger).Invoke();
         }
 
-        public void InvokeRawWeightPeak()
+        public void Unregister(Trigger trigger, Action callback)
         {
-            this.OnRawWeightPeak();
+            Action targetAction = this.GetEvent(trigger);
+
+            targetAction -= callback;
+
+            if (this.OnSubscriptionChange != null)
+            {
+                this.OnSubscriptionChange();
+            }
         }
 
-        public void InvokeRawWeightValley()
+        private Action GetEvent(Trigger trigger)
         {
-            this.OnRawWeightValley();
+            switch (trigger)
+            {
+                case Trigger.Play:
+                    return this.OnPlay;
+                case Trigger.Stop:
+                    return this.OnStop;
+                case Trigger.DurationReached:
+                    return this.OnDurationReached;
+                case Trigger.RawWeightPeak:
+                    return this.OnRawWeightPeak;
+                case Trigger.RawWeightValley:
+                    return this.OnRawWeightValley;
+            }
+
+            return null;
         }
     }
 
@@ -202,7 +246,7 @@ namespace Slerpy.Unity3D
         [HideInInspector]
         private float simulatedTime = 0.0f;
 
-        private WeightMetadata rawWeightMetadata = new WeightMetadata();
+        private WeightMetadata rawWeightMetadata = null;
 
         public EffectSettings Settings
         {
@@ -268,6 +312,9 @@ namespace Slerpy.Unity3D
             }
         }
 
+        /// <remarks>
+        /// Can be null. Must be enabled via <see cref="EnableRawWeightMetadata"/>. Automatically enabled when any events are subscribed.
+        /// </remarks>
         public WeightMetadata RawWeightMetadata
         {
             get
@@ -301,11 +348,11 @@ namespace Slerpy.Unity3D
 
                 this.simulatedTime = value;
 
-                this.ProcessEffect(this.CalculateWeight(this.rawWeightMetadata));
+                this.ProcessEffect(this.CalculateWeight(this.RawWeightMetadata));
 
                 if (Mathf.Abs(previousSimulatedTime) < this.Duration && Mathf.Abs(this.simulatedTime) >= this.Duration)
                 {
-                    this.events.InvokeDurationReached();
+                    this.events.Invoke(EffectEvents.Trigger.DurationReached);
                 }
             }
         }
@@ -449,10 +496,27 @@ namespace Slerpy.Unity3D
             return this.CalculateWeight(this.SimulatedTime, rawWeightMetadataReceiver);
         }
 
+        public void EnableRawWeightMetadata()
+        {
+            this.rawWeightMetadata = new WeightMetadata();
+        }
+
+        public void DisableRawWeightMetadata()
+        {
+            if (!this.events.HasSubscribers())
+            {
+                this.rawWeightMetadata = null;
+            }
+        }
+
         protected abstract void ProcessEffect(float weight);
         
         protected virtual void Start()
         {
+            this.events.OnSubscriptionChange += this.EnsureEventsHaveRawWeightMetadata;
+
+            this.EnsureEventsHaveRawWeightMetadata();
+
             /// Allows time-based events to trigger even if starting time is non-zero
             float tempSimulatedTime = this.simulatedTime;
 
@@ -466,7 +530,7 @@ namespace Slerpy.Unity3D
         {
             if (Application.isPlaying)
             {
-                this.events.InvokePlay();
+                this.events.Invoke(EffectEvents.Trigger.Play);
             }
         }
 
@@ -474,8 +538,13 @@ namespace Slerpy.Unity3D
         {
             if (Application.isPlaying)
             {
-                this.events.InvokeStop();
+                this.events.Invoke(EffectEvents.Trigger.Stop);
             }
+        }
+
+        protected virtual void OnValidate()
+        {
+            this.EnsureEventsHaveRawWeightMetadata();
         }
 
         protected void Update()
@@ -487,19 +556,21 @@ namespace Slerpy.Unity3D
                 timeScaling = this.transform is RectTransform ? EffectSettingTimeScaling.Unscaled : EffectSettingTimeScaling.Scaled;
             }
 
-            bool previousIsOnUpwardCurve = this.rawWeightMetadata.IsOnUpwardCurve;
+            bool hasRawWeightMetadata = this.RawWeightMetadata != null;
+
+            bool previousIsOnUpwardCurve = !hasRawWeightMetadata || this.RawWeightMetadata.IsOnUpwardCurve;
 
             this.AddRawTime(timeScaling == EffectSettingTimeScaling.Unscaled ? Time.unscaledDeltaTime : Time.deltaTime);
 
-            if (previousIsOnUpwardCurve != this.rawWeightMetadata.IsOnUpwardCurve)
+            if (hasRawWeightMetadata && previousIsOnUpwardCurve != this.RawWeightMetadata.IsOnUpwardCurve)
             {
-                if (this.rawWeightMetadata.IsOnUpwardCurve)
+                if (this.RawWeightMetadata.IsOnUpwardCurve)
                 {
-                    this.events.InvokeRawWeightValley();
+                    this.events.Invoke(EffectEvents.Trigger.RawWeightValley);
                 }
                 else
                 {
-                    this.events.InvokeRawWeightPeak();
+                    this.events.Invoke(EffectEvents.Trigger.RawWeightPeak);
                 }
             }
         }
@@ -520,6 +591,14 @@ namespace Slerpy.Unity3D
             deltaTime *= this.Speed;
 
             this.SimulatedTime += deltaTime;
+        }
+
+        private void EnsureEventsHaveRawWeightMetadata()
+        {
+            if (this.events.HasSubscribers())
+            {
+                this.EnableRawWeightMetadata();
+            }
         }
 
         [Serializable]

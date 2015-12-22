@@ -333,8 +333,10 @@ namespace Slerpy.Unity3D
             }
         }
 
-        private void OnValidate()
+        protected override void OnValidate()
         {
+            base.OnValidate();
+
             if (this.previousPreset != TransformEffectPreset.Custom && this.previousPreset == this.preset)
             {
                 this.preset = TransformEffectPreset.Custom;
