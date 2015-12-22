@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Slerpy.Unity3D
 {
@@ -53,6 +54,65 @@ namespace Slerpy.Unity3D
             {
                 this.reverseClamp = value;
             }
+        }
+    }
+
+    [Serializable]
+    public sealed class EffectEvents
+    {
+        public event Action OnPlay = null;
+        public event Action OnStop = null;
+        public event Action OnDurationReached = null;
+        public event Action OnRawWeightPeak = null;
+        public event Action OnRawWeightValley = null;
+
+        [SerializeField]
+        private UnityEvent onPlay = new UnityEvent();
+
+        [SerializeField]
+        private UnityEvent onStop = new UnityEvent();
+
+        [SerializeField]
+        private UnityEvent onDurationReached = new UnityEvent();
+
+        [SerializeField]
+        private UnityEvent onRawWeightPeak = new UnityEvent();
+
+        [SerializeField]
+        private UnityEvent onRawWeightValley = new UnityEvent();
+
+        public EffectEvents()
+        {
+            this.OnPlay += this.onPlay.Invoke;
+            this.OnStop += this.onStop.Invoke;
+            this.OnDurationReached += this.onDurationReached.Invoke;
+            this.OnRawWeightPeak += this.onRawWeightPeak.Invoke;
+            this.OnRawWeightValley += this.onRawWeightValley.Invoke;
+        }
+
+        public void InvokePlay()
+        {
+            this.OnPlay();
+        }
+
+        public void InvokeStop()
+        {
+            this.OnStop();
+        }
+
+        public void InvokeDurationReached()
+        {
+            this.OnDurationReached();
+        }
+
+        public void InvokeRawWeightPeak()
+        {
+            this.OnRawWeightPeak();
+        }
+
+        public void InvokeRawWeightValley()
+        {
+            this.OnRawWeightValley();
         }
     }
 
@@ -119,6 +179,10 @@ namespace Slerpy.Unity3D
         private EffectSettings settings = new EffectSettings();
 
         [SerializeField]
+        [Tooltip("General events.")]
+        private EffectEvents events = new EffectEvents();
+
+        [SerializeField]
         [Tooltip(Effect.TOOLTIP_WEIGHTS)]
         private WeightType[] weights = new WeightType[] { WeightType.Linear };
 
@@ -138,11 +202,21 @@ namespace Slerpy.Unity3D
         [HideInInspector]
         private float simulatedTime = 0.0f;
 
+        private WeightMetadata rawWeightMetadata = new WeightMetadata();
+
         public EffectSettings Settings
         {
             get
             {
                 return this.settings;
+            }
+        }
+
+        public EffectEvents Events
+        {
+            get
+            {
+                return this.events;
             }
         }
 
@@ -194,6 +268,14 @@ namespace Slerpy.Unity3D
             }
         }
 
+        public WeightMetadata RawWeightMetadata
+        {
+            get
+            {
+                return this.rawWeightMetadata;
+            }
+        }
+
         public abstract float Duration { get; set; }
 
         public abstract WrapType TimeWrap { get; set; }
@@ -215,9 +297,16 @@ namespace Slerpy.Unity3D
 
             set
             {
+                float previousSimulatedTime = this.simulatedTime;
+
                 this.simulatedTime = value;
 
-                this.ProcessEffect(this.CalculateWeight());
+                this.ProcessEffect(this.CalculateWeight(this.rawWeightMetadata));
+
+                if (Mathf.Abs(previousSimulatedTime) < this.Duration && Mathf.Abs(this.simulatedTime) >= this.Duration)
+                {
+                    this.events.InvokeDurationReached();
+                }
             }
         }
 
@@ -325,12 +414,9 @@ namespace Slerpy.Unity3D
             this.SimulatedTime = 0.0f;
         }
 
-        public float CalculateWeight(float time)
+        public float CalculateWeight(float time, WeightMetadata rawWeightMetadataReceiver = null)
         {
-            float rawWeight = Weight.FromTime(
-                this.TimeWrap,
-                time,
-                this.Duration);
+            float rawWeight = this.CalculateRawWeight(time, rawWeightMetadataReceiver);
 
             float weight = rawWeight;
 
@@ -358,16 +444,38 @@ namespace Slerpy.Unity3D
             return weight * this.customWeight.Curve.Evaluate(customWeightStimulus);
         }
 
-        public float CalculateWeight()
+        public float CalculateWeight(WeightMetadata rawWeightMetadataReceiver = null)
         {
-            return this.CalculateWeight(this.SimulatedTime);
+            return this.CalculateWeight(this.SimulatedTime, rawWeightMetadataReceiver);
         }
 
         protected abstract void ProcessEffect(float weight);
         
         protected virtual void Start()
         {
-            this.ProcessEffect(this.CalculateWeight());
+            /// Allows time-based events to trigger even if starting time is non-zero
+            float tempSimulatedTime = this.simulatedTime;
+
+            this.simulatedTime = 0.0f;
+
+            this.SimulatedTime = tempSimulatedTime;
+            ///
+        }
+
+        protected virtual void OnEnable()
+        {
+            if (Application.isPlaying)
+            {
+                this.events.InvokePlay();
+            }
+        }
+
+        protected virtual void OnDisable()
+        {
+            if (Application.isPlaying)
+            {
+                this.events.InvokeStop();
+            }
         }
 
         protected void Update()
@@ -379,7 +487,30 @@ namespace Slerpy.Unity3D
                 timeScaling = this.transform is RectTransform ? EffectSettingTimeScaling.Unscaled : EffectSettingTimeScaling.Scaled;
             }
 
+            bool previousIsOnUpwardCurve = this.rawWeightMetadata.IsOnUpwardCurve;
+
             this.AddRawTime(timeScaling == EffectSettingTimeScaling.Unscaled ? Time.unscaledDeltaTime : Time.deltaTime);
+
+            if (previousIsOnUpwardCurve != this.rawWeightMetadata.IsOnUpwardCurve)
+            {
+                if (this.rawWeightMetadata.IsOnUpwardCurve)
+                {
+                    this.events.InvokeRawWeightValley();
+                }
+                else
+                {
+                    this.events.InvokeRawWeightPeak();
+                }
+            }
+        }
+
+        private float CalculateRawWeight(float time, WeightMetadata weightMetadataReceiver = null)
+        {
+            return Weight.FromTime(
+                this.TimeWrap,
+                time,
+                this.Duration,
+                weightMetadataReceiver);
         }
 
         private void AddRawTime(float deltaTime)
