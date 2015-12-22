@@ -49,6 +49,7 @@ namespace Slerpy
                 if (optionalMetadataReceiver != nullptr)
                 {
                     optionalMetadataReceiver->WrapCount = (int)(scaledCurrentValue / (scaledMaxValue * 2.0f));
+                    optionalMetadataReceiver->IsOnUpwardCurve = weight < 1.0f;
                 }
 
                 return weight >= 1.0f ? 2.0f - weight : weight;
@@ -60,6 +61,7 @@ namespace Slerpy
                 if (optionalMetadataReceiver != nullptr)
                 {
                     optionalMetadataReceiver->WrapCount = (int)weight;
+                    optionalMetadataReceiver->IsOnUpwardCurve = true;
                 }
 
                 weight = MATH_FMOD(weight, 1.0f);
@@ -79,6 +81,7 @@ namespace Slerpy
                 if (optionalMetadataReceiver != nullptr)
                 {
                     optionalMetadataReceiver->WrapCount = (int)(scaledCurrentValue / (scaledMaxValue * 4.0f));
+                    optionalMetadataReceiver->IsOnUpwardCurve = weightAbs < 1.0f || weightAbs >= 3.0f;
                 }
 
                 if (weightAbs >= 2.0f)
@@ -97,6 +100,7 @@ namespace Slerpy
                 if (optionalMetadataReceiver != nullptr)
                 {
                     optionalMetadataReceiver->WrapCount = (int)(weight * 0.5f);
+                    optionalMetadataReceiver->IsOnUpwardCurve = weight < 1.0f;
                 }
 
                 if (weight > 1.0f)
@@ -114,6 +118,7 @@ namespace Slerpy
                 if (optionalMetadataReceiver != nullptr)
                 {
                     optionalMetadataReceiver->WrapCount = (int)weight;
+                    optionalMetadataReceiver->IsOnUpwardCurve = weight < 1.0f;
                 }
 
                 return weight;

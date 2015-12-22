@@ -77,6 +77,7 @@ namespace Slerpy
     public ref struct WeightMetadata
     {
         property int WrapCount;
+        property bool IsOnUpwardCurve;
     };
 
     public ref class Weight
@@ -95,6 +96,7 @@ extern "C"
     struct WeightMetadata
     {
         int WrapCount;
+        bool IsOnUpwardCurve;
     };
 #endif //_MANAGED
 
