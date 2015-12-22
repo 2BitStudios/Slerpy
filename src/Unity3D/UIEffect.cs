@@ -189,8 +189,10 @@ namespace Slerpy.Unity3D
             base.Start();
         }
 
-        private void OnValidate()
+        protected override void OnValidate()
         {
+            base.OnValidate();
+
             if (this.previousAnchorMode != this.anchorMode)
             {
                 UIEffectAnchorMode newAnchorMode = this.anchorMode;
