@@ -29,7 +29,7 @@ namespace Slerpy.Unity3D
         private const string TOOLTIP_ROTATIONEXTENT = "Maximum local-space rotation change at a weight of 1.0. Can be exceeded or inverted by weight modifiers or time wrap type.";
         private const string TOOLTIP_SCALEEXTENT = "Maximum local-space scale change at a weight of 1.0. Can be exceeded or inverted by weight modifiers or time wrap type.";
 
-        private const TransformEffectPreset PRESET_DEFAULT = TransformEffectPreset.Custom;
+        private const TransformEffectPreset DEFAULT_PRESET = TransformEffectPreset.Custom;
 
         private static readonly Dictionary<TransformEffectPreset, PresetData> presetData = new Dictionary<TransformEffectPreset, PresetData>()
         {
@@ -86,7 +86,7 @@ namespace Slerpy.Unity3D
 
         [SerializeField]
         [Tooltip("Pre-defined common settings for the values that follow.")]
-        private TransformEffectPreset preset = PRESET_DEFAULT;
+        private TransformEffectPreset preset = DEFAULT_PRESET;
 
         [SerializeField]
         [Tooltip(Effect.TOOLTIP_DURATION)]
@@ -110,7 +110,7 @@ namespace Slerpy.Unity3D
 
         [SerializeField]
         [HideInInspector]
-        private TransformEffectPreset previousPreset = PRESET_DEFAULT;
+        private TransformEffectPreset previousPreset = DEFAULT_PRESET;
 
         [SerializeField]
         [HideInInspector]

@@ -39,7 +39,7 @@ namespace Slerpy.Unity3D
     {
         private const string TOOLTIP_FILTERMODE = "The filter that is applied to the audio stream by this effect.";
 
-        private const AudioFilterMode FILTERMODE_DEFAULT = AudioFilterMode.Volume;
+        private const AudioFilterMode DEFAULT_FILTERMODE = AudioFilterMode.Volume;
 
         public static AudioFilter CalculateAudioFilter(float weight, AudioFilterMode filterMode)
         {
@@ -56,11 +56,11 @@ namespace Slerpy.Unity3D
 
         [SerializeField]
         [Tooltip(AudioEffect.TOOLTIP_FILTERMODE)]
-        private AudioFilterMode filterMode = FILTERMODE_DEFAULT;
+        private AudioFilterMode filterMode = DEFAULT_FILTERMODE;
 
         [SerializeField]
         [HideInInspector]
-        private AudioFilter filter = new AudioFilter(AudioEffect.FILTERMODE_DEFAULT, 0.0f);
+        private AudioFilter filter = new AudioFilter(AudioEffect.DEFAULT_FILTERMODE, 0.0f);
 
         public override float Duration
         {
@@ -129,7 +129,7 @@ namespace Slerpy.Unity3D
         {
             [SerializeField]
             [Tooltip(AudioEffect.TOOLTIP_FILTERMODE)]
-            private AudioFilterMode filterMode = FILTERMODE_DEFAULT;
+            private AudioFilterMode filterMode = DEFAULT_FILTERMODE;
 
             public AudioFilterMode FilterMode
             {

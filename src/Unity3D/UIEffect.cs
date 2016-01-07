@@ -52,7 +52,7 @@ namespace Slerpy.Unity3D
         private const string TOOLTIP_ANCHORMODE = "Canvas-space units of anchor transformation.";
         private const string TOOLTIP_ANCHOREXTENT = "Maximum anchor position change at a weight of 1.0. Can be exceeded or inverted by weight modifiers or time wrap type.";
 
-        private const UIEffectAnchorMode ANCHORMODE_DEFAULT = UIEffectAnchorMode.Relative;
+        private const UIEffectAnchorMode DEFAULT_ANCHORMODE = UIEffectAnchorMode.Relative;
 
         public static AnchorOffset CalculateAnchorOffset(float weight, UIEffectAnchorMode anchorMode, Vector2 extent)
         {
@@ -81,7 +81,7 @@ namespace Slerpy.Unity3D
 
         [SerializeField]
         [Tooltip(UIEffect.TOOLTIP_ANCHORMODE)]
-        private UIEffectAnchorMode anchorMode = ANCHORMODE_DEFAULT;
+        private UIEffectAnchorMode anchorMode = DEFAULT_ANCHORMODE;
 
         [SerializeField]
         [Tooltip(UIEffect.TOOLTIP_ANCHOREXTENT)]
@@ -89,7 +89,7 @@ namespace Slerpy.Unity3D
 
         [SerializeField]
         [HideInInspector]
-        private UIEffectAnchorMode previousAnchorMode = ANCHORMODE_DEFAULT;
+        private UIEffectAnchorMode previousAnchorMode = DEFAULT_ANCHORMODE;
 
         [SerializeField]
         [HideInInspector]
@@ -208,7 +208,7 @@ namespace Slerpy.Unity3D
         {
             [SerializeField]
             [Tooltip(UIEffect.TOOLTIP_ANCHORMODE)]
-            private UIEffectAnchorMode anchorMode = ANCHORMODE_DEFAULT;
+            private UIEffectAnchorMode anchorMode = DEFAULT_ANCHORMODE;
 
             [SerializeField]
             [Tooltip(UIEffect.TOOLTIP_ANCHOREXTENT)]
