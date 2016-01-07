@@ -202,6 +202,12 @@ namespace Slerpy.Unity3D.Editor
         }
     }
 
+    [CustomEditor(typeof(AudioEffect))]
+    [CanEditMultipleObjects]
+    public sealed class AudioEffectEditor : EffectEditor
+    {
+    }
+
     [CustomEditor(typeof(UIEffect))]
     [CanEditMultipleObjects]
     public sealed class UIEffectEditor : EffectEditor

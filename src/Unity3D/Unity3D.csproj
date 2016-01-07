@@ -54,6 +54,7 @@
     <Compile Include="Timers\StopEffect.cs" />
     <Compile Include="Timers\ReverseEffect.cs" />
     <Compile Include="Timers\PlayEffect.cs" />
+    <Compile Include="AudioEffect.cs" />
     <Compile Include="UIEffect.cs" />
     <Compile Include="Timers\StopAnimation.cs" />
     <Compile Include="Timers\PlayAnimation.cs" />
