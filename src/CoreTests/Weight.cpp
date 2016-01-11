@@ -493,6 +493,22 @@ namespace Slerpy
                 Assert::AreEqual(-0.9047f, Slerpy::Weight::WithType(WeightType::Bounce, -0.95f), EPSILON);
                 Assert::AreEqual(-1.0f, Slerpy::Weight::WithType(WeightType::Bounce, -1.0f), EPSILON);
             }
+
+            [Test]
+            static void OneMinus()
+            {
+                Assert::AreEqual(0.0f, Slerpy::Weight::WithType(WeightType::OneMinus, 1.0f), EPSILON);
+                Assert::AreEqual(0.25f, Slerpy::Weight::WithType(WeightType::OneMinus, 0.75f), EPSILON);
+                Assert::AreEqual(0.5f, Slerpy::Weight::WithType(WeightType::OneMinus, 0.5f), EPSILON);
+                Assert::AreEqual(0.75f, Slerpy::Weight::WithType(WeightType::OneMinus, 0.25f), EPSILON);
+
+                Assert::AreEqual(1.0f, Slerpy::Weight::WithType(WeightType::OneMinus, 0.0f), EPSILON);
+
+                Assert::AreEqual(1.25f, Slerpy::Weight::WithType(WeightType::OneMinus, -0.25f), EPSILON);
+                Assert::AreEqual(1.5f, Slerpy::Weight::WithType(WeightType::OneMinus, -0.5f), EPSILON);
+                Assert::AreEqual(1.75f, Slerpy::Weight::WithType(WeightType::OneMinus, -0.75f), EPSILON);
+                Assert::AreEqual(2.0f, Slerpy::Weight::WithType(WeightType::OneMinus, -1.0f), EPSILON);
+            }
         };
     }
 }

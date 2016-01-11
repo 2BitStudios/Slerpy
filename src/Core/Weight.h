@@ -64,7 +64,8 @@ namespace Slerpy
         StickyHigh = 6,
         Snap = 7,
         Elastic = 8,
-        Bounce = 9
+        Bounce = 9,
+        OneMinus = 10
     };
 
 #ifdef _MANAGED
@@ -118,6 +119,7 @@ extern "C"
     DECLARATION_PREFIX float TRANSLATE_FUNCTION_NAME(Snap)(WEIGHT_PARAMS_STANDARD);
     DECLARATION_PREFIX float TRANSLATE_FUNCTION_NAME(Elastic)(WEIGHT_PARAMS_STANDARD);
     DECLARATION_PREFIX float TRANSLATE_FUNCTION_NAME(Bounce)(WEIGHT_PARAMS_STANDARD);
+    DECLARATION_PREFIX float TRANSLATE_FUNCTION_NAME(OneMinus)(WEIGHT_PARAMS_STANDARD);
 
 #ifdef _MANAGED
     };

@@ -160,6 +160,8 @@ namespace Slerpy
             return TRANSLATE_FUNCTION_NAME(Elastic)(weight);
         case WeightType::Bounce:
             return TRANSLATE_FUNCTION_NAME(Bounce)(weight);
+        case WeightType::OneMinus:
+            return TRANSLATE_FUNCTION_NAME(OneMinus)(weight);
         case WeightType::Linear:
         default:
             return TRANSLATE_FUNCTION_NAME(Linear)(weight);
@@ -322,6 +324,11 @@ namespace Slerpy
         }
 
         return weight;
+    }
+
+    float TRANSLATE_FUNCTION_NAME(OneMinus)(WEIGHT_PARAMS_STANDARD)
+    {
+        return 1.0f - weight;
     }
 
 #ifdef _MANAGED
