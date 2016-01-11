@@ -1,3 +1,5 @@
+#define MATH_PI (float)Math::PI
+
 namespace Slerpy
 {
     namespace Tests
@@ -37,42 +39,44 @@ namespace Slerpy
             [Test]
             static void SphericalStandard()
             {
-                Assert::AreEqual(1.0f, Slerpy::Interpolate::SphericalWithType(InterpolateType::Standard, -1.0f, 1.0f, -1.0f, Math::PI), EPSILON);
-                Assert::AreEqual(-1.0f, Slerpy::Interpolate::SphericalWithType(InterpolateType::Standard, -1.0f, 1.0f, 0.0f, Math::PI), EPSILON);
-                Assert::AreEqual(-1.0227f, Slerpy::Interpolate::SphericalWithType(InterpolateType::Standard, -1.0f, 1.0f, 0.1f, Math::PI), EPSILON);
-                Assert::AreEqual(-0.6818f, Slerpy::Interpolate::SphericalWithType(InterpolateType::Standard, -1.0f, 1.0f, 0.25f, Math::PI), EPSILON);
-                Assert::AreEqual(-0.6818f, Slerpy::Interpolate::SphericalWithType(InterpolateType::Standard, -1.0f, 1.0f, 0.4f, Math::PI), EPSILON);
-                Assert::AreEqual(0.0f, Slerpy::Interpolate::SphericalWithType(InterpolateType::Standard, -1.0f, 1.0f, 0.5f, Math::PI), EPSILON);
-                Assert::AreEqual(0.0f, Slerpy::Interpolate::SphericalWithType(InterpolateType::Standard, -1.0f, 1.0f, 0.6f, Math::PI), EPSILON);
-                Assert::AreEqual(0.6818f, Slerpy::Interpolate::SphericalWithType(InterpolateType::Standard, -1.0f, 1.0f, 0.75f, Math::PI), EPSILON);
-                Assert::AreEqual(0.6818f, Slerpy::Interpolate::SphericalWithType(InterpolateType::Standard, -1.0f, 1.0f, 0.9f, Math::PI), EPSILON);
-                Assert::AreEqual(1.0f, Slerpy::Interpolate::SphericalWithType(InterpolateType::Standard, -1.0f, 1.0f, 1.0f, Math::PI), EPSILON);
-                Assert::AreEqual(-1.0f, Slerpy::Interpolate::SphericalWithType(InterpolateType::Standard, -1.0f, 1.0f, 2.0f, Math::PI), EPSILON);
+                Assert::AreEqual(1.0f, Slerpy::Interpolate::SphericalWithType(InterpolateType::Standard, -1.0f, 1.0f, -1.0f, MATH_PI), EPSILON);
+                Assert::AreEqual(-1.0f, Slerpy::Interpolate::SphericalWithType(InterpolateType::Standard, -1.0f, 1.0f, 0.0f, MATH_PI), EPSILON);
+                Assert::AreEqual(-1.0227f, Slerpy::Interpolate::SphericalWithType(InterpolateType::Standard, -1.0f, 1.0f, 0.1f, MATH_PI), EPSILON);
+                Assert::AreEqual(-0.6818f, Slerpy::Interpolate::SphericalWithType(InterpolateType::Standard, -1.0f, 1.0f, 0.25f, MATH_PI), EPSILON);
+                Assert::AreEqual(-0.6818f, Slerpy::Interpolate::SphericalWithType(InterpolateType::Standard, -1.0f, 1.0f, 0.4f, MATH_PI), EPSILON);
+                Assert::AreEqual(0.0f, Slerpy::Interpolate::SphericalWithType(InterpolateType::Standard, -1.0f, 1.0f, 0.5f, MATH_PI), EPSILON);
+                Assert::AreEqual(0.0f, Slerpy::Interpolate::SphericalWithType(InterpolateType::Standard, -1.0f, 1.0f, 0.6f, MATH_PI), EPSILON);
+                Assert::AreEqual(0.6818f, Slerpy::Interpolate::SphericalWithType(InterpolateType::Standard, -1.0f, 1.0f, 0.75f, MATH_PI), EPSILON);
+                Assert::AreEqual(0.6818f, Slerpy::Interpolate::SphericalWithType(InterpolateType::Standard, -1.0f, 1.0f, 0.9f, MATH_PI), EPSILON);
+                Assert::AreEqual(1.0f, Slerpy::Interpolate::SphericalWithType(InterpolateType::Standard, -1.0f, 1.0f, 1.0f, MATH_PI), EPSILON);
+                Assert::AreEqual(-1.0f, Slerpy::Interpolate::SphericalWithType(InterpolateType::Standard, -1.0f, 1.0f, 2.0f, MATH_PI), EPSILON);
             }
 
             [Test]
             static void SphericalClamped()
             {
-                Assert::AreEqual(1.0f, Slerpy::Interpolate::SphericalWithType(InterpolateType::Clamped, -1.0f, 1.0f, -2.0f, Math::PI), EPSILON);
-                Assert::AreEqual(1.0f, Slerpy::Interpolate::SphericalWithType(InterpolateType::Clamped, -1.0f, 1.0f, -1.0f, Math::PI), EPSILON);
-                Assert::AreEqual(1.0227f, Slerpy::Interpolate::SphericalWithType(InterpolateType::Clamped, -1.0f, 1.0f, -0.9f, Math::PI), EPSILON);
-                Assert::AreEqual(0.6818f, Slerpy::Interpolate::SphericalWithType(InterpolateType::Clamped, -1.0f, 1.0f, -0.75f, Math::PI), EPSILON);
-                Assert::AreEqual(0.6818f, Slerpy::Interpolate::SphericalWithType(InterpolateType::Clamped, -1.0f, 1.0f, -0.6f, Math::PI), EPSILON);
-                Assert::AreEqual(0.0f, Slerpy::Interpolate::SphericalWithType(InterpolateType::Clamped, -1.0f, 1.0f, -0.5f, Math::PI), EPSILON);
-                Assert::AreEqual(0.0f, Slerpy::Interpolate::SphericalWithType(InterpolateType::Clamped, -1.0f, 1.0f, -0.4f, Math::PI), EPSILON);
-                Assert::AreEqual(-0.6818f, Slerpy::Interpolate::SphericalWithType(InterpolateType::Clamped, -1.0f, 1.0f, -0.25f, Math::PI), EPSILON);
-                Assert::AreEqual(-1.0227f, Slerpy::Interpolate::SphericalWithType(InterpolateType::Clamped, -1.0f, 1.0f, -0.1f, Math::PI), EPSILON);
-                Assert::AreEqual(-1.0f, Slerpy::Interpolate::SphericalWithType(InterpolateType::Clamped, -1.0f, 1.0f, 0.0f, Math::PI), EPSILON);
-                Assert::AreEqual(-1.0227f, Slerpy::Interpolate::SphericalWithType(InterpolateType::Clamped, -1.0f, 1.0f, 0.1f, Math::PI), EPSILON);
-                Assert::AreEqual(-0.6818f, Slerpy::Interpolate::SphericalWithType(InterpolateType::Clamped, -1.0f, 1.0f, 0.25f, Math::PI), EPSILON);
-                Assert::AreEqual(-0.6818f, Slerpy::Interpolate::SphericalWithType(InterpolateType::Clamped, -1.0f, 1.0f, 0.4f, Math::PI), EPSILON);
-                Assert::AreEqual(0.0f, Slerpy::Interpolate::SphericalWithType(InterpolateType::Clamped, -1.0f, 1.0f, 0.5f, Math::PI), EPSILON);
-                Assert::AreEqual(0.0f, Slerpy::Interpolate::SphericalWithType(InterpolateType::Clamped, -1.0f, 1.0f, 0.6f, Math::PI), EPSILON);
-                Assert::AreEqual(0.6818f, Slerpy::Interpolate::SphericalWithType(InterpolateType::Clamped, -1.0f, 1.0f, 0.75f, Math::PI), EPSILON);
-                Assert::AreEqual(0.6818f, Slerpy::Interpolate::SphericalWithType(InterpolateType::Clamped, -1.0f, 1.0f, 0.9f, Math::PI), EPSILON);
-                Assert::AreEqual(1.0f, Slerpy::Interpolate::SphericalWithType(InterpolateType::Clamped, -1.0f, 1.0f, 1.0f, Math::PI), EPSILON);
-                Assert::AreEqual(1.0f, Slerpy::Interpolate::SphericalWithType(InterpolateType::Clamped, -1.0f, 1.0f, 2.0f, Math::PI), EPSILON);
+                Assert::AreEqual(1.0f, Slerpy::Interpolate::SphericalWithType(InterpolateType::Clamped, -1.0f, 1.0f, -2.0f, MATH_PI), EPSILON);
+                Assert::AreEqual(1.0f, Slerpy::Interpolate::SphericalWithType(InterpolateType::Clamped, -1.0f, 1.0f, -1.0f, MATH_PI), EPSILON);
+                Assert::AreEqual(1.0227f, Slerpy::Interpolate::SphericalWithType(InterpolateType::Clamped, -1.0f, 1.0f, -0.9f, MATH_PI), EPSILON);
+                Assert::AreEqual(0.6818f, Slerpy::Interpolate::SphericalWithType(InterpolateType::Clamped, -1.0f, 1.0f, -0.75f, MATH_PI), EPSILON);
+                Assert::AreEqual(0.6818f, Slerpy::Interpolate::SphericalWithType(InterpolateType::Clamped, -1.0f, 1.0f, -0.6f, MATH_PI), EPSILON);
+                Assert::AreEqual(0.0f, Slerpy::Interpolate::SphericalWithType(InterpolateType::Clamped, -1.0f, 1.0f, -0.5f, MATH_PI), EPSILON);
+                Assert::AreEqual(0.0f, Slerpy::Interpolate::SphericalWithType(InterpolateType::Clamped, -1.0f, 1.0f, -0.4f, MATH_PI), EPSILON);
+                Assert::AreEqual(-0.6818f, Slerpy::Interpolate::SphericalWithType(InterpolateType::Clamped, -1.0f, 1.0f, -0.25f, MATH_PI), EPSILON);
+                Assert::AreEqual(-1.0227f, Slerpy::Interpolate::SphericalWithType(InterpolateType::Clamped, -1.0f, 1.0f, -0.1f, MATH_PI), EPSILON);
+                Assert::AreEqual(-1.0f, Slerpy::Interpolate::SphericalWithType(InterpolateType::Clamped, -1.0f, 1.0f, 0.0f, MATH_PI), EPSILON);
+                Assert::AreEqual(-1.0227f, Slerpy::Interpolate::SphericalWithType(InterpolateType::Clamped, -1.0f, 1.0f, 0.1f, MATH_PI), EPSILON);
+                Assert::AreEqual(-0.6818f, Slerpy::Interpolate::SphericalWithType(InterpolateType::Clamped, -1.0f, 1.0f, 0.25f, MATH_PI), EPSILON);
+                Assert::AreEqual(-0.6818f, Slerpy::Interpolate::SphericalWithType(InterpolateType::Clamped, -1.0f, 1.0f, 0.4f, MATH_PI), EPSILON);
+                Assert::AreEqual(0.0f, Slerpy::Interpolate::SphericalWithType(InterpolateType::Clamped, -1.0f, 1.0f, 0.5f, MATH_PI), EPSILON);
+                Assert::AreEqual(0.0f, Slerpy::Interpolate::SphericalWithType(InterpolateType::Clamped, -1.0f, 1.0f, 0.6f, MATH_PI), EPSILON);
+                Assert::AreEqual(0.6818f, Slerpy::Interpolate::SphericalWithType(InterpolateType::Clamped, -1.0f, 1.0f, 0.75f, MATH_PI), EPSILON);
+                Assert::AreEqual(0.6818f, Slerpy::Interpolate::SphericalWithType(InterpolateType::Clamped, -1.0f, 1.0f, 0.9f, MATH_PI), EPSILON);
+                Assert::AreEqual(1.0f, Slerpy::Interpolate::SphericalWithType(InterpolateType::Clamped, -1.0f, 1.0f, 1.0f, MATH_PI), EPSILON);
+                Assert::AreEqual(1.0f, Slerpy::Interpolate::SphericalWithType(InterpolateType::Clamped, -1.0f, 1.0f, 2.0f, MATH_PI), EPSILON);
             }
         };
     }
 }
+
+#undef MATH_PI
