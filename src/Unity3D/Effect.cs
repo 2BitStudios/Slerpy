@@ -113,9 +113,9 @@ namespace Slerpy.Unity3D
 
         public void Register(Trigger trigger, Action callback)
         {
-            Action targetAction = this.GetEvent(trigger);
-
-            targetAction += callback;
+            this.SetEvent(
+                trigger,
+                this.GetEvent(trigger) + callback);
 
             if (this.OnSubscriptionChange != null)
             {
@@ -130,9 +130,9 @@ namespace Slerpy.Unity3D
 
         public void Unregister(Trigger trigger, Action callback)
         {
-            Action targetAction = this.GetEvent(trigger);
-
-            targetAction -= callback;
+            this.SetEvent(
+                trigger,
+                this.GetEvent(trigger) - callback);
 
             if (this.OnSubscriptionChange != null)
             {
@@ -157,6 +157,33 @@ namespace Slerpy.Unity3D
             }
 
             return null;
+        }
+
+        private void SetEvent(Trigger trigger, Action newEvent)
+        {
+            switch (trigger)
+            {
+                case Trigger.Play:
+                    this.OnPlay = newEvent;
+
+                    break;
+                case Trigger.Stop:
+                    this.OnStop = newEvent;
+
+                    break;
+                case Trigger.DurationReached:
+                    this.OnDurationReached = newEvent;
+
+                    break;
+                case Trigger.RawWeightPeak:
+                    this.OnRawWeightPeak = newEvent;
+
+                    break;
+                case Trigger.RawWeightValley:
+                    this.OnRawWeightValley = newEvent;
+
+                    break;
+            }
         }
     }
 
