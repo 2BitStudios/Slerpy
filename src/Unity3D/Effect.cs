@@ -65,8 +65,7 @@ namespace Slerpy.Unity3D
             Play = 0,
             Stop = 1,
             DurationReached = 2,
-            RawWeightPeak = 3,
-            RawWeightValley = 4
+            RawWeightApex = 3
         }
 
         public event Action OnSubscriptionChange = null;
@@ -74,8 +73,7 @@ namespace Slerpy.Unity3D
         private event Action OnPlay = null;
         private event Action OnStop = null;
         private event Action OnDurationReached = null;
-        private event Action OnRawWeightPeak = null;
-        private event Action OnRawWeightValley = null;
+        private event Action OnRawWeightApex = null;
 
         [SerializeField]
         private UnityEvent onPlay = new UnityEvent();
@@ -87,18 +85,14 @@ namespace Slerpy.Unity3D
         private UnityEvent onDurationReached = new UnityEvent();
 
         [SerializeField]
-        private UnityEvent onRawWeightPeak = new UnityEvent();
-
-        [SerializeField]
-        private UnityEvent onRawWeightValley = new UnityEvent();
+        private UnityEvent onRawWeightApex = new UnityEvent();
 
         public EffectEvents()
         {
             this.OnPlay += this.onPlay.Invoke;
             this.OnStop += this.onStop.Invoke;
             this.OnDurationReached += this.onDurationReached.Invoke;
-            this.OnRawWeightPeak += this.onRawWeightPeak.Invoke;
-            this.OnRawWeightValley += this.onRawWeightValley.Invoke;
+            this.OnRawWeightApex += this.onRawWeightApex.Invoke;
         }
 
         public bool HasSubscribers()
@@ -107,8 +101,7 @@ namespace Slerpy.Unity3D
                 this.OnPlay.Target != this.onPlay || this.onPlay.GetPersistentEventCount() > 0
                 || this.OnStop.Target != this.onStop || this.onStop.GetPersistentEventCount() > 0
                 || this.OnDurationReached.Target != this.onDurationReached || this.onDurationReached.GetPersistentEventCount() > 0
-                || this.OnRawWeightPeak.Target != this.onRawWeightPeak || this.onRawWeightPeak.GetPersistentEventCount() > 0
-                || this.OnRawWeightValley.Target != this.onRawWeightValley || this.onRawWeightValley.GetPersistentEventCount() > 0;
+                || this.OnRawWeightApex.Target != this.onRawWeightApex || this.onRawWeightApex.GetPersistentEventCount() > 0;
         }
 
         public void Register(Trigger trigger, Action callback)
@@ -150,10 +143,8 @@ namespace Slerpy.Unity3D
                     return this.OnStop;
                 case Trigger.DurationReached:
                     return this.OnDurationReached;
-                case Trigger.RawWeightPeak:
-                    return this.OnRawWeightPeak;
-                case Trigger.RawWeightValley:
-                    return this.OnRawWeightValley;
+                case Trigger.RawWeightApex:
+                    return this.OnRawWeightApex;
             }
 
             return null;
@@ -175,12 +166,8 @@ namespace Slerpy.Unity3D
                     this.OnDurationReached = newEvent;
 
                     break;
-                case Trigger.RawWeightPeak:
-                    this.OnRawWeightPeak = newEvent;
-
-                    break;
-                case Trigger.RawWeightValley:
-                    this.OnRawWeightValley = newEvent;
+                case Trigger.RawWeightApex:
+                    this.OnRawWeightApex = newEvent;
 
                     break;
             }
@@ -585,19 +572,20 @@ namespace Slerpy.Unity3D
 
             bool hasRawWeightMetadata = this.RawWeightMetadata != null;
 
-            bool previousIsOnUpwardCurve = !hasRawWeightMetadata || this.RawWeightMetadata.IsOnUpwardCurve;
+            int previousApexCount = 0;
+
+            if (hasRawWeightMetadata)
+            {
+                previousApexCount = this.RawWeightMetadata.ApexCount;
+            }
 
             this.AddRawTime(timeScaling == EffectSettingTimeScaling.Unscaled ? Time.unscaledDeltaTime : Time.deltaTime);
 
-            if (hasRawWeightMetadata && previousIsOnUpwardCurve != this.RawWeightMetadata.IsOnUpwardCurve)
+            if (hasRawWeightMetadata)
             {
-                if (this.RawWeightMetadata.IsOnUpwardCurve)
+                if (previousApexCount != this.RawWeightMetadata.ApexCount)
                 {
-                    this.events.Invoke(EffectEvents.Trigger.RawWeightValley);
-                }
-                else
-                {
-                    this.events.Invoke(EffectEvents.Trigger.RawWeightPeak);
+                    this.events.Invoke(EffectEvents.Trigger.RawWeightApex);
                 }
             }
         }
