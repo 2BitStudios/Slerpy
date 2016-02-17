@@ -44,15 +44,17 @@ namespace Slerpy
         {
         case WrapType::PingPong:
             {
-                float const weight = MATH_ABS(MATH_FMOD(scaledCurrentValue, scaledMaxValue * 2.0f) / scaledMaxValue);
+                float const weight = MATH_FMOD(scaledCurrentValue, scaledMaxValue * 2.0f) / scaledMaxValue;
+                float const weightAbs = MATH_ABS(weight);
 
                 if (optionalMetadataReceiver != nullptr)
                 {
                     optionalMetadataReceiver->WrapCount = (int)(scaledCurrentValue / (scaledMaxValue * 2.0f));
-                    optionalMetadataReceiver->IsOnUpwardCurve = weight < 1.0f;
+                    optionalMetadataReceiver->ApexCount = (int)weight + (weight <= 0.0f ? 0 : 1) + optionalMetadataReceiver->WrapCount * 2;
+                    optionalMetadataReceiver->IsOnUpwardCurve = weightAbs < 1.0f;
                 }
 
-                return weight >= 1.0f ? 2.0f - weight : weight;
+                return weightAbs >= 1.0f ? 2.0f - weightAbs : weightAbs;
             }
         case WrapType::Repeat:
             {
@@ -61,6 +63,7 @@ namespace Slerpy
                 if (optionalMetadataReceiver != nullptr)
                 {
                     optionalMetadataReceiver->WrapCount = (int)weight;
+                    optionalMetadataReceiver->ApexCount = (weight <= 0.0f ? 0 : 1) + optionalMetadataReceiver->WrapCount;
                     optionalMetadataReceiver->IsOnUpwardCurve = true;
                 }
 
@@ -77,29 +80,33 @@ namespace Slerpy
             {
                 float const weight = MATH_FMOD(scaledCurrentValue, scaledMaxValue * 4.0f) / scaledMaxValue;
                 float const weightAbs = MATH_ABS(weight);
+                float const weightSign = MATH_SIGN(weight);
 
                 if (optionalMetadataReceiver != nullptr)
                 {
                     optionalMetadataReceiver->WrapCount = (int)(scaledCurrentValue / (scaledMaxValue * 4.0f));
+                    optionalMetadataReceiver->ApexCount = (int)((weightAbs + 1.0f) * 0.5f * weightSign) + optionalMetadataReceiver->WrapCount * 2;
                     optionalMetadataReceiver->IsOnUpwardCurve = weightAbs < 1.0f || weightAbs >= 3.0f;
                 }
 
                 if (weightAbs >= 2.0f)
                 {
-                    return (weightAbs >= 3.0f ? weightAbs - 4.0f : 2.0f - weightAbs) * MATH_SIGN(weight);
+                    return (weightAbs >= 3.0f ? weightAbs - 4.0f : 2.0f - weightAbs) * weightSign;
                 }
                 else
                 {
-                    return (weightAbs >= 1.0f ? 2.0f - weightAbs : weightAbs) * MATH_SIGN(weight);
+                    return (weightAbs >= 1.0f ? 2.0f - weightAbs : weightAbs) * weightSign;
                 }
             }
         case WrapType::MirrorClamp:
             {
-                float weight = MATH_CLAMP(scaledCurrentValue / scaledMaxValue, 0.0f, 2.0f);
+                float const weightUnclamped = scaledCurrentValue / scaledMaxValue;
+                float weight = MATH_CLAMP(weightUnclamped, 0.0f, 2.0f);
 
                 if (optionalMetadataReceiver != nullptr)
                 {
                     optionalMetadataReceiver->WrapCount = (int)(weight * 0.5f);
+                    optionalMetadataReceiver->ApexCount = weightUnclamped <= 0.0f ? 0 : ((weight >= 1.0f ? 2 : 1) + optionalMetadataReceiver->WrapCount);
                     optionalMetadataReceiver->IsOnUpwardCurve = weight < 1.0f;
                 }
 
@@ -113,11 +120,13 @@ namespace Slerpy
         case WrapType::Clamp:
         default:
             {
-                float const weight = MATH_CLAMP01(scaledCurrentValue / scaledMaxValue);
+                float const weightUnclamped = scaledCurrentValue / scaledMaxValue;
+                float const weight = MATH_CLAMP01(weightUnclamped);
 
                 if (optionalMetadataReceiver != nullptr)
                 {
                     optionalMetadataReceiver->WrapCount = (int)weight;
+                    optionalMetadataReceiver->ApexCount = weightUnclamped <= 0.0f ? 0 : 1 + optionalMetadataReceiver->WrapCount;
                     optionalMetadataReceiver->IsOnUpwardCurve = weight < 1.0f;
                 }
 
