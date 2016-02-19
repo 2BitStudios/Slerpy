@@ -89,10 +89,10 @@ namespace Slerpy.Unity3D
 
         public EffectEvents()
         {
-            this.OnPlay += this.onPlay.Invoke;
-            this.OnStop += this.onStop.Invoke;
-            this.OnDurationReached += this.onDurationReached.Invoke;
-            this.OnRawWeightApex += this.onRawWeightApex.Invoke;
+            this.SetEvent(Trigger.Play, this.onPlay.Invoke);
+            this.SetEvent(Trigger.Stop, this.onStop.Invoke);
+            this.SetEvent(Trigger.DurationReached, this.onDurationReached.Invoke);
+            this.SetEvent(Trigger.RawWeightApex, this.onRawWeightApex.Invoke);
         }
 
         public bool HasSubscribers()
@@ -126,6 +126,40 @@ namespace Slerpy.Unity3D
             this.SetEvent(
                 trigger,
                 this.GetEvent(trigger) - callback);
+
+            if (this.OnSubscriptionChange != null)
+            {
+                this.OnSubscriptionChange();
+            }
+        }
+
+        public void UnregisterAll(Trigger trigger)
+        {
+            Action baseEvent = null;
+
+            switch (trigger)
+            {
+                case Trigger.Play:
+                    baseEvent = this.onPlay.Invoke;
+
+                    break;
+                case Trigger.Stop:
+                    baseEvent = this.onStop.Invoke;
+
+                    break;
+                case Trigger.DurationReached:
+                    baseEvent = this.onDurationReached.Invoke;
+
+                    break;
+                case Trigger.RawWeightApex:
+                    baseEvent = this.onRawWeightApex.Invoke;
+
+                    break;
+            }
+
+            this.SetEvent(
+                trigger,
+                baseEvent);
 
             if (this.OnSubscriptionChange != null)
             {
