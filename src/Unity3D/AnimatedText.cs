@@ -29,7 +29,7 @@ namespace Slerpy.Unity3D
         [SerializeField]
         private ColorEffect.Detachable[] colorEffects = new ColorEffect.Detachable[0];
 
-        private float timePlaying = 0.0f;
+        private float animationTime = 0.0f;
 
         public bool UseUnscaledTime
         {
@@ -99,18 +99,23 @@ namespace Slerpy.Unity3D
             }
         }
 
-        private float TimePlaying
+        public float AnimationTime
         {
             get
             {
-                return this.timePlaying;
+                return this.animationTime;
+            }
+
+            set
+            {
+                this.animationTime = value;
             }
         }
 
         [ContextMenu("Rewind")]
         public void Rewind()
         {
-            this.timePlaying = 0.0f;
+            this.animationTime = 0.0f;
         }
 
         protected override void OnPopulateMesh(VertexHelper toFill)
@@ -119,7 +124,7 @@ namespace Slerpy.Unity3D
             
             for (int i = 0; i < toFill.currentVertCount; i += 4)
             {
-                float rawWeight = Weight.FromTime(this.timeWrap, Mathf.Max(this.timePlaying - i * this.interval, 0.0f), this.duration);
+                float rawWeight = Weight.FromTime(this.timeWrap, Mathf.Max(this.animationTime - i * this.interval, 0.0f), this.duration);
 
                 Matrix4x4 transformResult = Matrix4x4.identity;
 
@@ -164,7 +169,7 @@ namespace Slerpy.Unity3D
 
         private void Update()
         {
-            this.timePlaying += this.useUnscaledTime ? Time.unscaledDeltaTime : Time.deltaTime;
+            this.animationTime += this.useUnscaledTime ? Time.unscaledDeltaTime : Time.deltaTime;
 
             this.SetVerticesDirty();
         }
