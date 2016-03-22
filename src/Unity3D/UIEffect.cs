@@ -169,24 +169,17 @@ namespace Slerpy.Unity3D
 
             set
             {
-                this.anchorOffset.SubtractFrom(this.RectTransform);
+                this.anchorOffset.SubtractFrom((RectTransform)this.transform);
 
                 this.anchorOffset = value;
 
-                this.anchorOffset.AddTo(this.RectTransform);
+                this.anchorOffset.AddTo((RectTransform)this.transform);
             }
         }
 
         protected override void ProcessEffect(float weight)
         {
             this.AnchorOffset = UIEffect.CalculateAnchorOffset(weight, this.anchorMode, this.anchorExtent);
-        }
-
-        protected override void Start()
-        {
-            this.RectTransform = this.gameObject.GetComponent<RectTransform>();
-
-            base.Start();
         }
 
         protected override void OnValidate()
