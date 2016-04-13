@@ -613,7 +613,7 @@ namespace Slerpy.Unity3D
         {
             if (!this.isModifyingSleep)
             {
-                if (Application.isPlaying)
+                if (Application.isPlaying && !this.IsSleeping)
                 {
                     this.events.Invoke(EffectEvents.Trigger.Play);
                 }
@@ -626,7 +626,7 @@ namespace Slerpy.Unity3D
         {
             if (!this.isModifyingSleep)
             {
-                if (Application.isPlaying)
+                if (Application.isPlaying && !this.IsSleeping)
                 {
                     this.events.Invoke(EffectEvents.Trigger.Stop);
                 }
