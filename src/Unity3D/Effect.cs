@@ -275,6 +275,11 @@ namespace Slerpy.Unity3D
         private EffectEvents events = new EffectEvents();
 
         [SerializeField]
+        [HideInInspector]
+        private bool isSleeping = false;
+        private bool isModifyingSleep = false;
+
+        [SerializeField]
         [Tooltip(Effect.TOOLTIP_WEIGHTS)]
         private WeightType[] weights = new WeightType[] { WeightType.Linear };
 
@@ -338,6 +343,8 @@ namespace Slerpy.Unity3D
             set
             {
                 this.speed = value;
+
+                this.IsSleeping = false;
             }
         }
 
@@ -402,6 +409,8 @@ namespace Slerpy.Unity3D
                 {
                     this.events.Invoke(EffectEvents.Trigger.DurationReached);
                 }
+
+                this.IsSleeping = false;
             }
         }
 
@@ -409,18 +418,42 @@ namespace Slerpy.Unity3D
         {
             get
             {
-                return this.enabled;
+                return this.enabled || this.IsSleeping;
             }
 
             set
             {
                 this.enabled = value;
+                this.isSleeping = false;
+            }
+        }
+
+        public bool IsSleeping
+        {
+            get
+            {
+                return this.isSleeping;
+            }
+
+            private set
+            {
+                if (this.isSleeping != value)
+                {
+                    this.isModifyingSleep = true;
+
+                    this.isSleeping = value;
+                    this.enabled = !this.isSleeping;
+
+                    this.isModifyingSleep = false;
+                }
             }
         }
 
         public void SetWeights(params WeightType[] newWeights)
         {
             this.weights = newWeights;
+
+            this.IsSleeping = false;
         }
 
         public void AddWeights(params WeightType[] additionalWeights)
@@ -436,6 +469,8 @@ namespace Slerpy.Unity3D
         public void ClearWeights()
         {
             this.weights = new WeightType[0];
+
+            this.IsSleeping = false;
         }
 
         public void Play()
@@ -485,7 +520,7 @@ namespace Slerpy.Unity3D
         [ContextMenu("Reverse")]
         public void Reverse()
         {
-            this.speed = -this.speed;
+            this.Speed = -this.Speed;
 
             if (this.settings.ReverseClamp == EffectSettingReverseClamp.ByTimeWrap)
             {
@@ -576,23 +611,38 @@ namespace Slerpy.Unity3D
 
         protected virtual void OnEnable()
         {
-            if (Application.isPlaying)
+            if (!this.isModifyingSleep)
             {
-                this.events.Invoke(EffectEvents.Trigger.Play);
+                if (Application.isPlaying)
+                {
+                    this.events.Invoke(EffectEvents.Trigger.Play);
+                }
+
+                this.IsSleeping = false;
             }
         }
 
         protected virtual void OnDisable()
         {
-            if (Application.isPlaying)
+            if (!this.isModifyingSleep)
             {
-                this.events.Invoke(EffectEvents.Trigger.Stop);
+                if (Application.isPlaying)
+                {
+                    this.events.Invoke(EffectEvents.Trigger.Stop);
+                }
+
+                this.IsSleeping = false;
             }
         }
 
         protected virtual void OnValidate()
         {
-            this.EnsureEventsHaveRawWeightMetadata();
+            if (Application.isPlaying)
+            {
+                this.EnsureEventsHaveRawWeightMetadata();
+
+                this.IsSleeping = false;
+            }
         }
 
         protected void Update()
@@ -620,6 +670,23 @@ namespace Slerpy.Unity3D
                 if (previousApexCount != this.RawWeightMetadata.ApexCount)
                 {
                     this.events.Invoke(EffectEvents.Trigger.RawWeightApex);
+                }
+            }
+
+            if (this.IsPlaying)
+            {
+                if (this.TimeWrap == WrapType.Clamp
+                    && ((this.Direction == EffectDirection.Forward && this.SimulatedTime >= this.Duration)
+                        || (this.Direction == EffectDirection.Backward && this.SimulatedTime <= 0.0f)))
+                {
+                    this.IsSleeping = true;
+                }
+
+                if (this.TimeWrap == WrapType.MirrorClamp
+                    && ((this.Direction == EffectDirection.Forward && this.SimulatedTime >= this.Duration * 2.0f)
+                        || (this.Direction == EffectDirection.Backward && this.SimulatedTime <= 0.0f)))
+                {
+                    this.IsSleeping = true;
                 }
             }
         }
