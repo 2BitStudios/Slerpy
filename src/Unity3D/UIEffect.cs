@@ -106,7 +106,12 @@ namespace Slerpy.Unity3D
 
             set
             {
-                this.duration = value;
+                if (this.duration != value)
+                {
+                    this.duration = value;
+
+                    this.Refresh();
+                }
             }
         }
 
@@ -119,7 +124,12 @@ namespace Slerpy.Unity3D
 
             set
             {
-                this.timeWrap = value;
+                if (this.timeWrap != value)
+                {
+                    this.timeWrap = value;
+
+                    this.Refresh();
+                }
             }
         }
 
@@ -143,6 +153,8 @@ namespace Slerpy.Unity3D
                     this.AnchorOffset = new AnchorOffset(anchorOffset.RelativePosition, anchorOffset.AbsolutePosition);
 
                     this.previousAnchorMode = this.anchorMode;
+
+                    this.Refresh();
                 }
             }
         }
@@ -156,7 +168,12 @@ namespace Slerpy.Unity3D
 
             set
             {
-                this.anchorExtent = value;
+                if (this.anchorExtent != value)
+                {
+                    this.anchorExtent = value;
+
+                    this.Refresh();
+                }
             }
         }
 

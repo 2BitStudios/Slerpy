@@ -71,7 +71,12 @@ namespace Slerpy.Unity3D
 
             set
             {
-                this.duration = value;
+                if (this.duration != value)
+                {
+                    this.duration = value;
+
+                    this.Refresh();
+                }
             }
         }
 
@@ -84,7 +89,12 @@ namespace Slerpy.Unity3D
 
             set
             {
-                this.timeWrap = value;
+                if (this.timeWrap != value)
+                {
+                    this.timeWrap = value;
+
+                    this.Refresh();
+                }
             }
         }
 
@@ -97,7 +107,12 @@ namespace Slerpy.Unity3D
 
             set
             {
-                this.filterMode = value;
+                if (this.filterMode != value)
+                {
+                    this.filterMode = value;
+
+                    this.Refresh();
+                }
             }
         }
 

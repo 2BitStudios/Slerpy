@@ -49,7 +49,12 @@ namespace Slerpy.Unity3D
 
             set
             {
-                this.duration = value;
+                if (this.duration != value)
+                {
+                    this.duration = value;
+
+                    this.Refresh();
+                }
             }
         }
 
@@ -62,7 +67,12 @@ namespace Slerpy.Unity3D
 
             set
             {
-                this.timeWrap = value;
+                if (this.timeWrap != value)
+                {
+                    this.timeWrap = value;
+
+                    this.Refresh();
+                }
             }
         }
 
@@ -75,7 +85,12 @@ namespace Slerpy.Unity3D
 
             set
             {
-                this.materialProperty = value;
+                if (this.materialProperty != value)
+                {
+                    this.materialProperty = value;
+
+                    this.Refresh();
+                }
             }
         }
 
@@ -88,7 +103,12 @@ namespace Slerpy.Unity3D
 
             set
             {
-                this.affectChildren = value;
+                if (this.affectChildren != value)
+                {
+                    this.affectChildren = value;
+
+                    this.Refresh();
+                }
             }
         }
 
@@ -101,7 +121,12 @@ namespace Slerpy.Unity3D
 
             set
             {
-                this.fromColor = value;
+                if (this.fromColor != value)
+                {
+                    this.fromColor = value;
+
+                    this.Refresh();
+                }
             }
         }
 
@@ -114,7 +139,12 @@ namespace Slerpy.Unity3D
 
             set
             {
-                this.toColor = value;
+                if (this.toColor != value)
+                {
+                    this.toColor = value;
+
+                    this.Refresh();
+                }
             }
         }
 

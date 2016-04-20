@@ -133,7 +133,12 @@ namespace Slerpy.Unity3D
 
             set
             {
-                this.strength = value;
+                if (this.strength != value)
+                {
+                    this.strength = value;
+
+                    this.Refresh();
+                }
             }
         }
 
@@ -164,6 +169,8 @@ namespace Slerpy.Unity3D
                 }
 
                 this.previousPreset = this.preset;
+
+                this.Refresh();
             }
         }
 

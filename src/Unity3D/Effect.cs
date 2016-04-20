@@ -344,7 +344,7 @@ namespace Slerpy.Unity3D
             {
                 this.speed = value;
 
-                this.IsSleeping = false;
+                this.Wake();
             }
         }
 
@@ -403,14 +403,14 @@ namespace Slerpy.Unity3D
 
                 this.simulatedTime = value;
 
-                this.ProcessEffect(this.CalculateWeight(this.RawWeightMetadata));
+                this.Refresh(false);
 
                 if (Mathf.Abs(previousSimulatedTime) < this.Duration && Mathf.Abs(this.simulatedTime) >= this.Duration)
                 {
                     this.events.Invoke(EffectEvents.Trigger.DurationReached);
                 }
 
-                this.IsSleeping = false;
+                this.Wake();
             }
         }
 
@@ -424,7 +424,8 @@ namespace Slerpy.Unity3D
             set
             {
                 this.enabled = value;
-                this.isSleeping = false;
+
+                this.Wake();
             }
         }
 
@@ -453,7 +454,7 @@ namespace Slerpy.Unity3D
         {
             this.weights = newWeights;
 
-            this.IsSleeping = false;
+            this.Wake();
         }
 
         public void AddWeights(params WeightType[] additionalWeights)
@@ -470,7 +471,7 @@ namespace Slerpy.Unity3D
         {
             this.weights = new WeightType[0];
 
-            this.IsSleeping = false;
+            this.Wake();
         }
 
         public void Play()
@@ -542,6 +543,21 @@ namespace Slerpy.Unity3D
             this.rawTime = 0.0f;
 
             this.SimulatedTime = 0.0f;
+        }
+
+        public void Wake()
+        {
+            this.IsSleeping = false;
+        }
+
+        public void Refresh(bool wake = true)
+        {
+            if (wake)
+            {
+                this.Wake();
+            }
+
+            this.ProcessEffect(this.CalculateWeight(this.RawWeightMetadata));
         }
 
         public float CalculateWeight(float time, WeightMetadata rawWeightMetadataReceiver = null)
