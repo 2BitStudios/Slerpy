@@ -323,16 +323,6 @@ namespace Slerpy.Unity3D
             this.ScaleOffset = TransformEffect.CalculateScaleOffset(weight, this.scaleExtent * this.strength);
         }
 
-        private void TrySetToPreset()
-        {
-            PresetData data = default(PresetData);
-
-            if (TransformEffect.presetData.TryGetValue(this.preset, out data))
-            {
-                data.SetTo(this);
-            }
-        }
-
         protected override void OnValidate()
         {
             base.OnValidate();
@@ -343,6 +333,16 @@ namespace Slerpy.Unity3D
             }
 
             this.Preset = this.preset;
+        }
+
+        private void TrySetToPreset()
+        {
+            PresetData data = default(PresetData);
+
+            if (TransformEffect.presetData.TryGetValue(this.preset, out data))
+            {
+                data.SetTo(this);
+            }
         }
 
         public struct PresetData
