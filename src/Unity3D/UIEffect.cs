@@ -167,7 +167,7 @@ namespace Slerpy.Unity3D
                 return this.anchorOffset;
             }
 
-            set
+            private set
             {
                 this.anchorOffset.SubtractFrom((RectTransform)this.transform);
 

@@ -264,7 +264,7 @@ namespace Slerpy.Unity3D
                 return this.positionOffset;
             }
 
-            set
+            private set
             {
                 this.transform.localPosition -= this.positionOffset;
 
@@ -281,7 +281,7 @@ namespace Slerpy.Unity3D
                 return this.rotationOffset;
             }
 
-            set
+            private set
             {
                 this.transform.localRotation *= Quaternion.Inverse(this.rotationOffset);
 
@@ -298,7 +298,7 @@ namespace Slerpy.Unity3D
                 return this.scaleOffset;
             }
 
-            set
+            private set
             {
                 this.transform.localScale -= this.scaleOffset;
 
