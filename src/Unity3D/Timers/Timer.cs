@@ -9,23 +9,18 @@ namespace Slerpy.Unity3D.Timers
         Looping = 2
     }
 
-    public abstract class Timer<TTarget> : MonoBehaviour
-        where TTarget : class
+    public abstract class Timer : MonoBehaviour
     {
-        public static TTimer Set<TTimer>(GameObject owner, float triggerTime, TTarget target, TimerMode mode = TimerMode.OneShot)
-            where TTimer : Timer<TTarget>
+        public static TTimer Set<TTimer>(GameObject owner, float triggerTime, TimerMode mode = TimerMode.OneShot)
+            where TTimer : Timer
         {
             TTimer timer = owner.AddComponent<TTimer>();
 
-            timer.Target = target;
             timer.TriggerTime = triggerTime;
             timer.Mode = mode;
 
             return timer;
         }
-
-        [SerializeField]
-        private TTarget target = null;
 
         [SerializeField]
         private TimerMode mode = TimerMode.OneShot;
@@ -36,19 +31,6 @@ namespace Slerpy.Unity3D.Timers
         [SerializeField]
         [HideInInspector]
         private float runningTime = 0.0f;
-
-        public TTarget Target
-        {
-            get
-            {
-                return this.target;
-            }
-
-            private set
-            {
-                this.target = value;
-            }
-        }
 
         public TimerMode Mode
         {
@@ -147,6 +129,36 @@ namespace Slerpy.Unity3D.Timers
 
                         break;
                 }
+            }
+        }
+    }
+
+    public abstract class Timer<TTarget> : Timer
+        where TTarget : class
+    {
+        public static TTimer Set<TTimer>(GameObject owner, float triggerTime, TTarget target, TimerMode mode = TimerMode.OneShot)
+            where TTimer : Timer<TTarget>
+        {
+            TTimer timer = Timer.Set<TTimer>(owner, triggerTime, mode);
+
+            timer.Target = target;
+
+            return timer;
+        }
+
+        [SerializeField]
+        private TTarget target = null;
+
+        public TTarget Target
+        {
+            get
+            {
+                return this.target;
+            }
+
+            set
+            {
+                this.target = value;
             }
         }
     }
