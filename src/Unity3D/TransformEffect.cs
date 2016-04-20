@@ -308,14 +308,6 @@ namespace Slerpy.Unity3D
             }
         }
 
-        [ContextMenu("Reset Offsets")]
-        public void ResetOffsets()
-        {
-            this.PositionOffset = Vector3.zero;
-            this.RotationOffset = Quaternion.identity;
-            this.ScaleOffset = Vector3.zero;
-        }
-
         protected override void ProcessEffect(float weight)
         {
             this.PositionOffset = TransformEffect.CalculatePositionOffset(weight, this.positionExtent * this.strength);
