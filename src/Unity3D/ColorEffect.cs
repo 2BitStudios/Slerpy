@@ -26,11 +26,15 @@ namespace Slerpy.Unity3D
         private WrapType timeWrap = WrapType.PingPong;
 
         [SerializeField]
-        [Tooltip("Color property to set on materials. Ignored for UI and light color.\nDefault: _Color")]
+        [Tooltip("Color property to set on materials. Ignored for UI and Light color.\nDefault: _Color")]
         private string materialProperty = "_Color";
 
         [SerializeField]
         private bool affectChildren = false;
+
+        [SerializeField]
+        [Tooltip("Whether to modify color of Light components (performance penalty). Ignored when on UI objects.")]
+        private bool affectLights = false;
 
         [SerializeField]
         [Tooltip(ColorEffect.TOOLTIP_FROMCOLOR)]
@@ -172,10 +176,13 @@ namespace Slerpy.Unity3D
                     }
                 }
 
-                Light[] lights = this.GetTargetComponents<Light>();
-                for (int i = 0; i < lights.Length; ++i)
+                if (this.affectLights)
                 {
-                    lights[i].color = interpolatedColor;
+                    Light[] lights = this.GetTargetComponents<Light>();
+                    for (int i = 0; i < lights.Length; ++i)
+                    {
+                        lights[i].color = interpolatedColor;
+                    }
                 }
             }
         }
