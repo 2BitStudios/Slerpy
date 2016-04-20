@@ -108,7 +108,7 @@ namespace Slerpy.Unity3D
                 return this.filter;
             }
 
-            set
+            private set
             {
                 this.filter = value;
             }
