@@ -30,6 +30,7 @@ namespace Slerpy.Unity3D
         private string materialProperty = "_Color";
 
         [SerializeField]
+        [Tooltip("Whether to modify color of components on child objects (performance penalty).")]
         private bool affectChildren = false;
 
         [SerializeField]
