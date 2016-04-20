@@ -28,7 +28,12 @@ namespace Slerpy.Unity3D
 
             set
             {
-                this.duration = value;
+                if (this.duration != value)
+                {
+                    this.duration = value;
+
+                    this.Refresh();
+                }
             }
         }
 
@@ -41,7 +46,12 @@ namespace Slerpy.Unity3D
 
             set
             {
-                this.timeWrap = value;
+                if (this.timeWrap != value)
+                {
+                    this.timeWrap = value;
+
+                    this.Refresh();
+                }
             }
         }
 
@@ -56,6 +66,8 @@ namespace Slerpy.Unity3D
         public void AddChannel(Channel channel)
         {
             this.channels.Add(channel);
+
+            this.Refresh();
         }
 
         public Channel AddChannel(float threshold, float span, IEnumerable<Effect> effects)
@@ -70,6 +82,8 @@ namespace Slerpy.Unity3D
         public void RemoveChannel(Channel channel)
         {
             this.channels.Remove(channel);
+
+            this.Refresh();
         }
 
         protected override void ProcessEffect(float weight)
