@@ -545,6 +545,7 @@ namespace Slerpy.Unity3D
             this.SimulatedTime = 0.0f;
         }
 
+        [ContextMenu("Wake")]
         public void Wake()
         {
             this.IsSleeping = false;
