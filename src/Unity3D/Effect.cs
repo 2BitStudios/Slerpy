@@ -635,7 +635,7 @@ namespace Slerpy.Unity3D
                     this.events.Invoke(EffectEvents.Trigger.Play);
                 }
 
-                this.IsSleeping = false;
+                this.Wake();
             }
         }
 
@@ -648,7 +648,7 @@ namespace Slerpy.Unity3D
                     this.events.Invoke(EffectEvents.Trigger.Stop);
                 }
 
-                this.IsSleeping = false;
+                this.Wake();
             }
         }
 
@@ -658,7 +658,7 @@ namespace Slerpy.Unity3D
             {
                 this.EnsureEventsHaveRawWeightMetadata();
 
-                this.IsSleeping = false;
+                this.Wake();
             }
         }
 
