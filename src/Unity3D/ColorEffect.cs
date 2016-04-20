@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -44,6 +46,10 @@ namespace Slerpy.Unity3D
         [SerializeField]
         [Tooltip(ColorEffect.TOOLTIP_TOCOLOR)]
         private Color toColor = Color.red;
+
+        private List<Graphic> graphicComponentCache = null;
+        private List<Renderer> rendererComponentCache = null;
+        private List<Light> lightComponentCache = null;
 
         public override float Duration
         {
@@ -159,18 +165,28 @@ namespace Slerpy.Unity3D
 
             if (this.transform is RectTransform)
             {
-                Graphic[] graphics = this.GetTargetComponents<Graphic>();
-                for (int i = 0; i < graphics.Length; ++i)
+                if (this.graphicComponentCache == null)
                 {
-                    graphics[i].color = interpolatedColor;
+                    this.graphicComponentCache = new List<Graphic>();
+                }
+
+                this.GetTargetComponents<Graphic>(this.graphicComponentCache);
+                for (int i = 0; i < this.graphicComponentCache.Count; ++i)
+                {
+                    this.graphicComponentCache[i].color = interpolatedColor;
                 }
             }
             else
             {
-                Renderer[] renderers = this.GetTargetComponents<Renderer>();
-                for (int i = 0; i < renderers.Length; ++i)
+                if (this.rendererComponentCache == null)
                 {
-                    Material[] materials = renderers[i].materials;
+                    this.rendererComponentCache = new List<Renderer>();
+                }
+
+                this.GetTargetComponents<Renderer>(this.rendererComponentCache);
+                for (int i = 0; i < this.rendererComponentCache.Count; ++i)
+                {
+                    Material[] materials = this.rendererComponentCache[i].materials;
                     for (int k = 0; k < materials.Length; ++k)
                     {
                         materials[k].SetColor(materialProperty, interpolatedColor);
@@ -179,19 +195,31 @@ namespace Slerpy.Unity3D
 
                 if (this.affectLights)
                 {
-                    Light[] lights = this.GetTargetComponents<Light>();
-                    for (int i = 0; i < lights.Length; ++i)
+                    if (this.lightComponentCache == null)
                     {
-                        lights[i].color = interpolatedColor;
+                        this.lightComponentCache = new List<Light>();
+                    }
+
+                    this.GetTargetComponents<Light>(this.lightComponentCache);
+                    for (int i = 0; i < this.lightComponentCache.Count; ++i)
+                    {
+                        this.lightComponentCache[i].color = interpolatedColor;
                     }
                 }
             }
         }
 
-        private TComponent[] GetTargetComponents<TComponent>()
+        private void GetTargetComponents<TComponent>(List<TComponent> componentCache)
             where TComponent : Component
         {
-            return this.affectChildren ? this.gameObject.GetComponentsInChildren<TComponent>() : this.gameObject.GetComponents<TComponent>();
+            if (this.affectChildren)
+            {
+                this.gameObject.GetComponentsInChildren<TComponent>(componentCache);
+            }
+            else
+            {
+                this.gameObject.GetComponents<TComponent>(componentCache);
+            }
         }
 
         [Serializable]
