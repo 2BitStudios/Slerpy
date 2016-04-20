@@ -106,11 +106,13 @@ namespace Slerpy.Unity3D.Editor
                             1.0f),
                         this.lineTexture);
 
+                    float bottomLineY = weightCurveRect.y + weightCurveRect.height * ((2.0f + MAX_WEIGHT - 1.0f) / (MAX_WEIGHT * 2.0f));
+
                     // Bottom Line
                     GUI.DrawTexture(
                         new Rect(
                             weightCurveRect.x,
-                            weightCurveRect.y + weightCurveRect.height * ((2.0f + MAX_WEIGHT - 1.0f) / (MAX_WEIGHT * 2.0f)),
+                            bottomLineY,
                             weightCurveRect.width,
                             1.0f),
                         this.lineTexture);
@@ -136,6 +138,20 @@ namespace Slerpy.Unity3D.Editor
                             middleLineThickness,
                             weightCurveRect.height),
                         this.lineTexture);
+
+                    if (targetEffect.IsSleeping)
+                    {
+                        GUI.color = new Color(1.0f, 0.3f, 0.3f, 0.6f);
+
+                        // Time Text
+                        GUI.Box(
+                            new Rect(
+                                weightCurveRect.x + weightCurveRect.width - 5.0f - 40.0f,
+                                bottomLineY - 5.0f - 20.0f,
+                                40.0f,
+                                20.0f),
+                            "Zzz");
+                    }
 
                     GUI.color = new Color(0.0f, 0.0f, 0.0f, 0.5f);
 
