@@ -40,10 +40,12 @@ namespace Slerpy.Unity3D
         private bool affectLights = false;
 
         [SerializeField]
+        [ColorUsage(true, true, 0.0f, 8.0f, 0.125f, 3.0f)]
         [Tooltip(ColorEffect.TOOLTIP_FROMCOLOR)]
         private Color fromColor = Color.white;
 
         [SerializeField]
+        [ColorUsage(true, true, 0.0f, 8.0f, 0.125f, 3.0f)]
         [Tooltip(ColorEffect.TOOLTIP_TOCOLOR)]
         private Color toColor = Color.red;
 
